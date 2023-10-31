@@ -8,17 +8,17 @@
 
 @font-face {
   font-family: Poppins;
-  src: url(public/fonts/Poppins/Poppins-Regular.ttf);
+  src: url(/fonts/Poppins/Poppins-Regular.ttf);
 }
 
 @font-face {
   font-family: Poppins-title;
-  src: url(public/fonts/Poppins/Poppins-Light.ttf);
+  src: url(/fonts/Poppins/Poppins-Light.ttf);
 }
 
 @font-face {
   font-family: Poppins-bold;
-  src: url(public/fonts/Poppins/Poppins-Bold.ttf);
+  src: url(/fonts/Poppins/Poppins-Bold.ttf);
 }
 
 * {
