@@ -1,17 +1,16 @@
 ////// Dialog /////
-const dialog = document.querySelector("dialog");
-const openDialogBtn = document.getElementById("open_dialog");
-const closeDialogBtn = document.getElementById("close_dialog");
-const burger = document.querySelector(".burgermenu");
-const navMenu = document.querySelector(".nav-menu");
-burger.addEventListener("click", () => {
-  burger.classList.toggle("active");
-  navMenu.classList.toggle("active");
+const dialog = document.querySelector('dialog');
+const closeDialogBtn = document.getElementById('close_dialog');
+const burger = document.querySelector('.burgermenu');
+const navMenu = document.querySelector('.nav-menu');
+burger.addEventListener('click', () => {
+  burger.classList.toggle('active');
+  navMenu.classList.toggle('active');
 });
-document.querySelectorAll(".nav-link").forEach((n) =>
-  n.addEventListener("click", () => {
-    burger.classList.remove("active");
-    navMenu.classList.remove("active");
+document.querySelectorAll('.nav-link').forEach((n) =>
+  n.addEventListener('click', () => {
+    burger.classList.remove('active');
+    navMenu.classList.remove('active');
   })
 );
 
@@ -21,8 +20,8 @@ const elements = dialog.querySelectorAll(
 const firstElement = elements[0];
 const lastElement = elements[elements.length - 1];
 
-const trapFocus = (e) => {
-  if (e.key === "Tab") {
+/*const trapFocus = (e) => {
+  if (e.key === 'Tab') {
     const tabForwards = !e.shiftKey && document.activeElement === lastElement;
     const tabBackwards = e.shiftKey && document.activeElement === firstElement;
     if (tabForwards) {
@@ -33,19 +32,4 @@ const trapFocus = (e) => {
       lastElement.focus();
     }
   }
-};
-
-const openDialog = () => {
-  dialog.showModal();
-  dialog.addEventListener("keydown", trapFocus);
-};
-
-const closeDialog = (e) => {
-  e.preventDefault();
-  dialog.close();
-  dialog.removeEventListener("keydown", trapFocus);
-  openDialogBtn.focus();
-};
-
-openDialogBtn.addEventListener("click", openDialog);
-closeDialogBtn.addEventListener("click", closeDialog);
+};*/

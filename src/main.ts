@@ -1,4 +1,5 @@
 import { showAdminTools, showSuperAdminTools } from './functions';
+import { runAppStarterListeners } from './listeners';
 
 /**
  * Checks if user is admin and its status
@@ -23,4 +24,5 @@ const checkUserRole = (): void => {
   }
 };
 
+runAppStarterListeners();
 checkUserRole();
