@@ -5,16 +5,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HodariPuoti</title>
-  <link rel="stylesheet" href="src/css/style.css" class="css" />
+  <link rel="stylesheet" href="./src/css/style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   <script src="https://kit.fontawesome.com/b4b9814ab0.js" crossorigin="anonymous"></script>
-  <script src="src/js/dialog.js" defer></script>
+  <script src="./src/main.ts" type="module"></script>
 </head>
 
 <body>
   <header>
     <nav>
-      <a href="#" class="nav-branding">HodariPuoti</a>
+      <a href="#" class="nav-branding">Chiken Wings</a>
       <ul class="nav-menu">
         <div>
           <input type="checkbox" class="checkbox" id="checkbox">
@@ -26,13 +30,19 @@
         </div>
 
         <li class="nav-item">
-          <a href="#custom" class="nav-link">Custom hotdog</a>
+          <a href="#" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item">
+          <a href="#custom" class="nav-link">custom Hotdog</a>
         </li>
         <li class="nav-item">
           <a href="#menu" class="nav-link">Menu</a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">About</a>
+          <a href="#drinks" class="nav-link">Beverage</a>
+        </li>
+        <li class="nav-item">
+          <a href="#contact" class="nav-link">About us</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" id="open_dialog">Login</a>
@@ -62,176 +72,104 @@
     </section>
 
     <section id="custom">
-      <h1 class="custom-menu-title">
-        custom hodari
-      </h1>
-      <div class="custom-hotdog-container">
-        <h3>choose sausage</h3>
-        <div class="sausage-container">
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>Cheese</h3>
-            <img src="/images/cheese.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
+      <h1 class="custom-menu-title">custom hodari</h1>
+      <div class="bun-container">
+        <!--<h3>Buns</h3>
+         <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="bun-checkbox" id="bun1" />
+          <label for="bun1">Rye bun</label>
         </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="bun-checkbox" id="bun2" />
+          <label for="bun2">Wheat bun</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="bun-checkbox" id="bun3" />
+          <label for="bun3">Gluten free bun</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="bun-checkbox" id="bun4" />
+          <label for="bun4">Whole grain bun</label>
+        </div> -->
 
-        <h3>choose toppings</h3>
-        <div class="toppings-container">
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button> 
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-        </div>
-
-        <h3>choose sauce</h3>
-        <div class="sauce-container">
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-          <div class="box">
-            <h3>sipuli</h3>
-            <img src="/images/sipuli.webp" alt="onion image" />
-            <div class="button-container">
-              <button class="remove-button">-</button>
-              <button class="add-button">+</button>
-            </div>
-          </div>
-        </div>
-        <div class="total-box" id="total">Total Sum: 0</div>
       </div>
+
+      <div class="sausage-container">
+        <!--      <h3>choose sausage</h3>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sausage-checkbox" id="sausage1" />
+          <label for="sausage1">Beef sausage</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sausage-checkbox" id="sausage2" />
+          <label for="sausage2">Chicken sausage</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sausage-checkbox" id="sausage3" />
+          <label for="sausage3">Pork sausage</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sausage-checkbox" id="sausage4" />
+          <label for="sausage4">Vegan sausage</label>
+        </div> -->
+      </div>
+
+      <div class="toppings-container">
+        <!--  <h3>choose toppings</h3>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="toppings-checkbox" id="toppings1" />
+          <label for="toppings1">dryed onion</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="toppings-checkbox" id="toppings2" />
+          <label for="toppings2">fresh onnion</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="toppings-checkbox" id="toppings2" />
+          <label for="toppings2">pickled cucumber</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="toppings-checkbox" id="toppings3" />
+          <label for="toppings3">tomato</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="toppings-checkbox" id="toppings4" />
+          <label for="toppings4">jalapeno</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="toppings-checkbox" id="toppings5" />
+          <label for="toppings5">cheese</label>
+        </div> -->
+      </div>
+
+      <div class="sauce-container">
+        <!--   <h3>choose sauce</h3>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sauce-checkbox" id="sauce1" />
+          <label for="sauce1">ketchup</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sauce-checkbox" id="sauce2" />
+          <label for="sauce2">mustard</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sauce-checkbox" id="sauce3" />
+          <label for="sauce3">Hot sauce</label>
+        </div>
+        <div class="checkbox-container custom-checkbox">
+          <input type="checkbox" class="sauce-checkbox" id="sauce4" />
+          <label for="sauce4">carlic sauce</label>
+        </div> -->
+      </div>
+      <div class="total-box" id="total">Total Sum: 0</div>
       </div>
     </section>
-
 
 
     <section id="menu">
       <h2 class="menu-filter-title">Valmiit hodarit</h2>
       <div class="menu-container">
-        <div class="menu-item-container">
+        <!-- <div class="menu-item-container">
           <img class="menu-food-image" src="images/burger.png" alt="burger image" />
           <h3 class="menu-food-title">Tulinen Mestari</h3>
           <p class="menu-ingredients">
@@ -294,40 +232,51 @@
             Salaatti, Tomaatti, Majoneesi
           </p>
           <a href="#" id="loginButton" class="add-to-cart-btn">Lisää koriin</a>
+        </div> -->
+      </div>
+    </section>
+    <section id="drinks">
+      <h2 class="drink-filter-title">Drinks</h2>
+      <div class="drink-container">
+        <!--       <div class="drink-item-container">
+            <img class="drink-image" src="images/burger.png" alt="burger image" />
+            <h3 class="drink-title">Cola</h3>
+            <a href="#" id="loginButton" class="add-to-cart-btn">Lisää koriin</a>
+          </div>
+          <div class="drink-item-container">
+            <img class="drink-image" src="images/burger.png" alt="burger image" />
+            <h3 class="drink-title">Lähdevesi</h3>
+            <a href="#" id="loginButton" class="add-to-cart-btn">Lisää koriin</a>
+          </div>
+          <div class="drink-item-container">
+            <img class="menu-image" src="images/burger.png" alt="burger image" />
+            <h3 class="drink-title">Sprite</h3>
+            <a href="#" id="loginButton" class="add-to-cart-btn">Lisää koriin</a>
+          </div> -->
+      </div>
+    </section>
+
+    <section id="contact">
+      <h2 class="contact-filter-title">About Us</h2>
+      <div class="location-container">
+        <div class="location-map" id="map">
+        </div>
+        <div class="about">
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo tenetur magnam deserunt velit dicta
+            quia provident itaque similique minima fugit quisquam esse incidunt ipsam ea ad, consequatur sapiente
+            repudiandae maiores?</p>
+
         </div>
       </div>
     </section>
+
+
 
   </main>
 
   <footer class="footeri">
     <p>Copyright sit ei ole viel</p>
   </footer>
-  <dialog aria-labelledby="dialog_title">
-    <h2>Tilaus</h2>
-    <form method="dialog">
-      <label for="username">Sukunimi, minimi 3 kirjainta</label><br />
-      <input name="username" id="name-input" class="modal-input" autocomplete="name" type="text" placeholder="Nimesi"
-        minlength="3" required />
-      <br /><label for="email">Email (esimerrki@mail.com)</label><br />
-      <input name="email" id="email-input" class="modal-input" type="email" placeholder="Sähköpostisi" required />
-      <br /><label for="password">Salasana, minimi 6 merkkiä</label><br />
-      <input name="password" id="password-input" class="modal-input" type="password" placeholder="Salasana"
-        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$" required />
-      <div class="buttons-container">
-        <button id="modal-close-button">Close</button>
-        <button type="submit" value="submit" id="modal-ok-button order">
-          Order
-        </button>
-      </div>
-    </form>
-  </dialog>
-  <script>
-    const checkbox = document.getElementById("checkbox")
-    checkbox.addEventListener("change", () => {
-      document.body.classList.toggle("dark")
-    })
-  </script>
 </body>
 
 </html>

@@ -1,0 +1,27 @@
+
+### GET / bun
+GET http://127.0.0.1:3000/api/bun 
+
+### delete / items/:id
+DELETE http://127.0.0.1:3000/api/bun/4
+
+### PUT / api/bun/:id
+PUT http://127.0.0.1:3000/api/bun/1
+Content-Type: application/json
+
+ {
+    "id": 1,
+    "label": "Gluten Free Bun",
+    "price": 1.6
+  }
+
+
+### POST/items
+POST  http://127.0.0.1:3000/api/bun
+Content-Type: application/json
+    
+ {
+    "id": 6,
+    "label": "Gluten Free Bun",
+    "price": 1.7
+  }
