@@ -459,6 +459,13 @@ main {
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
+  transition: 0.5s ease;
+  transform: scale(1);
+}
+
+.order-info-button:hover {
+  transform: scale(1.1);
 }
 .order-info-button i {
   padding: 0 10px;
