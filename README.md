@@ -9,7 +9,6 @@ CREATE TABLE Users (
     username VARCHAR(50) NOT NULL,
     email VARCHAR(100) NOT NULL,
     role INT NOT NULL
-
 );
 ```
 
@@ -33,7 +32,7 @@ CREATE TABLE Orders (
 CREATE TABLE Toppings (
     topping_id INT PRIMARY KEY,
     topping_name VARCHAR(50) NOT NULL,
-    topping_type INT NOT NULL,
+    topping_type VARCHAR(50) NOT NULL,
     price INT NOT NULL
 
 );
@@ -69,10 +68,10 @@ INSERT INTO Orders (order_id, user_id) VALUES (1, 1);
 -- Täytteen lisäys
 
 ```sql
-INSERT INTO Toppings (topping_id, topping_name) VALUES
-(1, 'Sinappi'),
-(2, 'Ketsuppi'),
-(3, 'Sipuli');
+INSERT INTO Toppings (topping_id, topping_name, topping_type) VALUES
+(1, 'Sinappi', 'sauce'),
+(2, 'Ketsuppi', 'sauce'),
+(3, 'Sipuli', 'topping');
 ```
 
 -- Custom hotdogin lisäys monella täytteillä
@@ -80,4 +79,4 @@ INSERT INTO Toppings (topping_id, topping_name) VALUES
 ```sql
 INSERT INTO Custom (hotdog_id, order_id, hotdog_name, toppings) VALUES (1, 1, 'Classic Hotdog', '1,2,3');
 ``` 
--- Numerot vastaa tyätteiden id
+-- Numerot vastaa täytteiden id
