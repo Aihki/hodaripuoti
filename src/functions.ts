@@ -1,6 +1,16 @@
-import { formModal, updateForm, userManagementModel } from './components';
+import {
+  formModal,
+  orderManagementModel,
+  updateForm,
+  userManagementModel,
+} from './components';
+import { Order } from './interfaces/Order';
 import { User } from './interfaces/User';
-import { addAuthFormListeners } from './listeners';
+import {
+  addAuthFormListeners,
+  addOrderActionsListeners,
+  addUserManageNavListener,
+} from './listeners';
 import { url } from './variables';
 
 // Dummy users array
@@ -48,6 +58,60 @@ const users: User[] = [
     points: 10,
   },
 ];
+const orders: Order[] = [
+  {
+    orderID: 1,
+    status: 0,
+    orderDate: '2023-01-01T12:34:56',
+    info: 'Dummy info',
+    products: [
+      {
+        hotdogID: 1,
+        toppings: [],
+        basePrice: 1.5,
+      },
+    ],
+  },
+  {
+    orderID: 2,
+    status: 2,
+    orderDate: '2023-01-01T12:34:56',
+    info: 'Dummy info',
+    products: [
+      {
+        hotdogID: 1,
+        toppings: [],
+        basePrice: 1.5,
+      },
+    ],
+  },
+  {
+    orderID: 3,
+    status: 3,
+    orderDate: '2023-01-01T12:34:56',
+    info: 'Dummy info',
+    products: [
+      {
+        hotdogID: 1,
+        toppings: [],
+        basePrice: 1.5,
+      },
+    ],
+  },
+  {
+    orderID: 4,
+    status: 1,
+    orderDate: '2023-01-01T12:34:56',
+    info: 'Dummy info',
+    products: [
+      {
+        hotdogID: 1,
+        toppings: [],
+        basePrice: 1.5,
+      },
+    ],
+  },
+];
 
 /**
  * Fetch data from url, returns as json
@@ -72,8 +136,12 @@ const showSuperAdminTools = (): void => {
   }
 
   const userManagamentHtml = userManagementModel(users);
+  const orderManagementHtml = orderManagementModel(orders);
   adminSection.innerHTML = '';
   adminSection.insertAdjacentHTML('beforeend', userManagamentHtml);
+  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  addUserManageNavListener();
+  addOrderActionsListeners();
 };
 
 const renderForms = (isLogin: boolean | null): void => {
@@ -157,6 +225,17 @@ const formLogin = async (): Promise<void> => {
   console.log('Login');
 };
 
-const showAdminTools = () => {};
+const showAdminTools = () => {
+  const adminSection = document.querySelector('#adminSection');
+  if (!adminSection) {
+    console.log('ERROR: No admin section found');
+    return;
+  }
+
+  const orderManagementHtml = orderManagementModel(orders);
+  adminSection.innerHTML = '';
+  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  addOrderActionsListeners();
+};
 
 export { showSuperAdminTools, showAdminTools, renderForms };

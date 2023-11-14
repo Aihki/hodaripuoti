@@ -1,10 +1,10 @@
+import { confirmModal } from './components';
 import { renderForms } from './functions';
 
 /**
  * Runs all wanted listeners when application starts
  */
 const runAppStarterListeners = () => {
-  addUserManageNavListener();
   addProfileBtnListener();
 };
 
@@ -12,42 +12,34 @@ const addUserManageNavListener = () => {
   const userManageNavButtons = document.querySelectorAll(
     '.user-manage-nav-btn'
   );
-
   if (userManageNavButtons.length <= 0) {
     return;
   }
   userManageNavButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      console.log('here');
+      const activeBtns = document.querySelectorAll('.user-manage-active');
+      activeBtns.forEach((btn) => {
+        if (!btn.classList.contains('user-manage-active')) {
+          return;
+        }
+        btn.classList.remove('user-manage-active');
+        console.log('here');
+      });
+      button.classList.add('user-manage-active');
       switch (button.id) {
         case 'userManageAllWorkersBtn':
-          !button.classList.contains('user-manage-active')
-            ? button.classList.add('user-manage-active')
-            : button.classList.add('');
           // TODO: Call get function in backend or filter it on frontend
           break;
         case 'userManageSAdminBtn':
-          !button.classList.contains('user-manage-active')
-            ? button.classList.add('user-manage-active')
-            : button.classList.add('');
           // TODO: Call get function in backend or filter it on frontend
           break;
         case 'userManageChefBtn':
-          !button.classList.contains('user-manage-active')
-            ? button.classList.add('user-manage-active')
-            : button.classList.add('');
           // TODO: Call get function in backend or filter it on frontend
           break;
         case 'userManageCounterBtn':
-          !button.classList.contains('user-manage-active')
-            ? button.classList.add('user-manage-active')
-            : button.classList.add('');
           // TODO: Call get function in backend or filter it on frontend
           break;
         case 'userManageAllBtn':
-          !button.classList.contains('user-manage-active')
-            ? button.classList.add('user-manage-active')
-            : button.classList.add('');
           // TODO: Call get function in backend or filter it on frontend
           break;
         default:
@@ -95,4 +87,71 @@ const addAuthFormListeners = () => {
     });
   });
 };
-export { runAppStarterListeners, addAuthFormListeners };
+const addOrderActionsListeners = () => {
+  // Login form mode listener
+  const checkActionBtns = document.querySelectorAll('#checkActionBtn');
+  if (checkActionBtns.length <= 0) {
+    return;
+  }
+  const viewActionBtns = document.querySelectorAll('#viewActionBtn');
+  if (viewActionBtns.length <= 0) {
+    return;
+  }
+  checkActionBtns.forEach((checkActionBtn) => {
+    const modal = document.querySelector('dialog');
+    if (!modal) {
+      return;
+    }
+    checkActionBtn?.addEventListener('click', () => {
+      const confirmModalHtml = confirmModal(
+        'Oletko varma haluavasi merkata tilauksen <strong>valmiiksi</strong>?'
+      );
+
+      modal.innerHTML = '';
+      modal.insertAdjacentHTML('beforeend', confirmModalHtml);
+      (modal as any).showModal();
+      const confirmYesBtn = document.querySelector('#confirmYesBtn');
+      if (!confirmYesBtn) {
+        return;
+      }
+      confirmYesBtn.addEventListener('click', () => {
+        // TODO: Change orders status to completed
+        console.log('order completed');
+        (modal as any).close();
+      });
+    });
+  });
+  viewActionBtns.forEach((viewActionBtn) => {
+    const modal = document.querySelector('dialog');
+    if (!modal) {
+      return;
+    }
+    viewActionBtn?.addEventListener('click', () => {
+      const viewOrderModal = '';
+
+      modal.innerHTML = '';
+      modal.insertAdjacentHTML('beforeend', viewOrderModal);
+      (modal as any).showModal();
+    });
+  });
+
+  // Modal cose listener
+  const modal = document.querySelector('dialog');
+  if (!modal) {
+    return;
+  }
+  const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
+  modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      console.log('close');
+      (modal as any).close();
+    });
+  });
+};
+
+export {
+  runAppStarterListeners,
+  addAuthFormListeners,
+  addUserManageNavListener,
+  addOrderActionsListeners,
+};
