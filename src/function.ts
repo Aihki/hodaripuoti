@@ -1,78 +1,52 @@
-import { apiUrl } from "./variables";
+import { url } from "./variables";
+import { Beverage, Custom } from "./interfaces/Menu";
 
-const getBunOptions = async () => {
-  try {
-    const response = await fetch(apiUrl + "/bun");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return [];
+const getOptions = async (url: string, options = {}) => {
+  const response = await fetch(url, options);
+  if (!response.ok) {
+    throw new Error(`Error ${response.status} occured`);
   }
+  const json = await response.json();
+  return json;
 };
-const getBsausageOptions = async () => {
+
+const displayOptions = async () => {
   try {
-    const response = await fetch(apiUrl + "/sausage");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
+    const options: Custom[] = await getOptions(url + "/custom");
+    const productByType: { [key: string]: Custom[] } = {};
+
+    options.forEach((option: Custom) => {
+      if (!productByType[option.productType]) {
+        productByType[option.productType] = [];
+      }
+      productByType[option.productType].push(option);
+    });
+    Object.keys(productByType).forEach((productType) => {
+      const container = document.querySelector(`.${productType}-container`);
+      if (container) {
+        const title = document.createElement("h3");
+        title.textContent = `Choose ${productType}`;
+        container.appendChild(title);
+
+        productByType[productType].forEach((option) => {
+          const html = `
+          <div class="checkbox-container custom-checkbox">
+            <input type="checkbox" class="${productType}-checkbox" id="${option.id}" />
+            <span style="margin-right: 10px;"></span> 
+            <label for="${option.id}">${option.label}</label>
+            <span class="price">${option.price}€</span>
+          </div>
+        `;
+          container.innerHTML += html;
+        });
+      }
+    });
   } catch (error) {
-    return [];
-  }
-};
-const getToppingsOptions = async () => {
-  try {
-    const response = await fetch(apiUrl + "/toppings");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return [];
-  }
-};
-const getSauceOptions = async () => {
-  try {
-    const response = await fetch(apiUrl + "/sauce");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return [];
-  }
-};
-const getMenu = async () => {
-  try {
-    const response = await fetch(apiUrl + "/menu");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return [];
-  }
-};
-const getBeverage = async () => {
-  try {
-    const response = await fetch(apiUrl + "/beverages");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    return [];
+    console.log(error);
   }
 };
 
+/* 
 const displayBunOptions = async () => {
   const bunOptions = await getBunOptions();
   console.log(bunOptions);
@@ -109,125 +83,10 @@ const displayBunOptions = async () => {
     });
     bunContainer.appendChild(bunContainer);
   }
-};
-
-const displaySausageOptions = async () => {
-  const sausageOptions = await getBsausageOptions();
-  console.log(sausageOptions);
-
-  const sausageContainer = document.querySelector(".sausage-container");
-  if (sausageContainer) {
-    const sausageTitle = document.createElement("h3");
-    sausageTitle.textContent = "Choose sausage";
-    sausageContainer.appendChild(sausageTitle);
-
-    sausageOptions.forEach((option: any) => {
-      const checkboxContainer = document.createElement("div");
-      checkboxContainer.className = "checkbox-container custom-checkbox";
-
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.className = "sausage-checkbox";
-      input.id = option.id;
-
-      const label = document.createElement("label");
-      label.htmlFor = option.id;
-      label.textContent = option.label;
-
-      const price = document.createElement("span");
-      price.className = "price";
-      price.textContent = option.price + "€";
-
-      label.appendChild(price);
-
-      checkboxContainer.appendChild(input);
-      checkboxContainer.appendChild(label);
-
-      sausageContainer.appendChild(checkboxContainer);
-    });
-    sausageContainer.appendChild(sausageContainer);
-  }
-};
-
-const displayToppingsOptions = async () => {
-  const toppingsOptions = await getToppingsOptions();
-  console.log(toppingsOptions);
-
-  const toppingsContainer = document.querySelector(".toppings-container");
-  if (toppingsContainer) {
-    const toppingsTitle = document.createElement("h3");
-    toppingsTitle.textContent = "Choose toppings";
-    toppingsContainer.appendChild(toppingsTitle);
-
-    toppingsOptions.forEach((option: any) => {
-      const checkboxContainer = document.createElement("div");
-      checkboxContainer.className = "checkbox-container custom-checkbox";
-
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.className = "toppings-checkbox";
-      input.id = option.id;
-
-      const label = document.createElement("label");
-      label.htmlFor = option.id;
-      label.textContent = option.label;
-
-      const price = document.createElement("span");
-      price.className = "price";
-      price.textContent = option.price + "€";
-
-      label.appendChild(price);
-
-      checkboxContainer.appendChild(input);
-      checkboxContainer.appendChild(label);
-
-      toppingsContainer.appendChild(checkboxContainer);
-    });
-    toppingsContainer.appendChild(toppingsContainer);
-  }
-};
-
-const displaySauceOptions = async () => {
-  const sauceOptions = await getSauceOptions();
-  console.log(sauceOptions);
-
-  const sauceContainer = document.querySelector(".sauce-container");
-  if (sauceContainer) {
-    const sauceTitle = document.createElement("h3");
-    sauceTitle.textContent = "Choose sauce";
-    sauceContainer.appendChild(sauceTitle);
-
-    sauceOptions.forEach((option: any) => {
-      const checkboxContainer = document.createElement("div");
-      checkboxContainer.className = "checkbox-container custom-checkbox";
-
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.className = "sauce-checkbox";
-      input.id = option.id;
-
-      const label = document.createElement("label");
-      label.htmlFor = option.id;
-      label.textContent = option.label;
-
-      const price = document.createElement("span");
-      price.className = "price";
-      price.textContent = option.price + "€";
-
-      label.appendChild(price);
-
-      checkboxContainer.appendChild(input);
-      checkboxContainer.appendChild(label);
-
-      sauceContainer.appendChild(checkboxContainer);
-    });
-    sauceContainer.appendChild(sauceContainer);
-  }
-};
+};*/
 
 const displayMenu = async () => {
-  const menu = await getMenu();
-  console.log(menu);
+  const menu = await getOptions(url + "/menu");
 
   const menuContainer = document.querySelector(".menu-container");
   if (menuContainer) {
@@ -269,52 +128,25 @@ const displayMenu = async () => {
 
       menuContainer.appendChild(menuItemContainer);
     });
-    menuContainer.appendChild(menuContainer);
   }
 };
 
 const displayBeverage = async () => {
-  const beverage = await getBeverage();
-  console.log(beverage);
+  const beverage: Beverage[] = await getOptions(url + "/beverages");
 
   const beverageContainer = document.querySelector(".drink-container");
   if (beverageContainer) {
-    beverage.forEach((option: any) => {
-      const beverageItemContainer = document.createElement("div");
-      beverageItemContainer.className = "drink-item-container";
-
-      const img = document.createElement("img");
-      img.className = "drink-image";
-      img.src = option.image;
-      img.alt = option.label;
-
-      const title = document.createElement("h3");
-      title.className = "drink-title";
-      title.textContent = option.label;
-
-      const price = document.createElement("p");
-      price.className = "drink-price";
-      price.textContent = option.price + "€";
-
-      const button = document.createElement("a");
-      button.className = "add-to-cart-btn";
-      button.textContent = "Lisää koriin";
-
-      beverageItemContainer.appendChild(img);
-      beverageItemContainer.appendChild(title);
-      beverageItemContainer.appendChild(price);
-      beverageItemContainer.appendChild(button);
-
-      beverageContainer.appendChild(beverageItemContainer);
+    beverage.forEach((option: Beverage) => {
+      const html = `
+      <div class='drink-item-container'>
+        <h3 class='drink-title'>${option.label}</h3>
+        <p class='drink-price'>${option.price}€</p>
+        <a class='add-to-cart-btn'>Lisää koriin</a>
+      </div>
+      `;
+      beverageContainer.innerHTML += html;
     });
-    beverageContainer.appendChild(beverageContainer);
   }
 };
-export {
-  displayBunOptions,
-  displaySausageOptions,
-  displayToppingsOptions,
-  displaySauceOptions,
-  displayMenu,
-  displayBeverage,
-};
+
+export { displayMenu, displayBeverage, displayOptions };

@@ -1,12 +1,5 @@
 import * as L from "leaflet";
-import {
-  displayBeverage,
-  displayBunOptions,
-  displayMenu,
-  displaySauceOptions,
-  displaySausageOptions,
-  displayToppingsOptions,
-} from "./function";
+import { displayBeverage, displayMenu, displayOptions } from "./function";
 
 const burger: HTMLElement | null = document.querySelector(".burgermenu");
 const navMenu: HTMLElement | null = document.querySelector(".nav-menu");
@@ -35,12 +28,9 @@ if (checkbox) {
   });
 }
 
-displayBunOptions();
-displaySausageOptions();
-displayToppingsOptions();
-displaySauceOptions();
 displayMenu();
 displayBeverage();
+displayOptions();
 
 const map = L.map("map").setView([60.1699, 24.9384], 8);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {

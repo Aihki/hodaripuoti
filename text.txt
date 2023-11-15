@@ -1,0 +1,53 @@
+ 
+ ///custom hotdog
+ 
+  const checkboxContainer = document.createElement("div");
+          checkboxContainer.className = "checkbox-container custom-checkbox";
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.className = `${productType}-checkbox`;
+          input.id = option.id.toString();
+
+          const label = document.createElement("label");
+          label.htmlFor = option.id.toString();
+          label.textContent = option.label;
+
+          const price = document.createElement("span");
+          price.className = "price";
+          price.textContent = option.price + "€";
+
+          checkboxContainer.appendChild(input);
+          checkboxContainer.appendChild(label);
+          checkboxContainer.appendChild(price);
+
+          container.appendChild(checkboxContainer);
+
+
+///beverage
+const beverageContainer = document.querySelector(".drink-container");
+  if (beverageContainer) {
+    beverage.forEach((option: Beverage) => {
+      const beverageItemContainer = document.createElement("div");
+      beverageItemContainer.className = "drink-item-container";
+
+      const title = document.createElement("h3");
+      title.className = "drink-title";
+      title.textContent = option.label;
+
+      const price = document.createElement("p");
+      price.className = "drink-price";
+      price.textContent = option.price + "€";
+
+      const button = document.createElement("a");
+      button.className = "add-to-cart-btn";
+      button.textContent = "Lisää koriin";
+
+      beverageItemContainer.appendChild(img);
+      beverageItemContainer.appendChild(title);
+      beverageItemContainer.appendChild(price);
+      beverageItemContainer.appendChild(button);
+
+      beverageContainer.appendChild(beverageItemContainer);
+    });
+  }
