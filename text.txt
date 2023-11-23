@@ -1,0 +1,75 @@
+ 
+ ///custom hotdog
+ 
+  const checkboxContainer = document.createElement("div");
+          checkboxContainer.className = "checkbox-container custom-checkbox";
+
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.className = `${productType}-checkbox`;
+          input.id = option.id.toString();
+
+          const label = document.createElement("label");
+          label.htmlFor = option.id.toString();
+          label.textContent = option.label;
+
+          const price = document.createElement("span");
+          price.className = "price";
+          price.textContent = option.price + "€";
+
+          checkboxContainer.appendChild(input);
+          checkboxContainer.appendChild(label);
+          checkboxContainer.appendChild(price);
+
+          container.appendChild(checkboxContainer);
+
+
+///beverage
+const beverageContainer = document.querySelector(".drink-container");
+  if (beverageContainer) {
+    beverage.forEach((option: Beverage) => {
+      const beverageItemContainer = document.createElement("div");
+      beverageItemContainer.className = "drink-item-container";
+
+      const title = document.createElement("h3");
+      title.className = "drink-title";
+      title.textContent = option.label;
+
+      const price = document.createElement("p");
+      price.className = "drink-price";
+      price.textContent = option.price + "€";
+
+      const button = document.createElement("a");
+      button.className = "add-to-cart-btn";
+      button.textContent = "Lisää koriin";
+
+      beverageItemContainer.appendChild(img);
+      beverageItemContainer.appendChild(title);
+      beverageItemContainer.appendChild(price);
+      beverageItemContainer.appendChild(button);
+
+      beverageContainer.appendChild(beverageItemContainer);
+    });
+  }
+
+
+  INSERT INTO  hod_custom (order_id, toppings, base_price, hotdog_name)
+  VALUE (1,'Täysjyvä sämpylä, Tulinen soijamakkara, Jalapenos, Avocado, Tulinen kastike',10.00,'Tulinen vegedog'),
+  (1,'Gluteeniton sämpylä, Soijamakkara, Paahdettu sipuli , Avocado, Vegaaninen honey mustard',10.00,'Gluteeniton vegedog'),
+  (1,'Vehnä sämpylä, Kavismakkara, Sipuli , Vegaaninen juusto raaste, Guacamole ',10.00,'Vegedog'),
+  (1,'Pretzel-sämpylä, Tulinen Kasvismakkara, Chili, Kurkkusalaatti, Siracha-majoneesi ',10.00,'Tulinen pretzelvege'),
+  (1,'Pretzel-sämpylä, Liha makkara, Chili, Sipuli, Juusto raaste, Siracha-majoneesi',10.00, 'Pretzeldog'),
+  (1,'Täysjyvä sämpylä, Kana makkara, Avocado, Tomaattisalsa, Jalapenos',10.00, 'Tulinen kana dog'),
+  (1,'Gluteeniton sämpylä, Kana makkara, Pikkelöity sipuli ,Kurkkusalaatti , Hummus ',10.00, 'Kana dog'),
+  (1,'Vehnä sämpylä, Tulinen makkara, Chili ,Jalapenos, Paahdettu sipuli , Siracha-majoneesi ',10.00, 'Tulinen dog')
+
+
+
+INSERT INTO hod_beverage (order_id,beverage_name, beverage_price)
+VALUE (1,'Vesi', 0.90),
+(1,'coca-cola', 1.50),
+(1,'Pepsi max', 1.50),
+(1,'Lemonade', 1.40),
+(1,'Jaffa', 1.50)
+
+  

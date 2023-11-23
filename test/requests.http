@@ -1,0 +1,14 @@
+
+### GET /products
+GET http://127.0.0.1:3000/api/products
+
+
+### post /products
+POST http://127.0.0.1:3000/api/products
+Content-Type: application/json
+
+{
+    "topping_name": "testi",
+    "topping_type": "testi",
+    "price": "1.00"
+}
