@@ -1,5 +1,5 @@
 import { url } from "./variables";
-import { Beverage, Custom } from "./interfaces/Menu";
+import { Beverages, ChefChoice, Ingredients } from "./interfaces/Menu";
 
 const getOptions = async (url: string, options = {}) => {
   const response = await fetch(url, options);
@@ -12,32 +12,33 @@ const getOptions = async (url: string, options = {}) => {
 
 const displayOptions = async () => {
   try {
-    const options: Custom[] = await getOptions(url + "/custom");
-    const productByType: { [key: string]: Custom[] } = {};
+    const options: Ingredients[] = await getOptions(url + "/products");
+    console.log(options);
+    const productByType: { [key: string]: Ingredients[] } = {};
 
-    options.forEach((option: Custom) => {
-      if (!productByType[option.productType]) {
-        productByType[option.productType] = [];
+    options.forEach((option: Ingredients) => {
+      if (!productByType[option.topping_type]) {
+        productByType[option.topping_type] = [];
       }
-      productByType[option.productType].push(option);
+      productByType[option.topping_type].push(option);
     });
     Object.keys(productByType).forEach((productType) => {
       const container = document.querySelector(`.${productType}-container`);
       if (container) {
         const title = document.createElement("h3");
-        title.textContent = `Choose ${productType}`;
+        title.textContent = `Valitse ${productType}`;
         container.appendChild(title);
 
         productByType[productType].forEach((option) => {
           const html = `
           <div class="checkbox-container custom-checkbox">
-            <input type="checkbox" class="${productType}-checkbox" id="${option.id}" />
-            <span style="margin-right: 10px;"></span> 
-            <label for="${option.id}">${option.label}</label>
-            <span class="price">${option.price}€</span>
+          <input type="checkbox" class="${productType}-checkbox" id="${option.topping_id}" />
+          <span style="margin-right: 10px;"></span> 
+          <label for="${option.topping_id}">${option.topping_name}</label>
+          <span class="price">${option.price}€</span>
           </div>
         `;
-          container.innerHTML += html;
+          container.insertAdjacentHTML("beforeend", html);
         });
       }
     });
@@ -46,107 +47,49 @@ const displayOptions = async () => {
   }
 };
 
-/* 
-const displayBunOptions = async () => {
-  const bunOptions = await getBunOptions();
-  console.log(bunOptions);
+const displayChefchoice = async () => {
+  try {
+    const allProducts: ChefChoice[] = await getOptions(url + "/chef");
 
-  const bunContainer = document.querySelector(".bun-container");
-  if (bunContainer) {
-    const bunTitle = document.createElement("h3");
-    bunTitle.textContent = "Choose bun";
-    bunContainer.appendChild(bunTitle);
-
-    bunOptions.forEach((option: any) => {
-      const checkboxContainer = document.createElement("div");
-      checkboxContainer.className = "checkbox-container custom-checkbox";
-
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.className = "bun-checkbox";
-      input.id = option.id;
-
-      const label = document.createElement("label");
-      label.htmlFor = option.id;
-      label.textContent = option.label;
-
-      const price = document.createElement("span");
-      price.className = "price";
-      price.textContent = option.price + "€";
-
-      label.appendChild(price);
-
-      checkboxContainer.appendChild(input);
-      checkboxContainer.appendChild(label);
-
-      bunContainer.appendChild(checkboxContainer);
-    });
-    bunContainer.appendChild(bunContainer);
-  }
-};*/
-
-const displayMenu = async () => {
-  const menu = await getOptions(url + "/menu");
-
-  const menuContainer = document.querySelector(".menu-container");
-  if (menuContainer) {
-    menu.forEach((option: any) => {
-      const menuItemContainer = document.createElement("div");
-      menuItemContainer.className = "menu-item-container";
-
-      const img = document.createElement("img");
-      img.className = "menu-food-image";
-      img.src = option.image;
-      img.alt = option.label;
-
-      const title = document.createElement("h3");
-      title.className = "menu-food-title";
-      title.textContent = option.label;
-
-      const ingredientsTitle = document.createElement("span");
-      ingredientsTitle.className = "ingredients-title";
-      ingredientsTitle.textContent = "Ingredients: ";
-
-      const ingredients = document.createElement("p");
-      ingredients.className = "menu-ingredients";
-      ingredients.textContent = option.ingredient;
-
-      const price = document.createElement("p");
-      price.className = "menu-price";
-
-      price.textContent = option.price + "€";
-
-      const button = document.createElement("a");
-      button.className = "add-to-cart-btn";
-      button.textContent = "Lisää koriin";
-
-      menuItemContainer.appendChild(img);
-      menuItemContainer.appendChild(title);
-      menuItemContainer.appendChild(ingredients);
-      menuItemContainer.appendChild(price);
-      menuItemContainer.appendChild(button);
-
-      menuContainer.appendChild(menuItemContainer);
-    });
+    const menuContainer = document.querySelector(".menu-container");
+    if (menuContainer) {
+      allProducts.forEach((option: ChefChoice) => {
+        const html = `
+          <div class="menu-item-container">
+            <h3 class="menu-food-title">${option.hotdog_name}</h3>
+            <p class = "menu-ingredients ">${option.toppings}</p>
+            <p class="menu-price">Price: $${option.base_price}</p>
+            <a class='add-to-cart-btn'>Lisää koriin</a>
+          </div>
+        `;
+        menuContainer.insertAdjacentHTML("beforeend", html);
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
   }
 };
 
 const displayBeverage = async () => {
-  const beverage: Beverage[] = await getOptions(url + "/beverages");
+  try {
+    const allProducts: Beverages[] = await getOptions(url + "/beverage");
 
-  const beverageContainer = document.querySelector(".drink-container");
-  if (beverageContainer) {
-    beverage.forEach((option: Beverage) => {
-      const html = `
-      <div class='drink-item-container'>
-        <h3 class='drink-title'>${option.label}</h3>
-        <p class='drink-price'>${option.price}€</p>
-        <a class='add-to-cart-btn'>Lisää koriin</a>
-      </div>
-      `;
-      beverageContainer.innerHTML += html;
-    });
+    const beverageContainer = document.querySelector(".drink-container");
+    if (beverageContainer) {
+      allProducts.forEach((option: Beverages) => {
+        const html = `
+            <div class='drink-item-container'>
+              <h3 class='drink-title'>${option.beverage_name}</h3>
+              <p class='drink-price'>${option.beverage_price}€</p>
+              <a class='add-to-cart-btn'>Lisää koriin</a>
+            </div>
+          `;
+        beverageContainer.insertAdjacentHTML("beforeend", html);
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
   }
 };
 
-export { displayMenu, displayBeverage, displayOptions };
+export { displayChefchoice, displayBeverage, displayOptions };

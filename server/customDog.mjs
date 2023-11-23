@@ -1,13 +1,12 @@
-const custom = [
+const products = [
   {
     id: 1,
     label: "dryed onions",
-    price: 0.5,
+    price: 0.1,
     productType: "toppings",
   },
   {
     id: 2,
-    label: "fresh onions",
     price: 0.5,
     productType: "toppings",
   },
@@ -20,7 +19,7 @@ const custom = [
   {
     id: 4,
     label: "pickles",
-    price: 0.5,
+    price: 0.79,
     productType: "toppings",
   },
   {
@@ -149,6 +148,87 @@ const custom = [
     price: 2.5,
     productType: "sausage",
   },
+  {
+    id: 25,
+    label: "coke",
+    price: 1.5,
+    productType: "beverage",
+  },
+  {
+    id: 26,
+    label: "diet coke",
+    price: 1.5,
+    productType: "beverage",
+  },
+  {
+    id: 27,
+    label: "sprite",
+    price: 1.5,
+    productType: "beverage",
+  },
+  {
+    id: 28,
+    label: "water",
+    price: 0.9,
+    productType: "beverage",
+  },
+  {
+    id: 29,
+    label: "lemonade",
+    price: 2.5,
+    productType: "beverage",
+  },
+  {
+    id: 30,
+    label: "sipcy vegan hot dog",
+    price: 2.5,
+    description:
+      "spicy vegan hot dog with spicy vegan sausage, jalapenos, and spicy sauce",
+    productType: "hotdog",
+  },
+  {
+    id: 31,
+    label: "vegan hot dog",
+    price: 2.5,
+    description: "vegan hot dog with vegan sausage, and vegan sauce",
+    productType: "hotdog",
+  },
+  {
+    id: 32,
+    label: "spicy hot dog",
+    price: 2.5,
+    description: "spicy hot dog with spicy sausage, jalapenos, and spicy sauce",
+    productType: "hotdog",
+  },
+  {
+    id: 33,
+    label: "hot dog",
+    price: 2.5,
+    description: "hot dog with sausage, and sauce",
+    productType: "hotdog",
+  },
+  {
+    id: 38,
+    label: "spicy vegan hot dog",
+    price: 2.5,
+    description:
+      "spicy vegan hot dog with spicy vegan sausage, jalapenos, and spicy sauce",
+    productType: "hotdog",
+  },
+  {
+    id: 39,
+    label: "vegan hot dog",
+    price: 2.5,
+    description: "vegan hot dog with vegan sausage, and vegan sauce",
+    productType: "hotdog",
+  },
+  {
+    id: 40,
+    label: "spicy hot dog",
+    price: 2.5,
+    description: "spicy hot dog with spicy sausage, jalapenos, and spicy sauce",
+    productType: "hotdog",
+  },
 ];
 
 /**
@@ -157,8 +237,8 @@ const custom = [
  * @param {object} res - http response
  * @returns {object} - beverage options
  */
-const getCustom = (req, res) => {
-  res.json(custom);
+const getProducts = (req, res) => {
+  res.json(products);
 };
 
 /**
@@ -214,4 +294,4 @@ const deleteCustomItem = (req, res) => {
   }
 };
 
-export { getCustom };
+export { getProducts };
