@@ -4,10 +4,9 @@ const getProducts = async () => {
   try {
     const [results] = await promisePool.query("SELECT * FROM Toppings");
     console.log(results);
-    res.status(200);
     return results;
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    return { error: error.message };
   }
 };
 
