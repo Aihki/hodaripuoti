@@ -12,7 +12,7 @@ const getOptions = async (url: string, options = {}) => {
 
 const displayOptions = async () => {
   try {
-    const options: Ingredients[] = await getOptions(url + "/products");
+    const options: Ingredients[] = await getOptions(url + "/custom/products");
     console.log(options);
     const productByType: { [key: string]: Ingredients[] } = {};
 
@@ -49,7 +49,7 @@ const displayOptions = async () => {
 
 const displayChefchoice = async () => {
   try {
-    const allProducts: ChefChoice[] = await getOptions(url + "/chef");
+    const allProducts: ChefChoice[] = await getOptions(url + "/menu/chef");
 
     const menuContainer = document.querySelector(".menu-container");
     if (menuContainer) {
