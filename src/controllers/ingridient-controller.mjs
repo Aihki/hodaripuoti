@@ -3,11 +3,8 @@ import { getProducts, newIngrident } from "../models/ingridient-model.mjs";
 const customIngriedirents = async (req, res) => {
   try {
     const ingredients = await getProducts();
-    if (ingredients.error) {
-      res.status(500).json({ error: ingredients.error });
-    } else {
-      res.json(ingredients);
-    }
+    console.log(ingredients);
+    res.json(ingredients);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
