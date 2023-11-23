@@ -16,9 +16,9 @@ app.use(
   })
 );
 
-app.use("/api/", customRouter);
+app.use("/api/custom", customRouter);
 app.use("/api/", beverageRouter);
-app.use("/api/", chefRouter);
+app.use("/api/menu", chefRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
