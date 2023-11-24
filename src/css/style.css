@@ -109,16 +109,23 @@ body.dark .support a {
 
 /* *********** */
 
-/* navaagtio css */
+/* header css */
 /* ****************** */
 header {
   margin: 0;
+  min-height: 70px;
+  display: flex;
+  justify-content: space-evenly;
   background-color: #262626;
+  align-items: center;
   position: fixed;
   top: 0;
-  /*   left: 0; */
   width: calc(100% - 220px);
   z-index: 1;
+}
+
+.branding {
+  font-size: 2rem;
 }
 
 li {
@@ -128,48 +135,6 @@ li {
 a {
   color: white;
   text-decoration: none;
-}
-
-nav {
-  min-height: 70px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-}
-
-.nav-menu {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 60px;
-}
-
-.nav-branding {
-  font-size: 2rem;
-}
-
-.nav-link {
-  transition: 0.7s ease;
-}
-
-.nav-link:hover {
-  color: dodgerblue;
-}
-
-.burgermenu {
-  display: none;
-  cursor: pointer;
-}
-
-.bar {
-  display: block;
-  width: 25px;
-  height: 3px;
-  margin: 5px auto;
-  -webkit-transition: all 0.3s ease-in-out;
-  transition: all 0.3s ease-in-out;
-  background-color: white;
 }
 
 .logo-img {
@@ -511,28 +476,39 @@ input {
   transform: scale(1.2);
 }
 /* ************* */
+/* footer nav css */
 
 footer {
+  margin: auto;
+  background-color: rgb(255, 136, 0);
   position: fixed;
-  left: 0;
   bottom: 0;
   width: 100%;
-  background-color: var(--dark);
-}
-
-.footeri {
-  height: 50px;
+  height: 70px;
   color: white;
   text-align: center;
+  z-index: 1;
+  width: calc(100% - 220px);
 }
 
-.footeri p {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  font-size: 14px;
+.nav-menu {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-link {
+  padding: 10px;
+  min-height: 70px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border: 2px solid rgb(58, 58, 58);
+  transition: 0.7s ease;
+}
+
+.nav-link:hover {
+  color: dodgerblue;
 }
 
 /* dialog css */
@@ -787,13 +763,20 @@ dialog:has(.confirm-modal-container) {
 /* ***************** */
 
 /* media css */
-@media only screen and (min-width: 700px) {
-  .location-container {
-    padding: 50px;
-    height: 500px;
-    margin: auto;
-    display: flex;
-    flex-direction: row;
+
+@media only screen and (min-width: 1100px) {
+  .menu-container,
+  .drink-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .bun-container,
+  .toppings-container,
+  .sausage-container,
+  .sauce-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 10px;
   }
 }
 
@@ -802,54 +785,28 @@ dialog:has(.confirm-modal-container) {
     margin: 0;
   }
 
-  header {
+  header, footer {
     width: 100%;
   }
 }
 
 @media only screen and (max-width: 768px) {
-  .burgermenu {
-    display: block;
-  }
-
-  .burgermenu.active .bar:nth-child(2) {
-    opacity: 0;
-  }
-
-  .burgermenu.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-  }
-
-  .burgermenu.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-  }
-
-  .nav-menu {
-    position: fixed;
-    left: -100%;
-    top: 70px;
-    gap: 0;
-    flex-direction: column;
-    background-color: #262626;
-    width: 100%;
-    text-align: center;
-    transition: 0.3s;
-  }
-
-  .nav-item {
-    margin: 16px 0;
-  }
-
-  .nav-menu.active {
-    left: 0;
-  }
-
   .location-map {
     width: 100%;
   }
 
   .about {
     width: 100%;
+  }
+}
+
+@media only screen and (min-width: 700px) {
+  .location-container {
+    padding: 50px;
+    height: 500px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
   }
 }
 
@@ -864,22 +821,6 @@ dialog:has(.confirm-modal-container) {
   .sauce-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-  }
-}
-
-@media only screen and (min-width: 1100px) {
-  .menu-container,
-  .drink-container {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .bun-container,
-  .toppings-container,
-  .sausage-container,
-  .sauce-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
     gap: 10px;
   }
 }
