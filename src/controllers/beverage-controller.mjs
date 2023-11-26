@@ -1,15 +1,11 @@
 import { getBeverage } from "../models/beverage-model.mjs";
 
 const beverage = async (req, res) => {
-  try {
-    const ingredients = await getBeverage();
-    if (ingredients.error) {
-      res.status(500).json({ error: ingredients.error });
-    } else {
-      res.json(ingredients);
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  const drink = await getBeverage();
+  if (!drink.error) {
+    res.json(drink);
+  } else {
+    res.status(500).json({ message: "Something went wrong" });
   }
 };
 

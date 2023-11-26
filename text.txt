@@ -73,3 +73,7 @@ VALUE (1,'Vesi', 0.90),
 (1,'Jaffa', 1.50)
 
   
+
+
+
+  sudo chown nestorl.nestorl /var/www/html

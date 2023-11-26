@@ -6,6 +6,6 @@ import {
 
 const customRouter = express.Router();
 
-customRouter.route("/products").get(customIngriedirents).post(addIngrident);
+customRouter.route("/").get(customIngriedirents).post(addIngrident);
 
 export default customRouter;
