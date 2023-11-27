@@ -75,5 +75,3 @@ VALUE (1,'Vesi', 0.90),
   
 
 
-
-  sudo chown nestorl.nestorl /var/www/html

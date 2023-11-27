@@ -259,15 +259,36 @@ main {
 }
 
 
+.divaider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+
+
 .total-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
   border: 2px solid var(--dark);
   border-radius: 10px;
   padding: 10px;
   font-size: 20px;
-  text-align: center;
-  display: flex;
-  justify-content: center;
+  margin: 10px;
 }
+
+/* .total-box #total {
+  border: 2px solid var(--dark);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 20px;
+  margin-bottom: 10px;
+} */
+
+
 
 input {
   width: 2rem;
@@ -563,11 +584,7 @@ label {
   scroll-snap-align: start;
 }
 
-.carousel-btn-container {
-  display: flex;
-  justify-content: center;
-  margin: 10px;
-}
+
 
 .carousel-btn {
   display: inline-block;
@@ -660,6 +677,11 @@ label {
   .about {
     width: 100%;
   }
+
+  .divaider {
+    flex-direction: column;
+  }
+
 
 }
 
