@@ -4,9 +4,13 @@ import customRouter from "./routes/ingridient-router.mjs";
 import beverageRouter from "./routes/beverage-router.mjs";
 import chefRouter from "./routes/chef-router.mjs";
 import path from "path";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
 const app = express();
 const port = 3000;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
