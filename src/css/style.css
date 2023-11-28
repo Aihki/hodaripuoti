@@ -430,7 +430,7 @@ input {
   flex-direction: column;
   margin: 20px 0;
 }
-.orders-nav h2 {
+x .orders-con .orders-nav h2 {
   font-family: poppins-title, sans-serif;
 }
 .orders-info-container {
@@ -637,9 +637,26 @@ form {
   transform: scale(1);
   cursor: pointer;
 }
+.form-button-a-container {
+  width: 100%;
+}
+.form-button-a {
+  margin: auto;
+  font-size: 1rem;
+  width: 50%;
+  display: block;
+  color: black;
+  margin-top: 1rem;
+  transition: 0.4s ease;
+}
+.form-button-a:hover {
+  color: black;
+  transform: scale(1.1);
+}
 .forms-top-container {
   display: flex;
   align-items: center;
+  margin-bottom: 1rem;
 }
 .forms-top-container button {
   margin-left: auto;

@@ -1,7 +1,14 @@
 import * as L from 'leaflet';
 import { displayBeverage, displayChefchoice, displayOptions } from './function';
-import { showAdminTools, showSuperAdminTools } from './functions';
+import {
+  fetchData,
+  getToken,
+  getUserData,
+  showAdminTools,
+  showSuperAdminTools,
+} from './functions';
 import { runAppStarterListeners } from './listeners';
+import { url } from './variables';
 
 const burger: HTMLElement | null = document.querySelector('.burgermenu');
 const navMenu: HTMLElement | null = document.querySelector('.nav-menu');
@@ -76,23 +83,37 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
  * 0 is regular user, 1 is chef or cashier, 2 is super admin
  * @returns role status - [0, 1, 2]
  */
-const checkUserRole = (): void => {
-  // TODO: get user role from db
-  const userRole = 2; // Fixed to super admin
-  if (userRole === 2) {
-    showSuperAdminTools();
-  } else if (userRole === 1) {
-    showAdminTools();
-  } else if (userRole === 0) {
-    console.log('Regular user');
+const checkUserRole = async (): Promise<void> => {
+  const token = getToken();
+  if (token !== null) {
+    const user = await getUserData(token);
+    console.log(user.role);
+    const userRole = user.role; // Fixed to super admin
+    if (userRole === 2) {
+      showSuperAdminTools();
+    } else if (userRole === 1) {
+      showAdminTools();
+    } else if (userRole === 0) {
+      console.log('Regular user');
+      const adminSection = document.querySelector(
+        '#adminSection'
+      ) as HTMLElement;
+      if (adminSection) {
+        adminSection.style.display = 'none';
+      }
+    } else {
+      console.log('ERROR: Users role is invalid');
+    }
+  } else {
+    console.log('Un registered user');
     const adminSection = document.querySelector('#adminSection') as HTMLElement;
     if (adminSection) {
       adminSection.style.display = 'none';
     }
-  } else {
-    console.log('ERROR: Users role is invalid');
   }
 };
 
 runAppStarterListeners();
 checkUserRole();
+
+export { checkUserRole };

@@ -4,11 +4,10 @@ const userManagementModel = (users: User[]): string => {
   let html = `
     <div class="admin-container">
         <div class="user-management-nav">
-            <a id="userManageAllWorkersBtn" class="user-manage-nav-btn user-manage-active">Kaikki työntekijät</a>
+        <a id="userManageAllBtn" class="user-manage-nav-btn user-manage-active">Kaikki</a>
+            <a id="userManageAllWorkersBtn" class="user-manage-nav-btn">Kaikki työntekijät</a>
             <a id="userManageSAdminBtn" class="user-manage-nav-btn">S-ylläpito</a>
-            <a id="userManageChefBtn" class="user-manage-nav-btn">Kokit</a>
-            <a id="userManageCounterBtn" class="user-manage-nav-btn">Kassa</a>
-            <a id="userManageAllBtn" class="user-manage-nav-btn">Kaikki</a>
+            <a id="userManageCounterBtn" class="user-manage-nav-btn">Työntekijät</a>
         </div>
         <div class="user-management-table-container">
             <table>
@@ -21,10 +20,42 @@ const userManagementModel = (users: User[]): string => {
             </tr>
         `;
   users.forEach((user: User) => {
-    const { userId, username, email, role, points } = user;
+    const { user_id, username, email, role, points } = user;
     html += `
               <tr>
-                <td><p>${userId}</p></td>
+                <td><p>${user_id}</p></td>
+                <td><p>${username}</p></td>
+                <td><p>${email}</p></td>
+                <td><p>${points}</p></td>
+                <td><p>${role}</p><div class="dropdown-here"></div></td>
+              </tr>
+              `;
+  });
+  html += `</table></div>`;
+  return html;
+};
+const updateUserManagementModel = (users: User[]): string => {
+  const userManagementTableContainer = document.querySelector(
+    '.user-management-table-container'
+  );
+  if (userManagementTableContainer) {
+    userManagementTableContainer.innerHTML = '';
+  }
+  let html = `
+            <table>
+            <tr class="sticky-row">
+                <th>ID</th>
+                <th>Käyttäjänimi</th>
+                <th>Sähköposti</th>
+                <th>Pisteet</th>
+                <th>Rooli</th>
+            </tr>
+        `;
+  users.forEach((user: User) => {
+    const { user_id, username, email, role, points } = user;
+    html += `
+              <tr>
+                <td><p>${user_id}</p></td>
                 <td><p>${username}</p></td>
                 <td><p>${email}</p></td>
                 <td><p>${points}</p></td>
@@ -126,30 +157,41 @@ const orderManagementModel = (order: Order[]): string => {
   html += `</table></div>`;
   return html;
 };
-const formModal = (isLoginForm: boolean): string => {
+const loginFormModal = (): string => {
   let html = `
   <div class="forms-container">
     <div class="forms-top-container">
-    <h2 id="loginH2">${isLoginForm ? 'Kirjaudu' : 'Luo käyttäjä'}</h2>
+    <h2 id="loginH2">Kirjaudu</h2>
     <button class="dialog-close-button" id="dialogCloseButton">X</button>
     </div>
-    <div class="slider-container">
-      <input type="checkbox" id="formModeCheckbox" class="slider-checkbox">
-      <label id="login-label" for="formModeCheckbox" class="slider-label">Kirjaudu</label>
-      <label id="register-label" for="formModeCheckbox" class="slider-label">Rekisteröidy</label>
+    <form method="dialog" id="authForm">
+    <input type="email" id="emailInput" name="email" class="modal-input" autocomplete="email" placeholder="Sähköposti" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"><br>
+    <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana" required minlength="8"><br>
+    <button class="form-button" type="submit" value="submit" id="loginButton">Kirjaudu</button>
+    </form>
+
+    <div class="form-button-a-container"> 
+      <a href="#" class="form-button-a" id="changeFormToRegisterBtn">Luo käyttäjä</a>
+    </div>
+    </div> `;
+  return html;
+};
+const registerFormModal = (): string => {
+  let html = `
+  <div class="forms-container">
+    <div class="forms-top-container">
+    <h2 id="loginH2">Luo käyttäjä</h2>
+    <button class="dialog-close-button" id="dialogCloseButton">X</button>
     </div>
     <form method="dialog" id="authForm">
-      <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlenght="3" required><br>
-      ${
-        isLoginForm
-          ? ''
-          : `<input type="email" id="emailInput" name="email" class="modal-input" autocomplete="email" placeholder="Sähköposti" required><br>`
-      }
-      <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana" required><br>
-      <button class="form-button" type="submit" value="submit" id="${
-        isLoginForm ? 'loginButton' : 'registerButton'
-      }">${isLoginForm ? 'Kirjaudu' : 'Luo käyttäjä'}</button>
+    <input type="email" id="emailInput" name="email" class="modal-input" autocomplete="email" placeholder="Sähköposti" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ><br>
+    <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlenght="3" maxlenght="40" required><br>
+    <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana" required minlenght="8"><br>
+    <button class="form-button" type="submit" value="submit" id="loginButton">Kirjaudu</button>
     </form>
+    <div class="form-button-a-container"> 
+    <a href="#" class="form-button-a" id="changeFormToLoginBtn">Kirjaudu sisään</a>
+    </div>
   </div> `;
   return html;
 };
@@ -193,8 +235,10 @@ const confirmModal = (modaltext: string): string => {
 
 export {
   userManagementModel,
-  formModal,
+  registerFormModal,
+  loginFormModal,
   updateForm,
   orderManagementModel,
   confirmModal,
+  updateUserManagementModel,
 };
