@@ -1,11 +1,8 @@
 import express from "express";
-import {
-  addIngrident,
-  customIngriedirents,
-} from "../controllers/ingridient-controller.mjs";
+import { customIngriedirents } from "../controllers/ingridient-controller.mjs";
 
 const customRouter = express.Router();
 
-customRouter.route("/").get(customIngriedirents).post(addIngrident);
+customRouter.route("/").get(customIngriedirents).post();
 
 export default customRouter;

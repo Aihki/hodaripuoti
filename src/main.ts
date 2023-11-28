@@ -68,3 +68,8 @@ const map = L.map("map").setView([60.1699, 24.9384], 8);
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19,
 }).addTo(map);
+
+const marker = L.marker([60.202990343063924, 24.93619952897825]).addTo(map);
+marker
+  .bindPopup("<b>Hodaripuoti</b><br>Parhaan hodarit tapahtumissa!")
+  .openPopup();
