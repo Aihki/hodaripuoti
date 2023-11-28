@@ -3,6 +3,7 @@ import cors from "cors";
 import customRouter from "./routes/ingridient-router.mjs";
 import beverageRouter from "./routes/beverage-router.mjs";
 import chefRouter from "./routes/chef-router.mjs";
+import path from "path";
 
 const app = express();
 const port = 3000;
