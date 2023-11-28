@@ -71,6 +71,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
 
+
+const marker = L.marker([60.202990343063924, 24.93619952897825]).addTo(map);
+marker
+  .bindPopup("<b>Hodaripuoti</b><br>Parhaan hodarit tapahtumissa!")
+  .openPopup();
+=======
 /**
  * Checks if user is admin and its status
  * 0 is regular user, 1 is chef or cashier, 2 is super admin
@@ -96,3 +102,4 @@ const checkUserRole = (): void => {
 
 runAppStarterListeners();
 checkUserRole();
+

@@ -1,3 +1,4 @@
+import { json } from "express";
 import { getProducts, newIngrident } from "../models/ingridient-model.mjs";
 
 const customIngriedirents = async (req, res) => {
@@ -10,27 +11,58 @@ const customIngriedirents = async (req, res) => {
   }
 };
 
-const addIngrident = async (req, res) => {
-  const { topping_name, topping_type, price } = req.body;
-  if (topping_name && topping_type && price) {
-    try {
-      const ingredients = {
-        topping_name,
-        topping_type,
-        price,
-      };
-      const result = await newIngrident(ingredients);
-      if (result.error) {
-        res.status(500).json({ error: result.error });
-      } else {
-        res.json(result);
-      }
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+const postIngridient = async (req, res) => {
+  try {
+    const ingredients = [
+      req.body.topping_name,
+      req.body.topping_type,
+      req.body.price,
+    ];
+    const result = await newIngrident(ingredients);
+    if (!result) {
+      res.status(404);
+      return;
     }
-  } else {
-    res.status(400);
+    res.status(200);
+    res.json(result);
+    res.json({ message: "Ingrident added" });
+  } catch (error) {
+    console.log("error", error.message);
   }
 };
 
-export { customIngriedirents, addIngrident };
+const putIngridient = async (req, res) => {
+  try {
+    const ingredients = [
+      req.body.topping_name,
+      req.body.topping_type,
+      req.body.price,
+    ];
+    const result = await updateIngrident(ingredients);
+    if (!result) {
+      res.status(404);
+      return;
+    }
+    res.status(200);
+    res.json(result);
+    res.json({ message: "Ingrident updated" });
+  } catch (error) {
+    console.log("error", error.message);
+  }
+};
+
+const deleteIngridientById = async (req, res) => {
+  try {
+    const result = await deleteIngrident(req.params.id);
+    if (!result) {
+      res.status(404);
+      return;
+    }
+    res.status(200);
+    res.json({ message: "Ingrident deleted" });
+  } catch (error) {
+    console.log("error", error.message);
+  }
+};
+
+export { customIngriedirents, postIngridient };

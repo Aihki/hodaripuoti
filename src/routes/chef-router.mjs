@@ -3,6 +3,6 @@ import { chef } from "../controllers/chef-controller.mjs";
 
 const chefRouter = express.Router();
 
-chefRouter.route("/chef").get(chef);
+chefRouter.route("/").get(chef);
 
 export default chefRouter;

@@ -3,6 +3,6 @@ import { beverage } from "../controllers/beverage-controller.mjs";
 
 const beverageRouter = express.Router();
 
-beverageRouter.route("/beverage").get(beverage);
+beverageRouter.route("/").get(beverage);
 
 export default beverageRouter;
