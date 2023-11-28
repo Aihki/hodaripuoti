@@ -1,90 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HodariPuoti</title>
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+      defer
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <script
+      src="https://kit.fontawesome.com/b4b9814ab0.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/c02d3fc986.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HodariPuoti</title>
-  <link rel="stylesheet" href="./src/css/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <script src="https://kit.fontawesome.com/b4b9814ab0.js" crossorigin="anonymous"></script>
-  <script src="./src/main.ts" type="module"></script>
-</head>
+  <body>
+    <header>
+        <a href="#" class="branding">Hodaripuoti</a>
+        <ul class="nav-menu">
+          <div>
+            <input type="checkbox" class="checkbox" id="checkbox" />
+            <label for="checkbox" class="checkbox-label">
+              <i class="fa-solid fa-moon"></i>
+              <i class="fa-solid fa-sun"></i>
+              <span class="ball"></span>
+            </label>
+          </div>
+        </ul>
+    </header>
 
-<body>
-  <header>
-    <nav>
-      <a href="#" class="nav-branding">Chiken Wings</a>
-      <ul class="nav-menu">
-        <div>
-          <input type="checkbox" class="checkbox" id="checkbox">
-          <label for="checkbox" class="checkbox-label">
-            <i class="fa-solid fa-moon"></i>
-            <i class="fa-solid fa-sun"></i>
-            <span class="ball"></span>
-          </label>
+    <main>
+      <section id="adminSection" class="admin-section"></section>
+      <section class="caruselContainer">
+        <div class="slider-wrapper">
+          <div class="slider">
+            <img id="slide-1" src="img/kimchi.jpeg" alt="" />
+            <img id="slide-2" src="img/salad.jpeg" alt="" />
+            <img id="slide-3" src="img/wings5.jpeg" alt="" />
+          </div>
+          <div class="slider-nav">
+            <a href="#slide-1" id="nav-1"></a>
+            <a href="#slide-2" id="nav-2"></a>
+            <a href="#slide-3" id="nav-3"></a>
+          </div>
         </div>
+      </section>
 
-        <li class="nav-item">
-          <a href="#" class="nav-link">Home</a>
-        </li>
-        <li class="nav-item">
-          <a href="#custom" class="nav-link">custom Hotdog</a>
-        </li>
-        <li class="nav-item">
-          <a href="#menu" class="nav-link">Menu</a>
-        </li>
-        <li class="nav-item">
-          <a href="#drinks" class="nav-link">Beverage</a>
-        </li>
-        <li class="nav-item">
-          <a href="#contact" class="nav-link">About us</a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="open_dialog">Login</a>
-        </li>
-      </ul>
-      <div class="burgermenu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </div>
-    </nav>
-  </header>
-
-  <main>
-    <section class="caruselContainer">
-      <div class="slider-wrapper">
-        <div class="slider">
-          <img id="slide-1" src="img/kimchi.jpeg" alt="">
-          <img id="slide-2" src="img/salad.jpeg" alt="">
-          <img id="slide-3" src="img/wings5.jpeg" alt="">
+      <section id="custom">
+        <h1 class="custom-menu-title">custom hodari</h1>
+        <div id="menu-carousel">
+          <div class="sampyla-container custom-container"></div>
+          <div class="makkara-container custom-container"></div>
+          <div class="täyte-container custom-container"></div>
+          <div class="kastike-container custom-container"></div>
         </div>
-        <div class="slider-nav">
-          <a href="#slide-1" id="nav-1"></a>
-          <a href="#slide-2" id="nav-2"></a>
-          <a href="#slide-3" id="nav-3"></a>
-        </div>
-      </div>
-    </section>
-
-    <section id="custom">
-      <h1 class="custom-menu-title">custom hodari</h1>
-      <div id="menu-carousel">
-        <div class="sampyla-container custom-container">
-        </div>
-        <div class="makkara-container custom-container">
-        </div>
-        <div class="täyte-container custom-container">
-        </div>
-        <div class="kastike-container custom-container">
-        </div>
-      </div>
-
+       
       <div class="divaider">
         <div class="carousel-btn-container">
           <button class="carousel-btn prev"><span>prev</span></button>
@@ -94,44 +82,59 @@
           <div id="total">Total Sum: 0</div>
           <a class="add-to-cart-btn">Lisää koriin</a>
         </div>
-      </div>
+      </section>
 
-    </section>
+      <section id="menu">
+        <h2 class="menu-filter-title">Valmiit hodarit</h2>
+        <div class="menu-container"></div>
+      </section>
+      <section id="drinks">
+        <h2 class="drink-filter-title">Drinks</h2>
+        <div class="drink-container"></div>
+      </section>
 
-
-    <section id="menu">
-      <h2 class="menu-filter-title">Valmiit hodarit</h2>
-      <div class="menu-container">
-      </div>
-    </section>
-    <section id="drinks">
-      <h2 class="drink-filter-title">Drinks</h2>
-      <div class="drink-container">
-      </div>
-    </section>
-
-    <section id="contact">
-      <h2 class="contact-filter-title">About Us</h2>
-      <div class="location-container">
-        <div class="location-map" id="map">
+      <section id="contact">
+        <h2 class="contact-filter-title">About Us</h2>
+        <div class="location-container">
+          <div class="location-map" id="map"></div>
+          <div class="about">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo
+              tenetur magnam deserunt velit dicta quia provident itaque
+              similique minima fugit quisquam esse incidunt ipsam ea ad,
+              consequatur sapiente repudiandae maiores?
+            </p>
+          </div>
         </div>
-        <div class="about">
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo tenetur magnam deserunt velit dicta
-            quia provident itaque similique minima fugit quisquam esse incidunt ipsam ea ad, consequatur sapiente
-            repudiandae maiores?</p>
-
-        </div>
-      </div>
     </section>
 
 
+    </main>
 
-  </main>
-
-  <footer class="footeri">
-    <p>Copyright sit ei ole viel</p>
-  </footer>
-</body>
-
-
+    <footer>
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#custom" class="nav-link">Custom Hotdog</a>
+          </li>
+          <li class="nav-item">
+            <a href="#menu" class="nav-link">Menu</a>
+          </li>
+          <li class="nav-item">
+            <a href="#drinks" class="nav-link">Beverage</a>
+          </li>
+          <li class="nav-item">
+            <a href="#contact" class="nav-link">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="profileButton">Login</a>
+          </li>
+        </ul>
+      </nav>
+    </footer>
+  </body>
 </html>
+
