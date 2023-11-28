@@ -3,6 +3,8 @@ import cors from "cors";
 import customRouter from "./routes/ingridient-router.mjs";
 import beverageRouter from "./routes/beverage-router.mjs";
 import chefRouter from "./routes/chef-router.mjs";
+import { fileURLToPath } from "url";
+import path from "path";
 
 const app = express();
 const port = 3000;
@@ -10,6 +12,7 @@ const port = 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("src"));
+app.use("/css", express.static(path.join(__dirname, "css")));
 
 app.use(
   cors({
