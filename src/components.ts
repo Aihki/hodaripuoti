@@ -21,17 +21,28 @@ const userManagementModel = (users: User[]): string => {
         `;
   users.forEach((user: User) => {
     const { user_id, username, email, role, points } = user;
+
+    const formId = `form_${user_id}`;
+    const inputId = `roleInput_${user_id}`;
+
     html += `
               <tr>
                 <td><p>${user_id}</p></td>
                 <td><p>${username}</p></td>
                 <td><p>${email}</p></td>
                 <td><p>${points}</p></td>
-                <td><p>${role}</p><div class="dropdown-here"></div></td>
+                <td>
+                  <form id="${formId}">
+                    <input id="${inputId}" value="${role}">
+                    <button type="submit">Go</button>
+                  </form>
+  
+                </td>
               </tr>
               `;
   });
   html += `</table></div>`;
+
   return html;
 };
 const updateUserManagementModel = (users: User[]): string => {
@@ -185,8 +196,8 @@ const registerFormModal = (): string => {
     </div>
     <form method="dialog" id="authForm">
     <input type="email" id="emailInput" name="email" class="modal-input" autocomplete="email" placeholder="Sähköposti" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ><br>
-    <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlenght="3" maxlenght="40" required><br>
-    <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana" required minlenght="8"><br>
+    <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlength="3" maxlength="40" required><br>
+    <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana" required minlength="8"><br>
     <button class="form-button" type="submit" value="submit" id="loginButton">Kirjaudu</button>
     </form>
     <div class="form-button-a-container"> 

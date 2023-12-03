@@ -17,7 +17,8 @@
   "dependencies": {
     "@types/geojson": "^7946.0.12",
     "@types/leaflet": "^1.9.7",
-    "bcrypt": "^5.1.1",
+    "apidoc": "^1.2.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",

@@ -5,9 +5,11 @@ import {
   findUserById,
   listAllUsers,
   listAllUsersWithRole,
+  updateRole,
   updateUser,
 } from '../models/userModel.mjs';
 import { validationResult } from 'express-validator';
+import bcrypt from 'bcryptjs';
 
 /**
  * Get all users
@@ -64,16 +66,12 @@ const postUser = async (req, res) => {
     console.log(errors.array());
     return res.status(400).json({ message: 'invalid input fields' });
   }
-
-  // Check if email is already in use
-  const { email } = req.body;
-  const emailExists = await checkIfEmailExists(email);
-  if (emailExists) {
-    return res.status(400).json({ message: 'Email is already in use' });
-  }
-
-  // If email does not exist add a new user
-  const newUserId = await addUser(req.body);
+  const newUser = req.body;
+  const salt = await bcrypt.genSalt(10);
+  // replace plain text password with hash
+  newUser.password = await bcrypt.hash(newUser.password, salt);
+  // console.log('postUser', newUser);
+  const newUserId = await addUser(newUser);
   res.status(201).json({ message: 'user added', user_id: newUserId });
 };
 /**
@@ -124,6 +122,17 @@ const deleteUserById = async (req, res) => {
     console.error('delete', e.message);
   }
 };
+const putRole = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // details about errors:
+    console.log(errors.array());
+    return res.status(400).json({ message: 'invalid input fields' });
+  }
+  const newUser = await updateRole(req.body);
+  console.log('newUser', newUser);
+  res.status(201).json({ message: 'user role updated' });
+};
 export {
   getUsers,
   getUserById,
@@ -131,4 +140,5 @@ export {
   putUserById,
   deleteUserById,
   getUsersWithRole,
+  putRole,
 };

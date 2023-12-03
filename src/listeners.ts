@@ -163,10 +163,52 @@ const addOrderActionsListeners = () => {
     });
   });
 };
+const addUserManageFormSubmitListener = () => {
+  const userManagementTableContainer = document.querySelector(
+    '.user-management-table-container'
+  );
+
+  userManagementTableContainer?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (event.target && (event.target as HTMLElement).tagName === 'FORM') {
+      const form = event.target as HTMLFormElement;
+      const formId = form.id;
+      const user_id = parseInt(formId.split('_')[1], 10);
+      const input = form.querySelector('input') as HTMLInputElement;
+      const updatedRole = parseInt(input.value, 10);
+
+      // validate role
+      if (isNaN(updatedRole) || updatedRole < 0 || updatedRole > 2) {
+        return alert('Invalid role');
+      }
+      try {
+        const formData = {
+          user_id: user_id,
+          role: updatedRole,
+        };
+        const options = {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        };
+        console.log(formData);
+
+        const changeRole = await fetchData(url + '/user/updateRole', options);
+        console.log('changeRole', changeRole);
+      } catch (e) {
+        console.log('error', e);
+        return;
+      }
+    }
+  });
+};
 
 export {
   runAppStarterListeners,
   addAuthFormListeners,
   addUserManageNavListener,
   addOrderActionsListeners,
+  addUserManageFormSubmitListener,
 };

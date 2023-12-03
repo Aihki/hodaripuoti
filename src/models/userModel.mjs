@@ -1,5 +1,4 @@
 import { promisePool } from '../utils/database.mjs';
-import bcrypt from 'bcrypt';
 const testUsersObj = [
   {
     user_id: 1,
@@ -52,11 +51,11 @@ const testUsersObj = [
   },
 ];
 
-const login = async (userCreds) => {
+const login = async (email) => {
   try {
-    const sql = `SELECT user_id, username, email, role, points
-                 FROM hod_users WHERE email = ? AND password = ?`;
-    const params = [userCreds.email, userCreds.password];
+    const sql = `SELECT user_id, username, password, email, role, points
+                 FROM hod_users WHERE email = ?`;
+    const params = [email];
     const result = await promisePool.query(sql, params);
     const [rows] = result;
 
@@ -154,6 +153,19 @@ const deleteUser = async (id) => {
     console.error('deleteUser', e.message);
   }
 };
+const updateRole = async (user) => {
+  try {
+    const sql = `UPDATE bet_users set role = ? WHERE user_id = ?;`;
+    const params = [user.role, user.user_id];
+    const result = await promisePool.query(sql, params);
+    const [rows] = result;
+
+    return rows[0];
+  } catch (e) {
+    console.error('error', e.message);
+    return { error: e.message };
+  }
+};
 export {
   deleteUser,
   updateUser,
@@ -163,4 +175,5 @@ export {
   login,
   listAllUsersWithRole,
   checkIfEmailExists,
+  updateRole,
 };

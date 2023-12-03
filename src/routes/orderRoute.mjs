@@ -1,20 +1,11 @@
 import express from 'express';
-import {
-  deleteUserById,
-  getUserById,
-  getUsers,
-  postUser,
-  putUserById,
-  getUsersWithRole,
-  putRole,
-} from '../controllers/userController.mjs';
 import { body } from 'express-validator';
 
-const userRouter = express.Router();
+const orderRouter = express.Router();
 
-userRouter
+orderRouter
   .route('/')
-  .get(getUsers)
+  .get(getOrders)
   .post(
     body('email').trim().isEmail(),
     body('username').trim().isLength({ min: 3, max: 40 }).isAlphanumeric(),
@@ -22,14 +13,14 @@ userRouter
     postUser
   );
 
-userRouter
+orderRouter
   .route('/:id')
   .get(getUserById)
   .put(putUserById)
   .delete(deleteUserById);
-userRouter.route('/role/:id').get(getUsersWithRole);
+orderRouter.route('/role/:id').get(getUsersWithRole);
 
-userRouter
+orderRouter
   .route('/updateRole')
   .put(
     body('user_id').trim(),

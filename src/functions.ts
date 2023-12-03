@@ -2,7 +2,6 @@ import {
   loginFormModal,
   orderManagementModel,
   registerFormModal,
-  updateForm,
   updateUserManagementModel,
   userManagementModel,
 } from './components';
@@ -11,6 +10,7 @@ import { User } from './interfaces/User';
 import {
   addAuthFormListeners,
   addOrderActionsListeners,
+  addUserManageFormSubmitListener,
   addUserManageNavListener,
 } from './listeners';
 import { checkUserRole } from './main';
@@ -150,7 +150,9 @@ const getUserData = async (token: string): Promise<User> => {
 };
 
 const showSuperAdminTools = async (): Promise<void> => {
-  const adminSection = document.querySelector('#adminSection');
+  const adminSection = document.querySelector(
+    '#adminSection'
+  ) as HTMLDivElement;
   if (!adminSection) {
     console.log('ERROR: No admin section found');
     return;
@@ -166,6 +168,23 @@ const showSuperAdminTools = async (): Promise<void> => {
   adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
   addUserManageNavListener();
   addOrderActionsListeners();
+  addUserManageFormSubmitListener();
+  adminSection.style.display = 'block';
+};
+const showAdminTools = () => {
+  const adminSection = document.querySelector(
+    '#adminSection'
+  ) as HTMLDivElement;
+  if (!adminSection) {
+    console.log('ERROR: No admin section found');
+    return;
+  }
+
+  const orderManagementHtml = orderManagementModel(orders);
+  adminSection.innerHTML = '';
+  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  addOrderActionsListeners();
+  adminSection.style.display = 'block';
 };
 
 const renderForms = (isLogin: boolean | null): void => {
@@ -213,6 +232,12 @@ const formRegister = async (): Promise<void> => {
     password: password,
     email: email,
   };
+
+  if (!validateData(email, password, username)) {
+    alert('Invalid input fields');
+    return;
+  }
+
   const options = {
     method: 'POST',
     headers: {
@@ -235,6 +260,12 @@ const formLogin = async (): Promise<void> => {
     email: email,
     password: password,
   };
+
+  if (!validateData(email, password, null)) {
+    alert('Invalid input fields');
+    return;
+  }
+
   const options = {
     method: 'POST',
     headers: {
@@ -244,22 +275,34 @@ const formLogin = async (): Promise<void> => {
   };
   // TODO: post data to backend, store token to localstorage
   const loginData = await fetchData(url + '/auth/login', options);
+
   localStorage.setItem('token', loginData.token);
   console.log('LoginData:', loginData);
+  (document.querySelector('dialog') as any)?.close(); // close modal
   checkUserRole();
 };
 
-const showAdminTools = () => {
-  const adminSection = document.querySelector('#adminSection');
-  if (!adminSection) {
-    console.log('ERROR: No admin section found');
-    return;
+const validateData = (
+  email: string,
+  password: string,
+  username: string | null
+) => {
+  // Validate email
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return false;
   }
 
-  const orderManagementHtml = orderManagementModel(orders);
-  adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
-  addOrderActionsListeners();
+  // Validate password
+  if (password.length < 8) {
+    return false;
+  }
+
+  // validate username if username is sent
+  if (username !== null && username.length < 3 && username.length > 40) {
+    return false;
+  }
+  return true;
 };
 
 const updateUserManagementTable = (users: User[]) => {

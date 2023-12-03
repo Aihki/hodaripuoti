@@ -1,19 +1,32 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { login } from '../models/userModel.mjs';
+import bcrypt from 'bcryptjs';
 
-const postLogin = async (req, res) => {
-  // TODO: use model to query sql for user info (username/pw)
-  const user = await login(req.body);
-  if (user && user.error) {
-    return next(new Error(user.error));
+const postLogin = async (req, res, next) => {
+  // TODO: input validation
+  const user = await login(req.body.email);
+  // user is undefined (username not found in db)
+  if (!user) {
+    const error = new Error('email/password invalid');
+    error.status = 401;
+    return next(error);
   }
+  // db error in model
+  if (user.error) {
+    return next(new Error(result.error));
+  }
+
   console.log('postLogin', user);
-  try {
+  const match = await bcrypt.compare(req.body.password, user.password);
+  if (match) {
+    delete user.password;
     const token = jwt.sign(user, process.env.JWT_SECRET);
     res.json({ message: 'logged in', token, user });
-  } catch (error) {
-    res.status(401).json({ message: 'invalid username/password' });
+  } else {
+    const error = new Error('email/password invalid');
+    error.status = 401;
+    return next(error);
   }
 };
 
