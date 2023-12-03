@@ -1,5 +1,11 @@
 import { confirmModal } from './components';
-import { renderForms } from './functions';
+import {
+  fetchData,
+  getToken,
+  renderForms,
+  updateUserManagementTable,
+} from './functions';
+import { url } from './variables';
 
 /**
  * Runs all wanted listeners when application starts
@@ -16,7 +22,7 @@ const addUserManageNavListener = () => {
     return;
   }
   userManageNavButtons.forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', async () => {
       const activeBtns = document.querySelectorAll('.user-manage-active');
       activeBtns.forEach((btn) => {
         if (!btn.classList.contains('user-manage-active')) {
@@ -28,19 +34,20 @@ const addUserManageNavListener = () => {
       button.classList.add('user-manage-active');
       switch (button.id) {
         case 'userManageAllWorkersBtn':
-          // TODO: Call get function in backend or filter it on frontend
+          const allStaff = await fetchData(url + '/user/role/1');
+          updateUserManagementTable(allStaff);
           break;
         case 'userManageSAdminBtn':
-          // TODO: Call get function in backend or filter it on frontend
-          break;
-        case 'userManageChefBtn':
-          // TODO: Call get function in backend or filter it on frontend
+          const superAdmins = await fetchData(url + '/user/role/2');
+          updateUserManagementTable(superAdmins);
           break;
         case 'userManageCounterBtn':
-          // TODO: Call get function in backend or filter it on frontend
+          const otherStaff = await fetchData(url + '/user');
+          updateUserManagementTable(otherStaff);
           break;
         case 'userManageAllBtn':
-          // TODO: Call get function in backend or filter it on frontend
+          const allUsers = await fetchData(url + '/user');
+          updateUserManagementTable(allUsers);
           break;
         default:
           console.log('ERROR: Button id is unvalid');
@@ -55,23 +62,31 @@ const addProfileBtnListener = () => {
   profileButtons.forEach((profileButton) => {
     profileButton.addEventListener('click', () => {
       // TODO: check if user is logged in
-      renderForms(null);
+      const token = getToken();
+      if (token) {
+        console.log('token found render profile');
+        //TODO: render profile
+        return;
+      }
+      renderForms(true);
     });
   });
 };
 
 const addAuthFormListeners = () => {
   // Login form mode listener
-  const formModeCheckbox = document.querySelector(
-    '#formModeCheckbox'
+  const changeFormToLoginBtn = document.querySelector(
+    '#changeFormToLoginBtn'
+  ) as HTMLInputElement;
+  const changeFormToRegisterBtn = document.querySelector(
+    '#changeFormToRegisterBtn'
   ) as HTMLInputElement;
 
-  formModeCheckbox?.addEventListener('change', () => {
-    if (formModeCheckbox.checked) {
-      renderForms(false); // send FALSE if REGISTER form
-    } else {
-      renderForms(true); // send TRUE if LOGIN form
-    }
+  changeFormToLoginBtn?.addEventListener('click', () => {
+    renderForms(true);
+  });
+  changeFormToRegisterBtn?.addEventListener('click', () => {
+    renderForms(false);
   });
 
   // Modal cose listener
@@ -148,10 +163,52 @@ const addOrderActionsListeners = () => {
     });
   });
 };
+const addUserManageFormSubmitListener = () => {
+  const userManagementTableContainer = document.querySelector(
+    '.user-management-table-container'
+  );
+
+  userManagementTableContainer?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (event.target && (event.target as HTMLElement).tagName === 'FORM') {
+      const form = event.target as HTMLFormElement;
+      const formId = form.id;
+      const user_id = parseInt(formId.split('_')[1], 10);
+      const input = form.querySelector('input') as HTMLInputElement;
+      const updatedRole = parseInt(input.value, 10);
+
+      // validate role
+      if (isNaN(updatedRole) || updatedRole < 0 || updatedRole > 2) {
+        return alert('Invalid role');
+      }
+      try {
+        const formData = {
+          user_id: user_id,
+          role: updatedRole,
+        };
+        const options = {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        };
+        console.log(formData);
+
+        const changeRole = await fetchData(url + '/user/updateRole', options);
+        console.log('changeRole', changeRole);
+      } catch (e) {
+        console.log('error', e);
+        return;
+      }
+    }
+  });
+};
 
 export {
   runAppStarterListeners,
   addAuthFormListeners,
   addUserManageNavListener,
   addOrderActionsListeners,
+  addUserManageFormSubmitListener,
 };

@@ -345,7 +345,7 @@ input {
 
 /* Admin */
 .admin-section {
-  margin: 100px 0;
+  margin: 100px 10px;
 }
 .user-management-nav {
   height: 50px;
@@ -393,24 +393,22 @@ input {
   overflow-y: auto;
   border: 1px black solid;
 }
-.admin-container {
-  margin: 0px 10px;
-}
-
-.admin-section table,
-.admin-section th,
-.admin-section td {
-  border: 1px solid var(--dark);
-}
 
 .admin-section th,
 .admin-section td {
   padding: 10px;
   text-align: left;
 }
+.admin-section tr {
+  background-color: var(--pure-light);
+}
+.admin-section tr:nth-child(2n) {
+  background-color: var(--light-green);
+}
 
 .admin-section tr:hover {
-  background-color: var(--light-green);
+  background-color: var(--green);
+  color: var(--pure-light);
 }
 
 .admin-orders-container {
@@ -418,7 +416,7 @@ input {
   flex-direction: column;
   margin: 20px 0;
 }
-.orders-nav h2 {
+x .orders-con .orders-nav h2 {
   font-family: poppins-title, sans-serif;
 }
 .orders-info-container {
@@ -438,6 +436,11 @@ input {
   cursor: pointer;
   transition: 0.5s ease;
   transform: scale(1);
+}
+.orders-container {
+  max-height: 400px;
+  overflow-y: auto;
+  border: #111 1px solid;
 }
 
 .order-info-button:hover {
@@ -636,9 +639,26 @@ form {
   transform: scale(1);
   cursor: pointer;
 }
+.form-button-a-container {
+  width: 100%;
+}
+.form-button-a {
+  margin: auto;
+  font-size: 1rem;
+  width: 50%;
+  display: block;
+  color: black;
+  margin-top: 1rem;
+  transition: 0.4s ease;
+}
+.form-button-a:hover {
+  color: black;
+  transform: scale(1.1);
+}
 .forms-top-container {
   display: flex;
   align-items: center;
+  margin-bottom: 1rem;
 }
 .forms-top-container button {
   margin-left: auto;
@@ -849,5 +869,20 @@ dialog:has(.confirm-modal-container) {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
+  }
+  .orders-info-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+  }
+  .order-filter-text {
+    display: none;
+  }
+  .order-amount {
+    font-size: 1.3rem;
+  }
+  .order-info-button {
+    height: 75px;
+    justify-content: center;
   }
 }
