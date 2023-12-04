@@ -61,9 +61,8 @@ const addProfileBtnListener = () => {
   const profileButtons = document.querySelectorAll('#profileButton');
   profileButtons.forEach((profileButton) => {
     profileButton.addEventListener('click', () => {
-      // TODO: check if user is logged in
       const token = getToken();
-      if (token) {
+      if (token !== null) {
         console.log('token found render profile');
         //TODO: render profile
         return;

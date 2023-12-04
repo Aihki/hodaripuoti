@@ -120,5 +120,4 @@ const checkUserRole = async (): Promise<void> => {
 
 runAppStarterListeners();
 checkUserRole();
-
 export { checkUserRole };

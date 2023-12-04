@@ -123,7 +123,6 @@ const getToken = (): string | null => {
     return null;
   }
   return token;
-  //const userData = await getUserData(token);
 };
 
 const getUserData = async (token: string): Promise<User> => {

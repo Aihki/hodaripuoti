@@ -20,6 +20,13 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(
+  cors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  })
+);
+
 app.disable('x-powered-by');
 
 app.use(express.json());
@@ -29,13 +36,6 @@ app.use('/css', express.static(path.join(__dirname, './css')));
 
 // simple custom middleware for logging/debugging all requests
 app.use(logger);
-
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-    credentials: true,
-  })
-);
 
 app.use('/api/custom', customRouter);
 app.use('/api/', beverageRouter);

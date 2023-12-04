@@ -198,7 +198,7 @@ const registerFormModal = (): string => {
     <input type="email" id="emailInput" name="email" class="modal-input" autocomplete="email" placeholder="Sähköposti" required pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" ><br>
     <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlength="3" maxlength="40" required><br>
     <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana" required minlength="8"><br>
-    <button class="form-button" type="submit" value="submit" id="loginButton">Kirjaudu</button>
+    <button class="form-button" type="submit" value="submit" id="loginButton">Luo käyttäjä</button>
     </form>
     <div class="form-button-a-container"> 
     <a href="#" class="form-button-a" id="changeFormToLoginBtn">Kirjaudu sisään</a>
