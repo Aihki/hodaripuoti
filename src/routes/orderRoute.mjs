@@ -1,5 +1,12 @@
 import express from 'express';
 import { body } from 'express-validator';
+import {
+  getOrders,
+  getOrdersHotdogs,
+  postOrders,
+  postOrdersHotdogs,
+  putOrderTotalPrice,
+} from '../controllers/orderController.mjs';
 
 const orderRouter = express.Router();
 
@@ -7,25 +14,21 @@ orderRouter
   .route('/')
   .get(getOrders)
   .post(
-    body('email').trim().isEmail(),
-    body('username').trim().isLength({ min: 3, max: 40 }).isAlphanumeric(),
-    body('password').trim().isLength({ min: 8 }),
-    postUser
+    body('user_id').isNumeric(),
+    body('total_price').isNumeric(),
+    postOrders
   );
 
 orderRouter
-  .route('/:id')
-  .get(getUserById)
-  .put(putUserById)
-  .delete(deleteUserById);
-orderRouter.route('/role/:id').get(getUsersWithRole);
-
-orderRouter
-  .route('/updateRole')
-  .put(
-    body('user_id').trim(),
-    body('role').trim().isLength({ min: 0, max: 2 }),
-    putRole
+  .route('/orderHotdogs')
+  .get(getOrdersHotdogs)
+  .post(
+    body('order_id').isNumeric(),
+    body('hotdog_id').isNumeric(),
+    body('amount').isNumeric(),
+    postOrdersHotdogs
   );
+orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
+orderRouter.route('/orderTotalPrice/:id').put(putOrderTotalPrice);
 
-export default userRouter;
+export default orderRouter;

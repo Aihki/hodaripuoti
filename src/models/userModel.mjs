@@ -54,7 +54,7 @@ const testUsersObj = [
 const login = async (email) => {
   try {
     const sql = `SELECT user_id, username, password, email, role, points
-                 FROM hod_users WHERE email = ?`;
+                 FROM Users WHERE email = ?`;
     const params = [email];
     const result = await promisePool.query(sql, params);
     const [rows] = result;
@@ -68,7 +68,7 @@ const login = async (email) => {
 
 const listAllUsers = async () => {
   try {
-    const [rows] = await promisePool.execute(`SELECT * FROM hod_users`);
+    const [rows] = await promisePool.execute(`SELECT * FROM Users`);
     return rows;
   } catch (e) {
     console.error('listAllUsers', e.message);
@@ -105,7 +105,7 @@ const findUserById = async (id) => {
 
 const addUser = async (user) => {
   try {
-    const sql = `INSERT INTO hod_users (username, email, password)
+    const sql = `INSERT INTO Users (username, email, password)
                 VALUES (?, ?, ?)`;
     const params = [user.username, user.email, user.password];
     const result = await promisePool.query(sql, params);
@@ -118,7 +118,7 @@ const addUser = async (user) => {
 
 const checkIfEmailExists = async (emailToCheck) => {
   try {
-    const sql = 'SELECT COUNT(*) as count FROM hod_users WHERE email = ?';
+    const sql = 'SELECT COUNT(*) as count FROM Users WHERE email = ?';
     const params = [emailToCheck];
     const result = await promisePool.query(sql, params);
 
@@ -133,7 +133,7 @@ const checkIfEmailExists = async (emailToCheck) => {
 const updateUser = async (user) => {
   try {
     const [rows] = await promisePool.execute(
-      `UPDATE bet_users set username = ?, email = ?, password = ?, user_level_id = ? WHERE user_id = ?;`,
+      `UPDATE Users set username = ?, email = ?, password = ?, user_level_id = ? WHERE user_id = ?;`,
       user
     );
     return rows;
@@ -145,7 +145,7 @@ const updateUser = async (user) => {
 const deleteUser = async (id) => {
   try {
     const [rows] = await promisePool.execute(
-      `DELETE FROM bet_users WHERE user_id = ?;`,
+      `DELETE FROM Users WHERE user_id = ?;`,
       [id]
     );
     return rows;
@@ -155,7 +155,7 @@ const deleteUser = async (id) => {
 };
 const updateRole = async (user) => {
   try {
-    const sql = `UPDATE bet_users set role = ? WHERE user_id = ?;`;
+    const sql = `UPDATE Users set role = ? WHERE user_id = ?;`;
     const params = [user.role, user.user_id];
     const result = await promisePool.query(sql, params);
     const [rows] = result;

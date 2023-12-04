@@ -12,6 +12,8 @@ import {
   logger,
   notFoundHandler,
 } from './middlewares/middlewares.mjs';
+import orderRouter from './routes/orderRoute.mjs';
+import hotdogRouter from './routes/hotdogRoute.mjs';
 
 const app = express();
 const port = 3000;
@@ -40,6 +42,8 @@ app.use('/api/', beverageRouter);
 app.use('/api/menu', chefRouter);
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/order', orderRouter);
+app.use('/api/hotdog', hotdogRouter);
 
 // All others routes => 404
 app.use(notFoundHandler);
