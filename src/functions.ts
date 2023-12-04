@@ -21,7 +21,6 @@ import {
 import { checkUserRole } from './main';
 import { url } from './variables';
 
-// Dummy users array
 const testHotdogsOrder: Hotdog[] = [
   {
     hotdog_id: null,
@@ -310,7 +309,7 @@ const createNewOrder = async (
   }
   const userData = await getUserData(token);
   const user_id = userData.user_id;
-  const totalPrice = 0.0; // Default value, it changes later in this function
+  const total_price = 0.0; // Default value, it changes later in this function
   let debugString: string = ''; // TODO: Remove this
   // Handle order creation
   const orderOptions = {
@@ -318,7 +317,7 @@ const createNewOrder = async (
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ user_id, totalPrice }),
+    body: JSON.stringify({ user_id, total_price }),
   };
   let order_id: number | undefined;
   try {
@@ -415,6 +414,7 @@ const createNewOrder = async (
     }
 
     // Handle hotdog_toppings creation
+    // TODO: everything works except this
     const hotdogToppingsOptions = {
       method: 'POST',
       headers: {
@@ -458,34 +458,31 @@ const createNewOrder = async (
       // Return an error message to the customer
       return { error: 'Failed to create hotdogToppings' };
     }
-
-    // Handle total price update
-    const totalPriceOptions = {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    let totalPrice: number | undefined;
-    try {
-      const ordersTotalPrice = await fetchData(
-        url + '/order/orderTotalPrice',
-        totalPriceOptions
-      );
-      if (!ordersTotalPrice) {
-        throw new Error('Failed to PUT ordersTotalPrice');
-      }
-      totalPrice = ordersTotalPrice.message;
-      debugString += ' totalPrice' + totalPrice;
-    } catch (error) {
-      console.error(
-        'Error creating ordersTotalPrice:',
-        (error as Error).message
-      );
-      // Return an error message to the customer
-      return { error: 'Failed to create ordersTotalPrice' };
-    }
   });
+
+  // Handle total price update
+  const totalPriceOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  let totalPrice: number | undefined;
+  try {
+    const ordersTotalPrice = await fetchData(
+      url + '/order/orderTotalPrice',
+      totalPriceOptions
+    );
+    if (!ordersTotalPrice) {
+      throw new Error('Failed to PUT ordersTotalPrice');
+    }
+    totalPrice = ordersTotalPrice.message;
+    debugString += ' totalPrice' + totalPrice;
+  } catch (error) {
+    console.error('Error creating ordersTotalPrice:', (error as Error).message);
+    // Return an error message to the customer
+    return { error: 'Failed to create ordersTotalPrice' };
+  }
   console.log('Order done');
   console.log(debugString);
 };
