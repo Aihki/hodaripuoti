@@ -220,16 +220,12 @@ main {
   padding: 10px;
 }
 
-
-
 .divaider {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 10px;
 }
-
-
 
 .total-box {
   display: flex;
@@ -250,8 +246,6 @@ main {
   font-size: 20px;
   margin-bottom: 10px;
 } */
-
-
 
 input {
   width: 2rem;
@@ -383,7 +377,7 @@ input {
 }
 .sticky-row {
   position: sticky;
-  z-index: 0;
+  z-index: 1;
   top: 0px;
   background-color: white;
   border: 1px black solid;
@@ -775,8 +769,6 @@ dialog:has(.confirm-modal-container) {
   scroll-snap-align: start;
 }
 
-
-
 .carousel-btn {
   display: inline-block;
   border-radius: 1rem;
@@ -824,7 +816,8 @@ dialog:has(.confirm-modal-container) {
     margin: 0;
   }
 
-  header, footer {
+  header,
+  footer {
     width: 100%;
   }
 }
@@ -838,13 +831,9 @@ dialog:has(.confirm-modal-container) {
     width: 100%;
   }
 
-
   .divaider {
     flex-direction: column;
   }
-
-
-
 }
 
 @media only screen and (min-width: 700px) {

@@ -1,9 +1,9 @@
 interface Order {
-  orderID: number;
+  order_id: number;
   status: number;
-  orderDate: string;
-  info: string;
-  products: Custom[];
+  order_date: string;
+  total_price: number;
+  user_id: number;
 }
 interface Custom {
   hotdogID: number;

@@ -78,6 +78,25 @@ const updateUserManagementModel = (users: User[]): string => {
   return html;
 };
 const orderManagementModel = (order: Order[]): string => {
+  let inProgressCount: number = 0;
+  let readyCount: number = 0;
+  let recievedCount: number = 0;
+  order.forEach((currentOrder: Order) => {
+    // Status, 0 = recieved, 1 = in progress, 2 = completed
+    switch (currentOrder.status) {
+      case 0:
+        recievedCount++;
+        break;
+      case 1:
+        inProgressCount++;
+        break;
+      case 2:
+        readyCount++;
+        break;
+      default:
+        console.log('status is unvalid');
+    }
+  });
   let html = `
     <div class="admin-orders-container">
         <div class="orders-nav">
@@ -87,28 +106,28 @@ const orderManagementModel = (order: Order[]): string => {
             <div class="order-info-button order-info-btn-orders">
               <i class="fa-solid fa-bag-shopping"></i>
               <div class="order-info">
-                <p class="order-amount">4</p>
+                <p class="order-amount">${order.length}</p>
                 <p class="order-filter-text">Tilaukset</p>
               </div>
             </div>
             <div class="order-info-button order-info-btn-in-progress">
               <i class="fa-regular fa-clock"></i>
               <div class="order-info">
-                <p class="order-amount">3</p>
+                <p class="order-amount">${inProgressCount}</p>
                 <p class="order-filter-text">Työn alla</p>
               </div>
             </div>
             <div class="order-info-button order-info-btn-completed">
               <i class="fa-solid fa-check"></i>
               <div class="order-info">
-                <p class="order-amount">2</p>
+                <p class="order-amount">${readyCount}</p>
                 <p class="order-filter-text">Valmiit</p>
               </div>
             </div>
             <div class="order-info-button order-info-btn-recieved">
               <i class="fa-solid fa-box"></i>
               <div class="order-info">
-                <p class="order-amount">2</p>
+                <p class="order-amount">${recievedCount}</p>
                 <p class="order-filter-text">Vastaanotetut</p>
               </div>
             </div>
@@ -118,18 +137,25 @@ const orderManagementModel = (order: Order[]): string => {
             <tr class="sticky-row">
                 <th>Tilauksen ID</th>
                 <th>Tilaaja</th>
-                <th>Tietoja</th>
-                <th>Tuotteita (kpl)</th>
+                <th>Hinta</th>
                 <th>Tilattu</th>
                 <th>Tila</th>
                 <th>Toiminnot</th>
             </tr>
         `;
   order.forEach((order: Order) => {
-    const { orderID, status, orderDate, info, products } = order;
-    // Status, 0 = recieved, 1 = in progress, 2 = completed
-    let statusString;
-    let statusStringClass;
+    const { order_id, status, order_date, total_price, user_id } = order;
+    const originalDate = new Date(order_date);
+    const formattedDate = originalDate.toLocaleString('fi-FI', {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+
+    let statusString: string;
+    let statusStringClass: string;
     switch (status) {
       case 0:
         statusString = 'Vastaanotettu';
@@ -150,16 +176,19 @@ const orderManagementModel = (order: Order[]): string => {
     }
     html += `
               <tr>
-                <td><p>${orderID}</p></td>
-                <td><p>Tilaaja</p></td>
-                <td><p>${info}</p></td>
-                <td><p>${products.length}</p></td>
-                <td><p>${orderDate}</p></td>
+                <td><p>${order_id}</p></td>
+                <td><p>${user_id}</p></td>
+                <td><p>${total_price}</p></td>
+                <td><p>${formattedDate}</p></td>
                 <td><div class="status-container status-container-${statusStringClass}"><p>${statusString}: ${status}</p></div></td>
                 <td>
                   <div class="actions-container">
-                    <div class="status-container-recieved action-btn" id="viewActionBtn"><i class="fa-regular fa-eye"></i></div>
-                    <div class="status-container-completed action-btn" id="checkActionBtn"><i class="fa-solid fa-check"></i></div>
+                  <div class="status-container-recieved action-btn viewActionBtn" data-order-id="${order.order_id}">
+                  <i class="fa-regular fa-eye"></i>
+                </div>
+                <div class="status-container-completed action-btn checkActionBtn" data-order-id="${order.order_id}">
+                  <i class="fa-solid fa-check"></i>
+                </div>
                   </div>
                 </td>
               </tr>

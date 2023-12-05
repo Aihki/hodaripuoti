@@ -26,7 +26,6 @@ const addOrderHotdogs = async (data) => {
     const sql = `INSERT INTO Orders_hotdogs (order_id, hotdog_id, amount)
                   VALUES (?, ?, ?)`;
     const params = [data.order_id, data.hotdog_id, data.amount];
-    console.log('params', params);
     const result = await promisePool.query(sql, params);
     return { insertId: result[0].insertId };
   } catch (e) {

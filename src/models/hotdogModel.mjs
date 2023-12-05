@@ -40,7 +40,9 @@ const addHotDog = async (hotdog) => {
 const addHotDogToppings = async (hotdog_id, topping_ids) => {
   try {
     const values = topping_ids.map((topping_id) => [hotdog_id, topping_id]);
-    console.log('values: hotdog_id', values[0], values[1]);
+    values.forEach((value) => {
+      console.log('value:', value);
+    });
     const sql = `INSERT INTO Hotdog_toppings (hotdog_id, topping_id) VALUES ?`;
     const result = await promisePool.query(sql, [values]);
     return { insertId: result[0].insertId };

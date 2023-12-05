@@ -18,7 +18,6 @@ import {
   addUserManageFormSubmitListener,
   addUserManageNavListener,
 } from './listeners';
-import { checkUserRole } from './main';
 import { url } from './variables';
 
 const testHotdogsOrder: Hotdog[] = [
@@ -31,73 +30,18 @@ const testHotdogsOrder: Hotdog[] = [
   {
     // Menu hotdogs dont need toppings or base_price
     hotdog_id: 1,
-    ordersHotdogsAmount: 1,
+    ordersHotdogsAmount: 3,
   },
   {
     // Menu hotdogs dont need toppings or base_price
     hotdog_id: 3,
-    ordersHotdogsAmount: 1,
+    ordersHotdogsAmount: 2,
   },
   {
     hotdog_id: null,
     base_price: 1.0,
-    ordersHotdogsAmount: 1,
+    ordersHotdogsAmount: 4,
     toppings: [2, 4, 19, 20, 22],
-  },
-];
-
-const orders: Order[] = [
-  {
-    orderID: 1,
-    status: 0,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
-    products: [
-      {
-        hotdogID: 1,
-        toppings: [],
-        basePrice: 1.5,
-      },
-    ],
-  },
-  {
-    orderID: 2,
-    status: 2,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
-    products: [
-      {
-        hotdogID: 1,
-        toppings: [],
-        basePrice: 1.5,
-      },
-    ],
-  },
-  {
-    orderID: 3,
-    status: 3,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
-    products: [
-      {
-        hotdogID: 1,
-        toppings: [],
-        basePrice: 1.5,
-      },
-    ],
-  },
-  {
-    orderID: 4,
-    status: 1,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
-    products: [
-      {
-        hotdogID: 1,
-        toppings: [],
-        basePrice: 1.5,
-      },
-    ],
   },
 ];
 
@@ -123,6 +67,40 @@ const getToken = (): string | null => {
   }
   return token;
 };
+const checkUserRole = async (): Promise<void> => {
+  try {
+    const token = getToken();
+    if (token !== null) {
+      const user = await getUserData(token);
+      console.log(user.role);
+      const userRole = user.role; // Fixed to super admin
+      if (userRole > 0) {
+        showAdminTools(userRole);
+      } else if (userRole === 0) {
+        console.log('Regular user');
+        const adminSection = document.querySelector(
+          '#adminSection'
+        ) as HTMLElement;
+        if (adminSection) {
+          adminSection.style.display = 'none';
+        }
+      } else {
+        console.log('ERROR: User role is invalid');
+      }
+    } else {
+      console.log('Unregistered user');
+      const adminSection = document.querySelector(
+        '#adminSection'
+      ) as HTMLElement;
+      if (adminSection) {
+        adminSection.style.display = 'none';
+      }
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    // Handle the error as needed
+  }
+};
 
 const getUserData = async (token: string): Promise<User> => {
   const options: RequestInit = {
@@ -133,7 +111,7 @@ const getUserData = async (token: string): Promise<User> => {
   return await fetchData(url + '/auth/me', options);
 };
 
-const showSuperAdminTools = async (): Promise<void> => {
+const showAdminTools = async (role: number) => {
   const adminSection = document.querySelector(
     '#adminSection'
   ) as HTMLDivElement;
@@ -142,33 +120,61 @@ const showSuperAdminTools = async (): Promise<void> => {
     return;
   }
 
-  // Get users
-  const users = await fetchData(url + '/user');
+  // Get orders
+  const orders = await fetchData(url + '/order');
 
-  const userManagamentHtml = userManagementModel(users);
   const orderManagementHtml = orderManagementModel(orders);
   adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', userManagamentHtml);
   adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
-  addUserManageNavListener();
-  addOrderActionsListeners();
-  addUserManageFormSubmitListener();
+  if (role === 2) {
+    // Get users
+    const users = await fetchData(url + '/user');
+    const userManagamentHtml = userManagementModel(users);
+    adminSection.insertAdjacentHTML('beforeend', userManagamentHtml);
+    addUserManageNavListener();
+    addUserManageFormSubmitListener();
+  }
+
+  // Remove existing event listeners (if any)
+  document.querySelectorAll('.viewActionBtn').forEach((btn) => {
+    btn.removeEventListener('click', viewActionHandler);
+  });
+
+  document.querySelectorAll('.checkActionBtn').forEach((btn) => {
+    btn.removeEventListener('click', checkActionHandler);
+  });
+
+  // Add new event listeners
+  document.querySelectorAll('.viewActionBtn').forEach((btn) => {
+    btn.addEventListener('click', viewActionHandler);
+  });
+
+  document.querySelectorAll('.checkActionBtn').forEach((btn) => {
+    btn.addEventListener('click', checkActionHandler);
+  });
+
   adminSection.style.display = 'block';
 };
-const showAdminTools = () => {
-  const adminSection = document.querySelector(
-    '#adminSection'
-  ) as HTMLDivElement;
-  if (!adminSection) {
-    console.log('ERROR: No admin section found');
-    return;
-  }
+const viewActionHandler = (event: Event) => {
+  const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
+    'data-order-id'
+  );
 
-  const orderManagementHtml = orderManagementModel(orders);
-  adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
-  addOrderActionsListeners();
-  adminSection.style.display = 'block';
+  if (orderId !== null && orderId !== undefined) {
+    // Call a function or perform an action with orderId
+    console.log(`View clicked for order ID: ${orderId}`);
+  }
+};
+
+const checkActionHandler = (event: Event) => {
+  const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
+    'data-order-id'
+  );
+
+  if (orderId !== null && orderId !== undefined) {
+    // Call a function or perform an action with orderId
+    console.log(`Check clicked for order ID: ${orderId}`);
+  }
 };
 
 const renderForms = (isLogin: boolean | null): void => {
@@ -202,6 +208,7 @@ const renderForms = (isLogin: boolean | null): void => {
     addAuthFormListeners();
   }
 };
+
 const formRegister = async (): Promise<void> => {
   const username = (
     document.querySelector('#usernameInput') as HTMLInputElement
@@ -300,7 +307,8 @@ const updateUserManagementTable = (users: User[]) => {
 
 // create order, insert hotdogs (link to order), link toppings, update totalprice
 const createNewOrder = async (
-  hotdogOrder: Hotdog[]
+  hotdogOrder: Hotdog[],
+  total_price: number
 ): Promise<CreateOrderResponse | null | void> => {
   const token = localStorage.getItem('token');
   if (!token) {
@@ -308,7 +316,6 @@ const createNewOrder = async (
   }
   const userData = await getUserData(token);
   const user_id = userData.user_id;
-  const total_price = 0.0; // Default value, it changes later in this function
   let debugString: string = ''; // TODO: Remove this
   // Handle order creation
   const orderOptions = {
@@ -393,13 +400,9 @@ const createNewOrder = async (
         url + '/order/orderHotdogs',
         ordersHotdogsOptions
       );
-      // if (
-      //   !ordersHotdogs ||
-      //   !ordersHotdogs.orderHotdogs ||
-      //   !ordersHotdogs.orderHotdogs.insertId
-      // ) {
-      //   throw new Error('Failed to create orderHotdogs');
-      // }
+      if (!ordersHotdogs) {
+        throw new Error('Failed to create orderHotdogs');
+      }
       orderHotdogsId = ordersHotdogs.insertId;
       debugString += ' orderHotdogsId' + orderHotdogsId;
     } catch (error) {
@@ -409,7 +412,7 @@ const createNewOrder = async (
     }
 
     // Handle hotdog_toppings creation
-    if (hotdog.hotdog_id && hotdog.hotdog_id > 8) {
+    if (hotdog.hotdog_id === null) {
       let hotdogToppingsId;
       const hotdogToppingsOptions = {
         method: 'POST',
@@ -419,15 +422,12 @@ const createNewOrder = async (
         body: JSON.stringify({ hotdog_id, topping_ids: hotdog.toppings }),
       } as RequestInit;
       try {
+        console.log('CREATING HOTDOG TOPPINGS');
         const hotdogToppings = await fetchData(
           url + '/hotdog/hotdogToppings',
           hotdogToppingsOptions
         );
-        if (
-          !hotdogToppings ||
-          !hotdogToppings.hotdogToppings ||
-          !hotdogToppings.hotdogToppings.insertId
-        ) {
+        if (!hotdogToppings) {
           throw new Error('Failed to create hotdogToppings');
         }
         hotdogToppingsId = hotdogToppings.message;
@@ -440,38 +440,40 @@ const createNewOrder = async (
         // Return an error message to the customer
         return { error: 'Failed to create hotdogToppings' };
       }
+    } else {
+      console.log('NOT CREATING HOTDOG TOPPINGS');
     }
   });
 
   // Handle total price update
-  const totalPriceOptions = {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-  let totalPrice: number | undefined;
-  try {
-    const ordersTotalPrice = await fetchData(
-      url + '/order/orderTotalPrice/' + order_id,
-      totalPriceOptions
-    );
-    if (!ordersTotalPrice) {
-      throw new Error('Failed to PUT ordersTotalPrice');
-    }
-    totalPrice = ordersTotalPrice.message;
-    debugString += ' totalPrice' + totalPrice;
-  } catch (error) {
-    console.error('Error creating ordersTotalPrice:', (error as Error).message);
-    // Return an error message to the customer
-    return { error: 'Failed to create ordersTotalPrice' };
-  }
+  // const totalPriceOptions = {
+  //   method: 'PUT',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  // };
+  // let totalPrice: number | undefined;
+  // try {
+  //   const ordersTotalPrice = await fetchData(
+  //     url + '/order/orderTotalPrice/' + order_id,
+  //     totalPriceOptions
+  //   );
+  //   if (!ordersTotalPrice) {
+  //     throw new Error('Failed to PUT ordersTotalPrice');
+  //   }
+  //   totalPrice = ordersTotalPrice.message;
+  //   debugString += ' totalPrice' + totalPrice;
+  // } catch (error) {
+  //   console.error('Error creating ordersTotalPrice:', (error as Error).message);
+  //   // Return an error message to the customer
+  //   return { error: 'Failed to create ordersTotalPrice' };
+  // }
   console.log('Order done');
   console.log(debugString);
 };
+checkUserRole();
 
 export {
-  showSuperAdminTools,
   updateUserManagementTable,
   showAdminTools,
   renderForms,
@@ -479,4 +481,5 @@ export {
   getToken,
   getUserData,
   createNewOrder,
+  checkUserRole,
 };

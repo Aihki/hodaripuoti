@@ -1,5 +1,5 @@
-import { url } from "./variables";
-import { Beverages, ChefChoice, Ingredients } from "./interfaces/Menu";
+import { url } from './variables';
+import { Beverages, ChefChoice, Ingredients } from './interfaces/Menu';
 
 const getOptions = async (url: string, options = {}) => {
   const response = await fetch(url, options);
@@ -12,7 +12,7 @@ const getOptions = async (url: string, options = {}) => {
 
 const displayOptions = async () => {
   try {
-    const options: Ingredients[] = await getOptions(url + "/custom/products");
+    const options: Ingredients[] = await getOptions(url + '/custom/products');
     console.log(options);
     const productByType: { [key: string]: Ingredients[] } = {};
 
@@ -25,7 +25,7 @@ const displayOptions = async () => {
     Object.keys(productByType).forEach((productType) => {
       const container = document.querySelector(`.${productType}-container`);
       if (container) {
-        const title = document.createElement("h3");
+        const title = document.createElement('h3');
         title.textContent = `Valitse ${productType}`;
         container.appendChild(title);
 
@@ -38,7 +38,7 @@ const displayOptions = async () => {
           <span class="price">${option.price}€</span>
           </div>
         `;
-          container.insertAdjacentHTML("beforeend", html);
+          container.insertAdjacentHTML('beforeend', html);
         });
       }
     });
@@ -49,9 +49,9 @@ const displayOptions = async () => {
 
 const displayChefchoice = async () => {
   try {
-    const allProducts: ChefChoice[] = await getOptions(url + "/menu/chef");
+    const allProducts: ChefChoice[] = await getOptions(url + '/menu/chef');
 
-    const menuContainer = document.querySelector(".menu-container");
+    const menuContainer = document.querySelector('.menu-container');
     if (menuContainer) {
       allProducts.forEach((option: ChefChoice) => {
         const html = `
@@ -62,19 +62,19 @@ const displayChefchoice = async () => {
             <a class='add-to-cart-btn'>Lisää koriin</a>
           </div>
         `;
-        menuContainer.insertAdjacentHTML("beforeend", html);
+        menuContainer.insertAdjacentHTML('beforeend', html);
       });
     }
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
   }
 };
 
 const displayBeverage = async () => {
   try {
-    const allProducts: Beverages[] = await getOptions(url + "/beverage");
+    const allProducts: Beverages[] = await getOptions(url + '/beverage');
 
-    const beverageContainer = document.querySelector(".drink-container");
+    const beverageContainer = document.querySelector('.drink-container');
     if (beverageContainer) {
       allProducts.forEach((option: Beverages) => {
         const html = `
@@ -84,11 +84,11 @@ const displayBeverage = async () => {
               <a class='add-to-cart-btn'>Lisää koriin</a>
             </div>
           `;
-        beverageContainer.insertAdjacentHTML("beforeend", html);
+        beverageContainer.insertAdjacentHTML('beforeend', html);
       });
     }
   } catch (error) {
-    console.error("Error fetching products:", error);
+    console.error('Error fetching products:', error);
   }
 };
 

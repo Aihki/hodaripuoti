@@ -36,13 +36,10 @@ const postOrders = async (req, res, next) => {
   if (order_id.error) {
     return next(new Error(order_id.error));
   }
-
-  console.log('postOrders', order_id);
   res.status(201).json({ message: 'Order added', order_id });
 };
 
 const postOrdersHotdogs = async (req, res, next) => {
-  console.log('req.body', req.body);
   const orderHotdogs = await addOrderHotdogs(req.body);
 
   // orderHotdogs is undefined or null

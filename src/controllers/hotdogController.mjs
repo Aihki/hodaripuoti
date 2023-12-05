@@ -52,7 +52,6 @@ const postHotdogs = async (req, res, next) => {
     return next(new Error(hotdog_id.error));
   }
 
-  console.log('postHotdogs', hotdog_id);
   res.status(201).json({ message: 'Hotdog added', hotdog_id });
 };
 
@@ -67,7 +66,6 @@ const postHotdogsToppings = async (req, res, next) => {
       return next(error);
     }
 
-    console.log('postHotdogsToppings', hotdogToppings);
     res.status(201).json({ message: 'HotdogToppings added', hotdogToppings });
   } catch (error) {
     console.error('Error adding hotdogToppings:', error.message);
