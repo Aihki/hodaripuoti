@@ -6,7 +6,6 @@ import {
   getMenuHotdogs,
   postHotdogs,
   postHotdogsToppings,
-  postManyHotdogsToppings,
 } from '../controllers/hotdogController.mjs';
 import { getOrdersHotdogs } from '../controllers/orderController.mjs';
 
@@ -25,8 +24,7 @@ hotdogRouter
     body('hotdog_id').isNumeric(),
     body('topping_id').isNumeric(),
     postHotdogsToppings
-  ); // TODO: is this necessary
-hotdogRouter.route('/manyHotdogToppings').post(postManyHotdogsToppings);
+  );
 
 hotdogRouter.route('/hotdogToppings/:id').get(getHotdogToppings);
 

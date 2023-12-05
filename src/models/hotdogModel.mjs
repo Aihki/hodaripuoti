@@ -37,26 +37,15 @@ const addHotDog = async (hotdog) => {
     return { error: e.message };
   }
 };
-const addHotDogToppings = async (data) => {
-  try {
-    const sql = `INSERT INTO Hotdog_toppings (hotdog_id, topping_id)
-                  VALUES (?, ?)`;
-    const params = [data.hotdog_id, data.topping_id];
-    const result = await promisePool.query(sql, params);
-    return { insertId: result[0].insertId };
-  } catch (e) {
-    console.error('error', e.message);
-    return { error: e.message };
-  }
-};
-const addManyHotDogToppings = async (hotdog_id, topping_ids) => {
+const addHotDogToppings = async (hotdog_id, topping_ids) => {
   try {
     const values = topping_ids.map((topping_id) => [hotdog_id, topping_id]);
+    console.log('values: hotdog_id', values[0], values[1]);
     const sql = `INSERT INTO Hotdog_toppings (hotdog_id, topping_id) VALUES ?`;
     const result = await promisePool.query(sql, [values]);
     return { insertId: result[0].insertId };
   } catch (e) {
-    console.error('Error adding many hotdogToppings:', e.message);
+    console.error('Error adding hotdogToppings:', e.message);
     return { error: e.message };
   }
 };
@@ -83,5 +72,4 @@ export {
   addHotDog,
   addHotDogToppings,
   listHotdogToppings,
-  addManyHotDogToppings,
 };

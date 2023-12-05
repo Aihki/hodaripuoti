@@ -1,7 +1,6 @@
 import {
   addHotDog,
   addHotDogToppings,
-  addManyHotDogToppings,
   listAllCustomerHotdogs,
   listAllMenuHotdogs,
   listHotdogToppings,
@@ -58,38 +57,20 @@ const postHotdogs = async (req, res, next) => {
 };
 
 const postHotdogsToppings = async (req, res, next) => {
-  const hotdogToppings = await addHotDogToppings(req.body);
-  // order is undefined
-  if (!hotdogToppings) {
-    const error = new Error('Could not add to hotdogToppings');
-    error.status = 401;
-    return next(error);
-  }
-  // db error in model
-  if (hotdogToppings.error) {
-    return next(new Error(hotdogToppings.error));
-  }
-
-  console.log('postHotdogsToppings', hotdogToppings);
-  res.status(201).json({ message: 'HotdogToppings added', hotdogToppings });
-};
-const postManyHotdogsToppings = async (req, res, next) => {
   const { hotdog_id, topping_ids } = req.body;
   try {
-    const hotdogToppings = await addManyHotDogToppings(hotdog_id, topping_ids);
+    const hotdogToppings = await addHotDogToppings(hotdog_id, topping_ids);
 
     if (!hotdogToppings || hotdogToppings.error) {
-      const error = new Error('Could not add many hotdogToppings');
+      const error = new Error('Could not add hotdogToppings');
       error.status = 401;
       return next(error);
     }
 
-    console.log('postManyHotdogsToppings', hotdogToppings);
-    res
-      .status(201)
-      .json({ message: 'Many HotdogToppings added', hotdogToppings });
+    console.log('postHotdogsToppings', hotdogToppings);
+    res.status(201).json({ message: 'HotdogToppings added', hotdogToppings });
   } catch (error) {
-    console.error('Error adding many hotdogToppings:', error.message);
+    console.error('Error adding hotdogToppings:', error.message);
     return next(error);
   }
 };
@@ -113,5 +94,4 @@ export {
   postHotdogs,
   postHotdogsToppings,
   getHotdogToppings,
-  postManyHotdogsToppings,
 };

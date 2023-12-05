@@ -42,6 +42,7 @@ const postOrders = async (req, res, next) => {
 };
 
 const postOrdersHotdogs = async (req, res, next) => {
+  console.log('req.body', req.body);
   const orderHotdogs = await addOrderHotdogs(req.body);
 
   // orderHotdogs is undefined or null

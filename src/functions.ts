@@ -262,7 +262,6 @@ const formLogin = async (): Promise<void> => {
   console.log('LoginData:', loginData);
   (document.querySelector('dialog') as any)?.close(); // close modal
   checkUserRole();
-  createNewOrder(testHotdogsOrder);
 };
 
 const validateData = (
@@ -335,7 +334,6 @@ const createNewOrder = async (
     // Return an error message to the customer
     return { error: 'Failed to create order' };
   }
-
   // for each hotdog in order
   hotdogOrder.forEach(async (hotdog) => {
     let hotdog_id: number | undefined;
@@ -372,11 +370,8 @@ const createNewOrder = async (
       }
     } else {
       // if hotdog does exist, do not create new just send the hotdog_id
-      const menuHotdogId = hotdog.hotdog_id;
-      if (!menuHotdogId) {
-        throw new Error('hotdog.hotdog_id is undefined');
-      }
-      hotdog_id = menuHotdogId;
+
+      hotdog_id = hotdog.hotdog_id;
       debugString += ' hotdog_id' + hotdog_id;
     }
 
@@ -391,20 +386,20 @@ const createNewOrder = async (
         hotdog_id,
         amount: ordersHotdogsAmount,
       }),
-    };
+    } as RequestInit;
     let orderHotdogsId: number | undefined;
     try {
       const ordersHotdogs = await fetchData(
         url + '/order/orderHotdogs',
         ordersHotdogsOptions
       );
-      if (
-        !ordersHotdogs ||
-        !ordersHotdogs.orderHotdogs ||
-        !ordersHotdogs.orderHotdogs.insertId
-      ) {
-        throw new Error('Failed to create orderHotdogs');
-      }
+      // if (
+      //   !ordersHotdogs ||
+      //   !ordersHotdogs.orderHotdogs ||
+      //   !ordersHotdogs.orderHotdogs.insertId
+      // ) {
+      //   throw new Error('Failed to create orderHotdogs');
+      // }
       orderHotdogsId = ordersHotdogs.insertId;
       debugString += ' orderHotdogsId' + orderHotdogsId;
     } catch (error) {
@@ -414,49 +409,37 @@ const createNewOrder = async (
     }
 
     // Handle hotdog_toppings creation
-    // TODO: everything works except this
-    const hotdogToppingsOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    } as RequestInit;
-
-    let fetchUrl;
-    if (hotdog.toppings && hotdog.toppings.length > 1) {
-      hotdogToppingsOptions.body = JSON.stringify({
-        hotdog_id,
-        topping_ids: hotdog.toppings,
-      });
-      fetchUrl = url + '/hotdog/manyHotdogToppings';
-    } else if (hotdog.toppings && hotdog.toppings.length === 1) {
-      hotdogToppingsOptions.body = JSON.stringify({
-        hotdog_id,
-        topping_id: hotdog.toppings[0],
-      });
-      fetchUrl = url + '/hotdog/hotdogToppings';
-    } else {
-      throw new Error('hotdog.toppings are 0 or undefined');
-    }
-
-    let hotdogToppingsId;
-
-    try {
-      const hotdogToppings = await fetchData(fetchUrl, hotdogToppingsOptions);
-      if (
-        !hotdogToppings ||
-        !hotdogToppings.hotdogToppings ||
-        !hotdogToppings.hotdogToppings.insertId
-      ) {
-        throw new Error('Failed to create hotdogToppings');
+    if (hotdog.hotdog_id && hotdog.hotdog_id > 8) {
+      let hotdogToppingsId;
+      const hotdogToppingsOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ hotdog_id, topping_ids: hotdog.toppings }),
+      } as RequestInit;
+      try {
+        const hotdogToppings = await fetchData(
+          url + '/hotdog/hotdogToppings',
+          hotdogToppingsOptions
+        );
+        if (
+          !hotdogToppings ||
+          !hotdogToppings.hotdogToppings ||
+          !hotdogToppings.hotdogToppings.insertId
+        ) {
+          throw new Error('Failed to create hotdogToppings');
+        }
+        hotdogToppingsId = hotdogToppings.message;
+        debugString += ' hotdog_id ' + hotdog_id;
+      } catch (error) {
+        console.error(
+          'Error creating hotdogToppings:',
+          (error as Error).message
+        );
+        // Return an error message to the customer
+        return { error: 'Failed to create hotdogToppings' };
       }
-
-      hotdogToppingsId = hotdogToppings.hotdogToppings.insertId;
-      debugString += ' hotdogToppingsId' + hotdogToppingsId;
-    } catch (error) {
-      console.error('Error creating hotdogToppings:', (error as Error).message);
-      // Return an error message to the customer
-      return { error: 'Failed to create hotdogToppings' };
     }
   });
 
@@ -470,7 +453,7 @@ const createNewOrder = async (
   let totalPrice: number | undefined;
   try {
     const ordersTotalPrice = await fetchData(
-      url + '/order/orderTotalPrice',
+      url + '/order/orderTotalPrice/' + order_id,
       totalPriceOptions
     );
     if (!ordersTotalPrice) {
