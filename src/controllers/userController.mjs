@@ -5,6 +5,7 @@ import {
   findUserById,
   listAllUsers,
   listAllUsersWithRole,
+  listAllWorkers,
   updateRole,
   updateUser,
 } from '../models/userModel.mjs';
@@ -21,12 +22,25 @@ const getUsers = async (req, res, next) => {
   try {
     const users = await listAllUsers();
     if (users.length < 1) {
-      res.status(404);
+      res.status(404).json({ message: 'no users found' });
       return;
     }
     res.json(users);
   } catch (e) {
     console.error('getUsers', e.message);
+    next();
+  }
+};
+const getWorkers = async (req, res, next) => {
+  try {
+    const users = await listAllWorkers();
+    if (users.length < 1) {
+      res.status(404).json({ message: 'no users found' });
+      return;
+    }
+    res.json(users);
+  } catch (e) {
+    console.error('getWorkers', e.message);
     next();
   }
 };
@@ -141,4 +155,5 @@ export {
   deleteUserById,
   getUsersWithRole,
   putRole,
+  getWorkers,
 };

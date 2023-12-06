@@ -1,55 +1,4 @@
 import { promisePool } from '../utils/database.mjs';
-const testUsersObj = [
-  {
-    user_id: 1,
-    username: 'Testi',
-    email: 'Testi@mail.com',
-    password: 'teesti',
-    points: 10,
-    role: 1,
-  },
-  {
-    user_id: 2,
-    username: 'Testi2',
-    email: 'Testi2@mail.com',
-    password: 'teesti2',
-    points: 20,
-    role: 2,
-  },
-  {
-    user_id: 3,
-    username: 'Testi3',
-    email: 'Testi3@mail.com',
-    password: 'teesti3',
-    points: 30,
-    role: 2,
-  },
-  {
-    user_id: 4,
-    username: 'Testi4',
-    email: 'Testi4@mail.com',
-    password: 'teesti4',
-    points: 40,
-    role: 0,
-  },
-  {
-    user_id: 5,
-    username: 'Testi5',
-    email: 'Testi5@mail.com',
-    password: 'teesti5',
-    points: 50,
-    role: 0,
-  },
-
-  {
-    user_id: 6,
-    username: 'Testi6',
-    email: 'Testi6@mail.com',
-    password: 'teesti6',
-    points: 60,
-    role: 1,
-  },
-];
 
 const login = async (email) => {
   try {
@@ -74,17 +23,24 @@ const listAllUsers = async () => {
     console.error('listAllUsers', e.message);
   }
 };
+const listAllWorkers = async () => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT * FROM Users WHERE role = 1 OR role = 2`
+    );
+    return rows;
+  } catch (e) {
+    console.error('listAllWorkers', e.message);
+  }
+};
 
 const listAllUsersWithRole = async (role) => {
-  const sortedUsers = testUsersObj.filter((user) => {
-    return user.role === role;
-  });
-  return sortedUsers;
   try {
-    /*const [rows] = await promisePool.execute(`SELECT * FROM Users WHERE role = ?`,
+    const [rows] = await promisePool.execute(
+      `SELECT * FROM Users WHERE role = ?`,
       [role]
     );
-    return rows;*/
+    return rows;
   } catch (e) {
     console.error('listAllUsers', e.message);
   }
@@ -176,4 +132,5 @@ export {
   listAllUsersWithRole,
   checkIfEmailExists,
   updateRole,
+  listAllWorkers,
 };

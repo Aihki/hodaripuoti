@@ -9,6 +9,18 @@ const listAllOrders = async () => {
   }
 };
 
+const listFilteredOrders = async (id) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT * FROM Orders WHERE status = ?`,
+      [id]
+    );
+    return rows;
+  } catch (e) {
+    console.error('listFilteredOrders', e.message);
+  }
+};
+
 const addOrder = async (order) => {
   try {
     const sql = `INSERT INTO Orders (total_price, user_id)
@@ -50,30 +62,29 @@ const listOrderHotdogs = async (order_id) => {
   }
 };
 
+// NOT IN USE
 const updateOrderTotalPrice = async (order_id) => {
   try {
     const [rows] = await promisePool.execute(
-      `UPDATE Orders
-      SET total_price = (
-          SELECT SUM(Hotdogs.base_price + COALESCE(topping_total, 0) * Orders_hotdogs.amount)
-          FROM Orders_hotdogs
-          JOIN Hotdogs ON Orders_hotdogs.hotdog_id = Hotdogs.hotdog_id
-          LEFT JOIN (
-              SELECT Hotdog_toppings.hotdog_id, SUM(Toppings.topping_price) as topping_total
-              FROM Hotdog_toppings
-              LEFT JOIN Toppings ON Hotdog_toppings.topping_id = Toppings.topping_id
-              GROUP BY Hotdog_toppings.hotdog_id
-          ) AS ToppingTotals ON Orders_hotdogs.hotdog_id = ToppingTotals.hotdog_id
-          WHERE Orders_hotdogs.order_id = Orders.order_id
-          GROUP BY Orders_hotdogs.order_id
-      )
-      WHERE order_id = ?;
-       `,
+      `UPDATE Orders set total_price WHERE user_id = ?;`,
       [order_id]
     );
     return rows;
   } catch (e) {
     console.error('listOrderHotdogs', e.message);
+    throw httpError('Database error', 500);
+  }
+};
+
+const updateOrderStatus = async (body) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `UPDATE Orders set status = ? WHERE order_id = ?;`,
+      [body.status, body.order_id]
+    );
+    return rows;
+  } catch (e) {
+    console.error('updateOrderStatus', e.message);
     throw httpError('Database error', 500);
   }
 };
@@ -84,4 +95,6 @@ export {
   addOrderHotdogs,
   listOrderHotdogs,
   updateOrderTotalPrice,
+  updateOrderStatus,
+  listFilteredOrders,
 };

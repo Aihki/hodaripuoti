@@ -1,4 +1,5 @@
 import {
+  infoModal,
   loginFormModal,
   orderManagementModel,
   registerFormModal,
@@ -14,9 +15,11 @@ import {
 import { User } from './interfaces/User';
 import {
   addAuthFormListeners,
-  addOrderActionsListeners,
+  addOrderFilterListeners,
   addUserManageFormSubmitListener,
   addUserManageNavListener,
+  checkActionHandler,
+  viewActionHandler,
 } from './listeners';
 import { url } from './variables';
 
@@ -111,7 +114,7 @@ const getUserData = async (token: string): Promise<User> => {
   return await fetchData(url + '/auth/me', options);
 };
 
-const showAdminTools = async (role: number) => {
+const showAdminTools = async (role: number, incomingOrders?: any) => {
   const adminSection = document.querySelector(
     '#adminSection'
   ) as HTMLDivElement;
@@ -121,11 +124,17 @@ const showAdminTools = async (role: number) => {
   }
 
   // Get orders
-  const orders = await fetchData(url + '/order');
+  let orders;
+  if (!incomingOrders) {
+    orders = await fetchData(url + '/order');
+  } else {
+    orders = incomingOrders;
+  }
 
   const orderManagementHtml = orderManagementModel(orders);
   adminSection.innerHTML = '';
   adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  addOrderFilterListeners(role);
   if (role === 2) {
     // Get users
     const users = await fetchData(url + '/user');
@@ -141,7 +150,9 @@ const showAdminTools = async (role: number) => {
   });
 
   document.querySelectorAll('.checkActionBtn').forEach((btn) => {
-    btn.removeEventListener('click', checkActionHandler);
+    btn.removeEventListener('click', (event) =>
+      checkActionHandler(role, event)
+    );
   });
 
   // Add new event listeners
@@ -150,31 +161,10 @@ const showAdminTools = async (role: number) => {
   });
 
   document.querySelectorAll('.checkActionBtn').forEach((btn) => {
-    btn.addEventListener('click', checkActionHandler);
+    btn.addEventListener('click', (event) => checkActionHandler(role, event));
   });
 
   adminSection.style.display = 'block';
-};
-const viewActionHandler = (event: Event) => {
-  const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
-    'data-order-id'
-  );
-
-  if (orderId !== null && orderId !== undefined) {
-    // Call a function or perform an action with orderId
-    console.log(`View clicked for order ID: ${orderId}`);
-  }
-};
-
-const checkActionHandler = (event: Event) => {
-  const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
-    'data-order-id'
-  );
-
-  if (orderId !== null && orderId !== undefined) {
-    // Call a function or perform an action with orderId
-    console.log(`Check clicked for order ID: ${orderId}`);
-  }
 };
 
 const renderForms = (isLogin: boolean | null): void => {
@@ -295,14 +285,28 @@ const validateData = (
 };
 
 const updateUserManagementTable = (users: User[]) => {
-  const adminSection = document.querySelector('#adminSection');
-  if (!adminSection) {
+  const userManagementTableContainer = document.querySelector(
+    '.user-management-table-container'
+  );
+  if (!userManagementTableContainer) {
     console.log('ERROR: No admin section found');
     return;
   }
   const userManagementHtml = updateUserManagementModel(users);
-  adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', userManagementHtml);
+  userManagementTableContainer.innerHTML = '';
+  userManagementTableContainer.insertAdjacentHTML(
+    'beforeend',
+    userManagementHtml
+  );
+};
+const showInfoModal = (text: string) => {
+  const modal = document.querySelector('dialog');
+  if (!modal) {
+    return;
+  }
+  const infoModalHtml = infoModal(text);
+  modal.innerHTML = '';
+  modal.insertAdjacentHTML('beforeend', infoModalHtml);
 };
 
 // create order, insert hotdogs (link to order), link toppings, update totalprice
@@ -482,4 +486,5 @@ export {
   getUserData,
   createNewOrder,
   checkUserRole,
+  showInfoModal,
 };

@@ -7,6 +7,7 @@ import {
   putUserById,
   getUsersWithRole,
   putRole,
+  getWorkers,
 } from '../controllers/userController.mjs';
 import { body } from 'express-validator';
 
@@ -22,6 +23,7 @@ userRouter
     postUser
   );
 
+userRouter.route('/workers').get(getWorkers);
 userRouter
   .route('/:id')
   .get(getUserById)

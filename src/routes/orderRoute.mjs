@@ -1,10 +1,12 @@
 import express from 'express';
 import { body } from 'express-validator';
 import {
+  getFilteredOrders,
   getOrders,
   getOrdersHotdogs,
   postOrders,
   postOrdersHotdogs,
+  putOrderStatus,
   putOrderTotalPrice,
 } from '../controllers/orderController.mjs';
 
@@ -18,6 +20,8 @@ orderRouter
     body('total_price').isNumeric(),
     postOrders
   );
+orderRouter.route('/changeOrderStatus').put(putOrderStatus);
+orderRouter.route('/getFilteredOrders/:id').get(getFilteredOrders);
 
 orderRouter
   .route('/orderHotdogs')

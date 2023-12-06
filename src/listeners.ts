@@ -3,6 +3,8 @@ import {
   fetchData,
   getToken,
   renderForms,
+  showAdminTools,
+  showInfoModal,
   updateUserManagementTable,
 } from './functions';
 import { url } from './variables';
@@ -29,29 +31,66 @@ const addUserManageNavListener = () => {
           return;
         }
         btn.classList.remove('user-manage-active');
-        console.log('here');
       });
       button.classList.add('user-manage-active');
+      let fetchString: string | null = '';
       switch (button.id) {
         case 'userManageAllWorkersBtn':
-          const allStaff = await fetchData(url + '/user/role/1');
-          updateUserManagementTable(allStaff);
+          fetchString = url + '/user/workers';
           break;
         case 'userManageSAdminBtn':
-          const superAdmins = await fetchData(url + '/user/role/2');
-          updateUserManagementTable(superAdmins);
+          fetchString = url + '/user/role/2';
           break;
         case 'userManageCounterBtn':
-          const otherStaff = await fetchData(url + '/user');
-          updateUserManagementTable(otherStaff);
+          fetchString = url + '/user/role/1';
           break;
         case 'userManageAllBtn':
-          const allUsers = await fetchData(url + '/user');
-          updateUserManagementTable(allUsers);
+          fetchString = url + '/user';
           break;
         default:
-          console.log('ERROR: Button id is unvalid');
+          fetchString == null;
           break;
+      }
+      if (fetchString === null) {
+        console.log('ERROR: Button id is unvalid');
+        return;
+      }
+      const users = await fetchData(fetchString);
+      console.log(users);
+      if (users) {
+        updateUserManagementTable(users);
+      } else {
+        showInfoModal('No users found');
+      }
+    });
+  });
+};
+const addOrderFilterListeners = (role: number) => {
+  const orderInfoButtons = document.querySelectorAll('.order-info-button');
+  if (orderInfoButtons.length <= 0) {
+    return;
+  }
+  orderInfoButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+      let fetchUrl: string | null = '';
+
+      // Use classList.contains() to check if the class is present
+      if (button.classList.contains('order-info-btn-orders')) {
+        fetchUrl = url + '/order';
+      } else if (button.classList.contains('order-info-btn-in-progress')) {
+        fetchUrl = url + '/order/getFilteredOrders/1';
+      } else if (button.classList.contains('order-info-btn-completed')) {
+        fetchUrl = url + '/order/getFilteredOrders/2';
+      } else if (button.classList.contains('order-info-btn-recieved')) {
+        fetchUrl = url + '/order/getFilteredOrders/0';
+      } else {
+        console.log(button.className);
+        fetchUrl = null;
+      }
+
+      if (fetchUrl !== null) {
+        const orderList = await fetchData(fetchUrl);
+        showAdminTools(role, orderList);
       }
     });
   });
@@ -101,67 +140,7 @@ const addAuthFormListeners = () => {
     });
   });
 };
-const addOrderActionsListeners = () => {
-  // Login form mode listener
-  const checkActionBtns = document.querySelectorAll('#checkActionBtn');
-  if (checkActionBtns.length <= 0) {
-    return;
-  }
-  const viewActionBtns = document.querySelectorAll('#viewActionBtn');
-  if (viewActionBtns.length <= 0) {
-    return;
-  }
-  checkActionBtns.forEach((checkActionBtn) => {
-    const modal = document.querySelector('dialog');
-    if (!modal) {
-      return;
-    }
-    checkActionBtn?.addEventListener('click', () => {
-      const confirmModalHtml = confirmModal(
-        'Oletko varma haluavasi merkata tilauksen <strong>valmiiksi</strong>?'
-      );
 
-      modal.innerHTML = '';
-      modal.insertAdjacentHTML('beforeend', confirmModalHtml);
-      (modal as any).showModal();
-      const confirmYesBtn = document.querySelector('#confirmYesBtn');
-      if (!confirmYesBtn) {
-        return;
-      }
-      confirmYesBtn.addEventListener('click', () => {
-        // TODO: Change orders status to completed
-        console.log('order completed');
-        (modal as any).close();
-      });
-    });
-  });
-  viewActionBtns.forEach((viewActionBtn) => {
-    const modal = document.querySelector('dialog');
-    if (!modal) {
-      return;
-    }
-    viewActionBtn?.addEventListener('click', () => {
-      const viewOrderModal = '';
-
-      modal.innerHTML = '';
-      modal.insertAdjacentHTML('beforeend', viewOrderModal);
-      (modal as any).showModal();
-    });
-  });
-
-  // Modal cose listener
-  const modal = document.querySelector('dialog');
-  if (!modal) {
-    return;
-  }
-  const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
-  modalCloseButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-      console.log('close');
-      (modal as any).close();
-    });
-  });
-};
 const addUserManageFormSubmitListener = () => {
   const userManagementTableContainer = document.querySelector(
     '.user-management-table-container'
@@ -204,10 +183,108 @@ const addUserManageFormSubmitListener = () => {
   });
 };
 
+const viewActionHandler = (event: Event) => {
+  const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
+    'data-order-id'
+  );
+
+  if (orderId !== null && orderId !== undefined) {
+    // Call a function or perform an action with orderId
+    console.log(`View clicked for order ID: ${orderId}`);
+
+    const modal = document.querySelector('dialog');
+
+    if (!modal) {
+      return;
+    }
+    const viewOrderModal = 'Heree';
+
+    modal.innerHTML = '';
+    modal.insertAdjacentHTML('beforeend', viewOrderModal);
+    (modal as any).showModal();
+  }
+};
+
+const checkActionHandler = (role: number, event: Event) => {
+  const orderIdString = (event.currentTarget as HTMLElement)?.getAttribute(
+    'data-order-id'
+  );
+  const orderId = orderIdString ? parseInt(orderIdString, 10) : null;
+  const orderStatusString = (event.currentTarget as HTMLElement)?.getAttribute(
+    'data-order-status'
+  );
+  const orderStatus = orderStatusString
+    ? parseInt(orderStatusString, 10)
+    : null;
+  const modal = document.querySelector('dialog');
+  if (!modal) {
+    return;
+  }
+  if (
+    orderId !== null &&
+    orderId !== undefined &&
+    orderStatus !== null &&
+    orderStatus !== undefined
+  ) {
+    // Call a function or perform an action with orderId
+    let confirmModalHtml: string = '';
+    switch (orderStatus) {
+      case 0: // Recieved
+        confirmModalHtml = confirmModal(
+          `Oletko varma haluavasi ottaa tilauksen <strong>${orderId} vastaan</strong>?`
+        );
+        break;
+      case 1: // In progress
+        confirmModalHtml = confirmModal(
+          `Oletko varma haluavasi merkata tilauksen <strong>${orderId} valmiiksi</strong>?`
+        );
+        break;
+      default:
+        console.log('Remove this btn');
+        break;
+    }
+
+    modal.innerHTML = '';
+    modal.insertAdjacentHTML('beforeend', confirmModalHtml);
+    const confirmYesBtn = document.querySelector('#confirmYesBtn');
+    if (!confirmYesBtn) {
+      return;
+    }
+    confirmYesBtn.addEventListener('click', async () => {
+      const formData = {
+        status: orderStatus + 1,
+        order_id: orderId,
+      };
+      const options = {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      };
+      const result = await fetchData(url + '/order/changeOrderStatus', options);
+      if (orderStatus === 0) {
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 0);
+        showAdminTools(role, orders);
+      } else if (orderStatus === 1) {
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 1);
+        showAdminTools(role, orders);
+      } else {
+        showAdminTools(role);
+        console.log('Order status is < 0 or status > 1');
+      }
+      (modal as any).close();
+    });
+    (modal as any).showModal();
+  }
+};
+
 export {
   runAppStarterListeners,
   addAuthFormListeners,
   addUserManageNavListener,
-  addOrderActionsListeners,
   addUserManageFormSubmitListener,
+  viewActionHandler,
+  checkActionHandler,
+  addOrderFilterListeners,
 };

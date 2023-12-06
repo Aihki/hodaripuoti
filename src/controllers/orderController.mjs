@@ -2,7 +2,9 @@ import {
   addOrder,
   addOrderHotdogs,
   listAllOrders,
+  listFilteredOrders,
   listOrderHotdogs,
+  updateOrderStatus,
   updateOrderTotalPrice,
 } from '../models/orderModel.mjs';
 
@@ -22,6 +24,18 @@ const getOrders = async (req, res) => {
     res.json(orders);
   } catch (e) {
     console.error('getOrders', e.message);
+  }
+};
+const getFilteredOrders = async (req, res) => {
+  try {
+    const orders = await listFilteredOrders(req.params.id);
+    if (orders.length < 1) {
+      res.status(404).json({ message: 'No orders found!' });
+      return;
+    }
+    res.json(orders);
+  } catch (e) {
+    console.error('getFilteredOrders', e.message);
   }
 };
 const postOrders = async (req, res, next) => {
@@ -73,7 +87,7 @@ const getOrdersHotdogs = async (req, res) => {
 
 const putOrderTotalPrice = async (req, res) => {
   try {
-    const result = await updateOrderTotalPrice(req.params.id);
+    const result = await updateOrderStatus(req.body);
     if (!result) {
       res.status(404);
       return;
@@ -87,10 +101,27 @@ const putOrderTotalPrice = async (req, res) => {
   }
 };
 
+const putOrderStatus = async (req, res) => {
+  try {
+    const result = await updateOrderStatus(req.body);
+    if (!result) {
+      res.status(404);
+      return;
+    }
+    res.json({
+      message: 'Orders status updated',
+    });
+  } catch (error) {
+    console.error('putOrderStatus', error.message);
+  }
+};
+
 export {
   getOrders,
   postOrders,
   postOrdersHotdogs,
   getOrdersHotdogs,
   putOrderTotalPrice,
+  putOrderStatus,
+  getFilteredOrders,
 };

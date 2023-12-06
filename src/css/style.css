@@ -121,7 +121,7 @@ header {
   position: fixed;
   top: 0;
   width: calc(100% - 220px);
-  z-index: 1;
+  z-index: 2;
 }
 
 .branding {
@@ -469,6 +469,10 @@ x .orders-con .orders-nav h2 {
   padding: 5px;
   margin: auto;
 }
+.status-container p {
+  white-space: nowrap;
+}
+
 .status-container-recieved {
   background-color: #77bbe9;
   color: #124e75;
@@ -792,8 +796,6 @@ dialog:has(.confirm-modal-container) {
 }
 
 /* ***************** */
-
-/* media css */
 
 @media only screen and (min-width: 1100px) {
   .menu-container,

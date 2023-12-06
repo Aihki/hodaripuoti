@@ -178,17 +178,24 @@ const orderManagementModel = (order: Order[]): string => {
               <tr>
                 <td><p>${order_id}</p></td>
                 <td><p>${user_id}</p></td>
-                <td><p>${total_price}</p></td>
+                <td><p>${total_price}€</p></td>
                 <td><p>${formattedDate}</p></td>
                 <td><div class="status-container status-container-${statusStringClass}"><p>${statusString}: ${status}</p></div></td>
                 <td>
                   <div class="actions-container">
-                  <div class="status-container-recieved action-btn viewActionBtn" data-order-id="${order.order_id}">
+                  <div class="status-container-recieved action-btn viewActionBtn" data-order-id="${
+                    order.order_id
+                  }" data-order-status="${order.status}">
                   <i class="fa-regular fa-eye"></i>
                 </div>
-                <div class="status-container-completed action-btn checkActionBtn" data-order-id="${order.order_id}">
+                ${
+                  status !== 2
+                    ? `
+                <div class="status-container-completed action-btn checkActionBtn" data-order-id="${order.order_id}" data-order-status="${order.status}">
                   <i class="fa-solid fa-check"></i>
-                </div>
+                </div>`
+                    : ''
+                }
                   </div>
                 </td>
               </tr>
@@ -272,6 +279,16 @@ const confirmModal = (modaltext: string): string => {
   </div> `;
   return html;
 };
+const infoModal = (modaltext: string): string => {
+  let html = `
+  <div class="confirm-modal-container">
+    <div class="forms-top-container">
+      <h2>${modaltext}</h2>
+    </div>
+    <button class="form-button form-button-cancel" id="dialogCloseButton">Peru</button>
+  </div> `;
+  return html;
+};
 
 export {
   userManagementModel,
@@ -281,4 +298,5 @@ export {
   orderManagementModel,
   confirmModal,
   updateUserManagementModel,
+  infoModal,
 };
