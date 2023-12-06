@@ -4,6 +4,7 @@ import {
   listAllOrders,
   listFilteredOrders,
   listOrderHotdogs,
+  listOrdersCounts,
   updateOrderStatus,
   updateOrderTotalPrice,
 } from '../models/orderModel.mjs';
@@ -36,6 +37,18 @@ const getFilteredOrders = async (req, res) => {
     res.json(orders);
   } catch (e) {
     console.error('getFilteredOrders', e.message);
+  }
+};
+const getOrdersCounts = async (req, res) => {
+  try {
+    const orders = await listOrdersCounts();
+    if (orders.length < 1) {
+      res.status(404).json({ message: 'No orders found!' });
+      return;
+    }
+    res.json(orders);
+  } catch (e) {
+    console.error('getOrdersCounts', e.message);
   }
 };
 const postOrders = async (req, res, next) => {
@@ -124,4 +137,5 @@ export {
   putOrderTotalPrice,
   putOrderStatus,
   getFilteredOrders,
+  getOrdersCounts,
 };

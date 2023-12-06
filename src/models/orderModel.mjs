@@ -20,6 +20,21 @@ const listFilteredOrders = async (id) => {
     console.error('listFilteredOrders', e.message);
   }
 };
+const listOrdersCounts = async () => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT 
+      COUNT(*) AS totalOrders,
+      SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) AS recievedCount,
+      SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS inProgressCount,
+      SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) AS completedCount
+      FROM Orders;`
+    );
+    return rows;
+  } catch (e) {
+    console.error('listOrdersCounts', e.message);
+  }
+};
 
 const addOrder = async (order) => {
   try {
@@ -97,4 +112,5 @@ export {
   updateOrderTotalPrice,
   updateOrderStatus,
   listFilteredOrders,
+  listOrdersCounts,
 };

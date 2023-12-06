@@ -3,6 +3,7 @@ import { body } from 'express-validator';
 import {
   getFilteredOrders,
   getOrders,
+  getOrdersCounts,
   getOrdersHotdogs,
   postOrders,
   postOrdersHotdogs,
@@ -33,6 +34,7 @@ orderRouter
     postOrdersHotdogs
   );
 orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
+orderRouter.route('/ordersCounts').get(getOrdersCounts);
 orderRouter.route('/orderTotalPrice/:id').put(putOrderTotalPrice);
 
 export default orderRouter;

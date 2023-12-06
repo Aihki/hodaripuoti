@@ -135,6 +135,8 @@ const showAdminTools = async (role: number, incomingOrders?: any) => {
   adminSection.innerHTML = '';
   adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
   addOrderFilterListeners(role);
+  updateOrderInfoBtnAmount();
+
   if (role === 2) {
     // Get users
     const users = await fetchData(url + '/user');
@@ -165,6 +167,36 @@ const showAdminTools = async (role: number, incomingOrders?: any) => {
   });
 
   adminSection.style.display = 'block';
+};
+const updateOrderInfoBtnAmount = async () => {
+  const counts = await fetchData(url + '/order/ordersCounts');
+  if (!counts) {
+    return;
+  }
+  const orderInfoBtnOrders = document
+    .querySelector('.order-info-btn-orders')
+    ?.querySelector('.order-amount');
+  const orderInfoBtnRecieved = document
+    .querySelector('.order-info-btn-recieved')
+    ?.querySelector('.order-amount');
+  const orderInfoBtnCompleted = document
+    .querySelector('.order-info-btn-completed')
+    ?.querySelector('.order-amount');
+  const orderInfoBtnInProgress = document
+    .querySelector('.order-info-btn-in-progress')
+    ?.querySelector('.order-amount');
+  if (
+    !orderInfoBtnCompleted ||
+    !orderInfoBtnInProgress ||
+    !orderInfoBtnOrders ||
+    !orderInfoBtnRecieved
+  ) {
+    return;
+  }
+  orderInfoBtnCompleted.innerHTML = counts[0].completedCount;
+  orderInfoBtnInProgress.innerHTML = counts[0].inProgressCount;
+  orderInfoBtnOrders.innerHTML = counts[0].totalOrders;
+  orderInfoBtnRecieved.innerHTML = counts[0].recievedCount;
 };
 
 const renderForms = (isLogin: boolean | null): void => {

@@ -78,25 +78,6 @@ const updateUserManagementModel = (users: User[]): string => {
   return html;
 };
 const orderManagementModel = (order: Order[]): string => {
-  let inProgressCount: number = 0;
-  let readyCount: number = 0;
-  let recievedCount: number = 0;
-  order.forEach((currentOrder: Order) => {
-    // Status, 0 = recieved, 1 = in progress, 2 = completed
-    switch (currentOrder.status) {
-      case 0:
-        recievedCount++;
-        break;
-      case 1:
-        inProgressCount++;
-        break;
-      case 2:
-        readyCount++;
-        break;
-      default:
-        console.log('status is unvalid');
-    }
-  });
   let html = `
     <div class="admin-orders-container">
         <div class="orders-nav">
@@ -106,28 +87,28 @@ const orderManagementModel = (order: Order[]): string => {
             <div class="order-info-button order-info-btn-orders">
               <i class="fa-solid fa-bag-shopping"></i>
               <div class="order-info">
-                <p class="order-amount">${order.length}</p>
+                <p class="order-amount">0</p>
                 <p class="order-filter-text">Tilaukset</p>
               </div>
             </div>
             <div class="order-info-button order-info-btn-in-progress">
               <i class="fa-regular fa-clock"></i>
               <div class="order-info">
-                <p class="order-amount">${inProgressCount}</p>
+                <p class="order-amount">0</p>
                 <p class="order-filter-text">Työn alla</p>
               </div>
             </div>
             <div class="order-info-button order-info-btn-completed">
               <i class="fa-solid fa-check"></i>
               <div class="order-info">
-                <p class="order-amount">${readyCount}</p>
+                <p class="order-amount">0</p>
                 <p class="order-filter-text">Valmiit</p>
               </div>
             </div>
             <div class="order-info-button order-info-btn-recieved">
               <i class="fa-solid fa-box"></i>
               <div class="order-info">
-                <p class="order-amount">${recievedCount}</p>
+                <p class="order-amount">0</p>
                 <p class="order-filter-text">Vastaanotetut</p>
               </div>
             </div>
