@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { url } from './variables';
 import { Beverages, ChefChoice, Ingredients } from './interfaces/Menu';
+=======
+import { url } from "./variables";
+import { ChefChoice, CustomIngredient, Ingredients } from "./interfaces/Menu";
+>>>>>>> shoppingCart
 
 const getOptions = async (url: string, options = {}) => {
   const response = await fetch(url, options);
@@ -9,11 +14,16 @@ const getOptions = async (url: string, options = {}) => {
   const json = await response.json();
   return json;
 };
+let customIngredients: { [key: string]: CustomIngredient } = {};
 
 const displayOptions = async () => {
   try {
+<<<<<<< HEAD
     const options: Ingredients[] = await getOptions(url + '/custom/products');
     console.log(options);
+=======
+    const options: Ingredients[] = await getOptions(url + "/ingridients");
+>>>>>>> shoppingCart
     const productByType: { [key: string]: Ingredients[] } = {};
 
     options.forEach((option: Ingredients) => {
@@ -22,6 +32,7 @@ const displayOptions = async () => {
       }
       productByType[option.topping_type].push(option);
     });
+
     Object.keys(productByType).forEach((productType) => {
       const container = document.querySelector(`.${productType}-container`);
       if (container) {
@@ -32,13 +43,64 @@ const displayOptions = async () => {
         productByType[productType].forEach((option) => {
           const html = `
           <div class="checkbox-container custom-checkbox">
-          <input type="checkbox" class="${productType}-checkbox" id="${option.topping_id}" />
+          <input type="Checkbox" class="productChekcbox" id="Topping-${option.topping_id}" />
           <span style="margin-right: 10px;"></span> 
-          <label for="${option.topping_id}">${option.topping_name}</label>
+          <label for="Topping-${option.topping_id}">${option.topping_name}</label>
           <span class="price">${option.price}€</span>
+<<<<<<< HEAD
           </div>
         `;
           container.insertAdjacentHTML('beforeend', html);
+=======
+      </div>
+            `;
+          container.insertAdjacentHTML("beforeend", html);
+>>>>>>> shoppingCart
+        });
+        const checkboxes: NodeListOf<HTMLInputElement> =
+          container.querySelectorAll(".productChekcbox");
+
+        checkboxes.forEach((checkbox: HTMLInputElement) => {
+          checkbox.addEventListener("change", (event: Event) => {
+            const targetCheckbox = event.target as HTMLInputElement;
+            const id = targetCheckbox.id.split("-")[1];
+            const parsedId = parseInt(id, 10);
+            const priceElement =
+              targetCheckbox.nextElementSibling?.nextElementSibling
+                ?.nextElementSibling;
+            const productName =
+              priceElement?.previousElementSibling?.textContent;
+            const price = parseFloat(priceElement?.textContent || "0");
+
+            if (targetCheckbox.checked) {
+              customIngredients[productName || ""] = {
+                price,
+                toppingId: parsedId,
+              };
+            } else {
+              delete customIngredients[productName || ""];
+            }
+
+            let totalSum = 0;
+            Object.values(customIngredients).forEach((ingredient) => {
+              totalSum += ingredient.price;
+              const totalBox = document.querySelector(".total");
+              if (totalBox) {
+                totalBox.textContent = `Total Sum: ${totalSum.toFixed(2)}`;
+              }
+              const addToCartButton = document.querySelector(
+                ".add-custom-to-cart-btn"
+              );
+              if (addToCartButton) {
+                addToCartButton.addEventListener("click", () => {
+                  checkboxes.forEach((checkbox) => {
+                    checkbox.checked = false;
+                    customIngredients = {};
+                  });
+                });
+              }
+            });
+          });
         });
       }
     });
@@ -49,16 +111,20 @@ const displayOptions = async () => {
 
 const displayChefchoice = async () => {
   try {
+<<<<<<< HEAD
     const allProducts: ChefChoice[] = await getOptions(url + '/menu/chef');
+=======
+    const allProducts: ChefChoice[] = await getOptions(url + "/menu");
+>>>>>>> shoppingCart
 
     const menuContainer = document.querySelector('.menu-container');
     if (menuContainer) {
       allProducts.forEach((option: ChefChoice) => {
         const html = `
           <div class="menu-item-container">
-            <h3 class="menu-food-title">${option.hotdog_name}</h3>
+            <h3 class="menu-food-title" id="Menu-${option.custom_id}">${option.hotdog_name}</h3>
             <p class = "menu-ingredients ">${option.toppings}</p>
-            <p class="menu-price">Price: $${option.base_price}</p>
+            <p class="menu-price">${option.base_price}€</p>
             <a class='add-to-cart-btn'>Lisää koriin</a>
           </div>
         `;
@@ -70,7 +136,7 @@ const displayChefchoice = async () => {
   }
 };
 
-const displayBeverage = async () => {
+/* const displayBeverage = async () => {
   try {
     const allProducts: Beverages[] = await getOptions(url + '/beverage');
 
@@ -90,6 +156,6 @@ const displayBeverage = async () => {
   } catch (error) {
     console.error('Error fetching products:', error);
   }
-};
+}; */
 
-export { displayChefchoice, displayBeverage, displayOptions };
+export { displayChefchoice, displayOptions, customIngredients };

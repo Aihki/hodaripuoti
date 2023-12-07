@@ -5,11 +5,19 @@ interface Order {
   total_price: number;
   user_id: number;
 }
+interface Hotdog {
+  hotdog_id: number | null;
+  ordersHotdogsAmount: number;
+  base_price?: number;
+  toppings?: number[];
+}
+
 interface Custom {
   hotdogID: number;
   toppings: Toppings[];
   basePrice: number;
 }
+
 interface Toppings {
   toppingID: number;
   toppingName: string;

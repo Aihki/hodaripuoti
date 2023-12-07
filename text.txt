@@ -75,3 +75,61 @@ VALUE (1,'Vesi', 0.90),
   
 
 
+const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+  '.custom-checkbox input[type="checkbox"]'
+);
+const totalElement: HTMLElement | null =
+  document.querySelector(".cart-total-price");
+const cartContent: HTMLElement | null = document.querySelector(".cart-content");
+let totalSum: number = 0;
+
+function updateTotal(): void {
+  totalSum = 0;
+  if (cartContent) cartContent.innerHTML = "";
+
+  checkboxes.forEach((checkbox: HTMLInputElement) => {
+    if (checkbox.checked) {
+      const priceElement: HTMLElement | null | undefined = checkbox
+        .nextElementSibling?.nextElementSibling as HTMLElement | null;
+      const price: number = parseFloat(priceElement?.textContent || "0");
+      totalSum += price;
+
+      // Add selected topping to the cart content
+      const toppingName: string | undefined =
+        checkbox.nextElementSibling?.nextElementSibling?.textContent ||
+        undefined;
+
+      const cartItem: HTMLDivElement = document.createElement("div");
+      if (toppingName) {
+        cartItem.textContent = `${toppingName} - ${price.toFixed(2)}€`;
+        if (cartContent) cartContent.appendChild(cartItem);
+      }
+    }
+  });
+  if (totalElement) totalElement.textContent = `${totalSum.toFixed(2)}€`;
+}
+
+checkboxes.forEach((checkbox: HTMLInputElement) => {
+  checkbox.addEventListener("change", updateTotal);
+});
+
+const addToCartBtn: HTMLElement | null =
+  document.querySelector(".add-to-cart-btn");
+addToCartBtn?.addEventListener("click", () => {
+  // Perform actions when the "Lisää koriin" (Add to cart) button is clicked
+  // For example, update the cart items or send data to the server
+  updateTotal();
+});
+
+const cartClose: HTMLElement | null = document.getElementById("cart-close");
+cartClose?.addEventListener("click", () => {
+  // Close the cart when the close icon is clicked
+  // Implement functionality to hide the cart here
+});
+
+const cartCheckout: HTMLElement | null =
+  document.querySelector(".cart-checkout");
+cartCheckout?.addEventListener("click", () => {
+  // Implement checkout functionality here
+  // For example, send the cart items to the server
+});
