@@ -2,7 +2,7 @@ import { promisePool } from "../utils/database.mjs";
 
 const getChefChoices = async () => {
   try {
-    const [results] = await promisePool.query("SELECT * FROM hod_custom");
+    const [results] = await promisePool.query("SELECT * FROM Hotdogs");
     console.log(results);
     return results;
   } catch (error) {

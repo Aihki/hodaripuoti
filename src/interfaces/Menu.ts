@@ -1,7 +1,7 @@
 interface Ingredients {
   topping_id: number;
   topping_name: string;
-  price: number;
+  topping_price: number;
   topping_type: "sampyla" | "makkara" | "täyte" | "kastike";
 }
 /* 
@@ -12,12 +12,13 @@ interface Beverages {
   beverage_price: number;
 } */
 interface CustomIngredient {
-  price: number;
-  toppingId: number;
+  topping_name?: string;
+  topping_price: number;
+  topping_id: number;
 }
 
 interface ChefChoice {
-  custom_id: number;
+  hotdog_id: number;
   order_id: number;
   hotdog_name: string;
   toppings: string;

@@ -396,17 +396,18 @@ input {
   border-radius: 10px;
 }
 
-<<<<<<< HEAD
 /* Admin */
 .admin-section {
   margin: 100px 10px;
 }
+
 .user-management-nav {
   height: 50px;
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
 }
+
 .user-manage-nav-btn {
   color: white;
   background-color: var(--dark);
@@ -419,22 +420,27 @@ input {
   height: 70%;
   transition: ease 0.5s;
 }
+
 .user-manage-nav-btn:hover {
   height: 90%;
   background-color: #303030;
 }
+
 .user-manage-active:hover {
   height: 100%;
   background-color: var(--light-green);
 }
+
 .user-manage-active {
   background-color: var(--light-green);
   height: 100%;
 }
+
 .admin-section table {
   border-collapse: collapse;
   width: 100%;
 }
+
 .sticky-row {
   position: sticky;
   z-index: 1;
@@ -442,6 +448,7 @@ input {
   background-color: white;
   border: 1px black solid;
 }
+
 .user-management-table-container {
   max-height: 300px;
   overflow-y: auto;
@@ -453,9 +460,11 @@ input {
   padding: 10px;
   text-align: left;
 }
+
 .admin-section tr {
   background-color: var(--pure-light);
 }
+
 .admin-section tr:nth-child(2n) {
   background-color: var(--light-green);
 }
@@ -470,15 +479,18 @@ input {
   flex-direction: column;
   margin: 20px 0;
 }
+
 x .orders-con .orders-nav h2 {
   font-family: poppins-title, sans-serif;
 }
+
 .orders-info-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
   padding: 20px 0;
 }
+
 .order-info-button {
   background-color: #3498db;
   color: #fff;
@@ -491,6 +503,7 @@ x .orders-con .orders-nav h2 {
   transition: 0.5s ease;
   transform: scale(1);
 }
+
 .orders-container {
   max-height: 400px;
   overflow-y: auto;
@@ -500,27 +513,34 @@ x .orders-con .orders-nav h2 {
 .order-info-button:hover {
   transform: scale(1.1);
 }
+
 .order-info-button i {
   padding: 0 10px;
   font-size: 1.25em;
 }
+
 .order-info {
   display: flex;
   flex-direction: column;
   margin-left: 10px;
 }
+
 .order-info-btn-orders {
   background-color: black;
 }
+
 .order-info-btn-in-progress {
   background-color: rebeccapurple;
 }
+
 .order-info-btn-completed {
   background-color: rgb(0, 160, 0);
 }
+
 .order-info-btn-recieved {
   background-color: #3498db;
 }
+
 .status-container {
   text-align: center;
   background-color: #c0c0c0;
@@ -529,6 +549,7 @@ x .orders-con .orders-nav h2 {
   padding: 5px;
   margin: auto;
 }
+
 .status-container p {
   white-space: nowrap;
 }
@@ -537,21 +558,26 @@ x .orders-con .orders-nav h2 {
   background-color: #77bbe9;
   color: #124e75;
 }
+
 .status-container-in-progress {
   background-color: rgb(164, 136, 194);
   color: rgb(55, 27, 83);
 }
+
 .status-container-completed {
   background-color: rgb(124, 212, 124);
   color: rgb(0, 75, 0);
 }
+
 .actions-container {
   display: flex;
   justify-content: space-around;
 }
+
 .action-btn {
   padding: 5px 10px;
-=======
+}
+
 .add-to-cart-btn:hover,
 .add-custom-to-cart-btn:hover {
   background-color: var(--light-green);
@@ -561,7 +587,6 @@ x .orders-con .orders-nav h2 {
 #menu-carousel {
   display: flex;
   border: 1px solid var(--light-green);
->>>>>>> shoppingCart
   border-radius: 10px;
   overflow: hidden;
   width: 100%;
@@ -691,13 +716,14 @@ x .orders-con .orders-nav h2 {
 
 .cart-checkout:hover {
   background-color: var(--light-green);
-<<<<<<< HEAD
   transform: scale(1);
   cursor: pointer;
 }
+
 .form-button-a-container {
   width: 100%;
 }
+
 .form-button-a {
   margin: auto;
   font-size: 1rem;
@@ -707,20 +733,21 @@ x .orders-con .orders-nav h2 {
   margin-top: 1rem;
   transition: 0.4s ease;
 }
+
 .form-button-a:hover {
   color: black;
   transform: scale(1.1);
 }
+
 .forms-top-container {
   display: flex;
   align-items: center;
   margin-bottom: 1rem;
 }
+
 .forms-top-container button {
   margin-left: auto;
   margin-right: 0;
-=======
->>>>>>> shoppingCart
 }
 
 #cart-close {
@@ -836,21 +863,13 @@ x .orders-con .orders-nav h2 {
   width: 100%;
 }
 
-.sticky-row {
-  position: sticky;
-  z-index: 0;
-  top: 0px;
-  background-color: var(--dark);
-  border: 1px black solid;
-}
-
-<<<<<<< HEAD
 .carousel-btn {
   display: inline-block;
   border-radius: 1rem;
   background-color: var(--green);
   border: none;
-=======
+}
+
 .user-management-table-container {
   max-height: 300px;
   overflow-y: auto;
@@ -992,7 +1011,6 @@ footer {
 
 .footeri {
   height: 50px;
->>>>>>> shoppingCart
   color: var(--light);
   text-align: center;
 }
@@ -1235,15 +1253,10 @@ dialog:has(.confirm-modal-container) {
     margin: 0;
   }
 
-<<<<<<< HEAD
   header,
   footer {
-=======
-  header {
->>>>>>> shoppingCart
     width: 100%;
   }
-
 }
 
 @media only screen and (max-width: 768px) {
@@ -1259,12 +1272,6 @@ dialog:has(.confirm-modal-container) {
   .divaider {
     flex-direction: column;
   }
-<<<<<<< HEAD
-=======
-
-  /*   .burgermenu {
-    display: block;
-  } */
 
   .burgermenu.active .bar:nth-child(2) {
     opacity: 0;
@@ -1311,7 +1318,6 @@ dialog:has(.confirm-modal-container) {
     padding: 10px;
   }
 
->>>>>>> shoppingCart
 }
 
 @media only screen and (min-width: 700px) {
@@ -1339,17 +1345,21 @@ dialog:has(.confirm-modal-container) {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 10px;
   }
+
   .orders-info-container {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     padding: 20px 0;
   }
+
   .order-filter-text {
     display: none;
   }
+
   .order-amount {
     font-size: 1.3rem;
   }
+
   .order-info-button {
     height: 75px;
     justify-content: center;

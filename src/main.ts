@@ -5,7 +5,8 @@ import { runAppStarterListeners } from "./listeners";
 import { customIngredients } from "./function";
 import { Hotdog } from "./interfaces/Order";
 import { Location } from "./interfaces/Location";
-import { fetchData, showAdminTools } from "./functions";
+import { createNewOrder, fetchData, showAdminTools } from "./functions";
+import { url } from "./variables";
 
 const burger: HTMLElement | null = document.querySelector(".burgermenu");
 const navMenu: HTMLElement | null = document.querySelector(".nav-menu");
@@ -168,16 +169,13 @@ if (cartIcon && cart && closeCart) {
 
 const purchaseClicked = (cart: object) => {
   const cartItems: HTMLElement | null = document.querySelector(".cart-content");
-
-  if (cartItems) {
-    while (cartItems.hasChildNodes()) {
-      console.log(cartItems.firstChild);
-      if (cartItems.firstChild) {
-        cartItems.removeChild(cartItems.firstChild);
-      }
-    }
-    console.log(cart);
-    updateCartTotal();
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("Token not found");
+  }
+  if (allCartItems.length > 0) {
+    console.log(allCartItems);
+    createNewOrder(allCartItems, 100);
   }
 };
 const removeCartItem = (event: Event) => {
@@ -196,6 +194,7 @@ const quantityChanged = (event: Event) => {
   if (quantity < 0) {
     console.log("quantity < 0", quantity);
     quantity = 0;
+    input.setAttribute("data-quantity", quantity.toString());
     input.value = "0";
   }
   updateCartTotal();
@@ -208,7 +207,7 @@ const addToCartClicked = async (event: Event) => {
   if (customItem) {
     const customPrice = Object.values(customIngredients).reduce(
       (acc, ingredient) => {
-        acc += ingredient.price;
+        acc += ingredient.topping_price;
         return acc;
       },
       0
@@ -219,11 +218,35 @@ const addToCartClicked = async (event: Event) => {
     }
 
     const ingredients = Object.keys(customIngredients).join(", ");
-    console.log(customIngredients);
+    console.log("name", customIngredients[0].topping_name);
 
     if (customPrice && customTitle) {
-      addItemToCart(customTitle, customPrice.toFixed(2) + "€, ", ingredients);
+      let toppingString = "";
+      customIngredients.forEach((ingredient, index) => {
+        if (index === customIngredients.length - 1) {
+          toppingString += ingredient.topping_name;
+        } else {
+          toppingString += ingredient.topping_name + ", ";
+        }
+      });
+      addItemToCart(customTitle, customPrice.toFixed(2) + "€, ", toppingString);
       updateCartTotal();
+      const topping_ids = customIngredients.map(
+        (ingredient) => ingredient.topping_id
+      );
+
+      console.log(
+        "customIngredients",
+        customIngredients,
+        "topping_ids",
+        topping_ids
+      );
+      allCartItems.push({
+        hotdog_id: null,
+        ordersHotdogsAmount: 1, // TODO: quantity
+        base_price: 1.0,
+        toppings: topping_ids,
+      });
     }
   }
   if (menuItem) {
@@ -236,18 +259,27 @@ const addToCartClicked = async (event: Event) => {
     const menuId = titleElement.id.split("-")[1];
     const parsedId = parseInt(menuId, 10);
 
-    // const menuCartItem = await fetchData(url + "")
+    const menuCartItem = await fetchData(url + "/hotdog/" + menuId);
+    const hotdog_id = menuCartItem[0].hotdog_id;
+    const toppings = await fetchData(url + "/hotdog/hotdogToppings/" + menuId);
+    let toppingString = "";
+    toppings.forEach((ingredient, index) => {
+      if (index === toppings.length - 1) {
+        toppingString += ingredient.topping_name;
+      } else {
+        toppingString += ingredient.topping_name + ", ";
+      }
+    });
 
     if (titleElement && priceElement && parsedId && ingredientsElement) {
       const title = titleElement.textContent || "";
       const price = priceElement.textContent || "";
       const id = parsedId;
-      const ingredients = ingredientsElement.textContent || "";
-      console.log(title, price, id, ingredients);
-      allCartItems.push({ hotdog_id: id, ordersHotdogsAmount: 1 });
-      const menu = { id, title, price, ingredients };
-      console.log(menu);
-      addItemToCart(title, price, ingredients);
+
+      allCartItems.push({ hotdog_id: hotdog_id, ordersHotdogsAmount: 1 }); // TODO: quantity
+      /*     console.log(menu); */
+      addItemToCart(title, price, toppingString);
+
       updateCartTotal();
     }
   }
@@ -297,15 +329,19 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
 
   cartItems.appendChild(cartShopBox);
 
-  const cartRemove = cartShopBox.querySelector(".cart-remove");
-  const cartQuantity = cartShopBox.querySelector(".cart-product-quantity");
+  const cartRemove = cartShopBox.querySelectorAll(".cart-remove");
+  const cartQuantity = cartShopBox.querySelectorAll(".cart-product-quantity");
 
   if (cartRemove) {
-    cartRemove.addEventListener("click", removeCartItem);
+    cartRemove.forEach((cart) => {
+      cart.addEventListener("click", removeCartItem);
+    });
   }
 
   if (cartQuantity) {
-    cartQuantity.addEventListener("change", quantityChanged);
+    cartRemove.forEach((cartRemoveBtn) => {
+      cartRemoveBtn.addEventListener("change", quantityChanged);
+    });
   }
 };
 

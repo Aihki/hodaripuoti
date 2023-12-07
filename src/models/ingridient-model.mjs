@@ -2,7 +2,7 @@ import { promisePool } from "../utils/database.mjs";
 
 const getProducts = async () => {
   try {
-    const [results] = await promisePool.query("SELECT * FROM hod_toppings");
+    const [results] = await promisePool.query("SELECT * FROM Toppings");
     console.log(results);
     return results;
   } catch (error) {

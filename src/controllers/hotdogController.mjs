@@ -3,9 +3,10 @@ import {
   addHotDogToppings,
   listAllCustomerHotdogs,
   listAllMenuHotdogs,
+  listHotdogById,
   listHotdogToppings,
-} from '../models/hotdogModel.mjs';
-import { addOrder } from '../models/orderModel.mjs';
+} from "../models/hotdogModel.mjs";
+import { addOrder } from "../models/orderModel.mjs";
 
 /**
  * Get all users
@@ -17,25 +18,36 @@ const getMenuHotdogs = async (req, res) => {
   try {
     const menuHotdogs = await listAllMenuHotdogs();
     if (menuHotdogs.length < 1) {
-      res.status(404).json({ message: 'No menu hotdogs found!' });
+      res.status(404).json({ message: "No menu hotdogs found!" });
       return;
     }
     res.json(menuHotdogs);
   } catch (e) {
-    console.error('getMenuHotdogs', e.message);
+    console.error("getMenuHotdogs", e.message);
   }
 };
-
+const getHotdogById = async (req, res) => {
+  try {
+    const menuHotdogs = await listHotdogById(req.params.id);
+    if (menuHotdogs.length < 1) {
+      res.status(404).json({ message: "No menu hotdogs found!" });
+      return;
+    }
+    res.json(menuHotdogs);
+  } catch (e) {
+    console.error("getMenuHotdogs", e.message);
+  }
+};
 const getCustomerHotdogs = async (req, res) => {
   try {
     const customerHotdogs = await listAllCustomerHotdogs();
     if (customerHotdogs.length < 1) {
-      res.status(404).json({ message: 'No customer hotdogs found!' });
+      res.status(404).json({ message: "No customer hotdogs found!" });
       return;
     }
     res.json(customerHotdogs);
   } catch (e) {
-    console.error('getCustomerHotdogs', e.message);
+    console.error("getCustomerHotdogs", e.message);
   }
 };
 
@@ -43,7 +55,7 @@ const postHotdogs = async (req, res, next) => {
   const hotdog_id = await addHotDog(req.body);
   // order is undefined
   if (!hotdog_id) {
-    const error = new Error('Could not add hotdog');
+    const error = new Error("Could not add hotdog");
     error.status = 401;
     return next(error);
   }
@@ -52,7 +64,7 @@ const postHotdogs = async (req, res, next) => {
     return next(new Error(hotdog_id.error));
   }
 
-  res.status(201).json({ message: 'Hotdog added', hotdog_id });
+  res.status(201).json({ message: "Hotdog added", hotdog_id });
 };
 
 const postHotdogsToppings = async (req, res, next) => {
@@ -61,14 +73,14 @@ const postHotdogsToppings = async (req, res, next) => {
     const hotdogToppings = await addHotDogToppings(hotdog_id, topping_ids);
 
     if (!hotdogToppings || hotdogToppings.error) {
-      const error = new Error('Could not add hotdogToppings');
+      const error = new Error("Could not add hotdogToppings");
       error.status = 401;
       return next(error);
     }
 
-    res.status(201).json({ message: 'HotdogToppings added', hotdogToppings });
+    res.status(201).json({ message: "HotdogToppings added", hotdogToppings });
   } catch (error) {
-    console.error('Error adding hotdogToppings:', error.message);
+    console.error("Error adding hotdogToppings:", error.message);
     return next(error);
   }
 };
@@ -77,12 +89,12 @@ const getHotdogToppings = async (req, res) => {
   try {
     const hotdogToppings = await listHotdogToppings(req.params.id);
     if (hotdogToppings.length < 1) {
-      res.status(404).json({ message: 'No hotdog toppings found!' });
+      res.status(404).json({ message: "No hotdog toppings found!" });
       return;
     }
     res.json(hotdogToppings);
   } catch (e) {
-    console.error('getHotdogToppings', e.message);
+    console.error("getHotdogToppings", e.message);
   }
 };
 
@@ -92,4 +104,5 @@ export {
   postHotdogs,
   postHotdogsToppings,
   getHotdogToppings,
+  getHotdogById,
 };
