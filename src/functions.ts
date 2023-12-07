@@ -3,57 +3,57 @@ import {
   orderManagementModel,
   updateForm,
   userManagementModel,
-} from './components';
-import { Order } from './interfaces/Order';
-import { User } from './interfaces/User';
+} from "./components";
+import { Order } from "./interfaces/Order";
+import { User } from "./interfaces/User";
 import {
   addAuthFormListeners,
   addOrderActionsListeners,
   addUserManageNavListener,
-} from './listeners';
-import { url } from './variables';
+} from "./listeners";
+import { url } from "./variables";
 
 // Dummy users array
 const users: User[] = [
   {
     userId: 0,
-    username: 'testi',
-    email: 'testi@mail.com',
+    username: "testi",
+    email: "testi@mail.com",
     role: 2,
     points: 0,
   },
   {
     userId: 1,
-    username: 'Mikko',
-    email: 'Mikko@mail.com',
+    username: "Mikko",
+    email: "Mikko@mail.com",
     role: 1,
     points: 10,
   },
   {
     userId: 2,
-    username: 'Mallikas',
-    email: 'Mallikas@mail.com',
+    username: "Mallikas",
+    email: "Mallikas@mail.com",
     role: 0,
     points: 20,
   },
   {
     userId: 3,
-    username: 'Petteri',
-    email: 'Petteri@mail.com',
+    username: "Petteri",
+    email: "Petteri@mail.com",
     role: 1,
     points: 50,
   },
   {
     userId: 4,
-    username: 'Puankuono',
-    email: 'Puankuono@mail.com',
+    username: "Puankuono",
+    email: "Puankuono@mail.com",
     role: 0,
     points: 25,
   },
   {
     userId: 5,
-    username: 'Joni',
-    email: 'Joni@mail.com',
+    username: "Joni",
+    email: "Joni@mail.com",
     role: 2,
     points: 10,
   },
@@ -62,8 +62,8 @@ const orders: Order[] = [
   {
     orderID: 1,
     status: 0,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
+    orderDate: "2023-01-01T12:34:56",
+    info: "Dummy info",
     products: [
       {
         hotdogID: 1,
@@ -75,8 +75,8 @@ const orders: Order[] = [
   {
     orderID: 2,
     status: 2,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
+    orderDate: "2023-01-01T12:34:56",
+    info: "Dummy info",
     products: [
       {
         hotdogID: 1,
@@ -88,8 +88,8 @@ const orders: Order[] = [
   {
     orderID: 3,
     status: 3,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
+    orderDate: "2023-01-01T12:34:56",
+    info: "Dummy info",
     products: [
       {
         hotdogID: 1,
@@ -101,8 +101,8 @@ const orders: Order[] = [
   {
     orderID: 4,
     status: 1,
-    orderDate: '2023-01-01T12:34:56',
-    info: 'Dummy info',
+    orderDate: "2023-01-01T12:34:56",
+    info: "Dummy info",
     products: [
       {
         hotdogID: 1,
@@ -129,33 +129,33 @@ const fetchData = async (url: string, options = {}): Promise<any> => {
 };
 
 const showSuperAdminTools = (): void => {
-  const adminSection = document.querySelector('#adminSection');
+  const adminSection = document.querySelector("#adminSection");
   if (!adminSection) {
-    console.log('ERROR: No admin section found');
+    console.log("ERROR: No admin section found");
     return;
   }
 
   const userManagamentHtml = userManagementModel(users);
   const orderManagementHtml = orderManagementModel(orders);
-  adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', userManagamentHtml);
-  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  adminSection.innerHTML = "";
+  adminSection.insertAdjacentHTML("beforeend", userManagamentHtml);
+  adminSection.insertAdjacentHTML("beforeend", orderManagementHtml);
   addUserManageNavListener();
   addOrderActionsListeners();
 };
 
 const renderForms = (isLogin: boolean | null): void => {
-  const modal = document.querySelector('dialog');
+  const modal = document.querySelector("dialog");
   if (!modal) {
     return;
   }
   if (isLogin === null || isLogin === undefined) {
     const authDialog: string = formModal(true);
-    modal.innerHTML = '';
-    modal.insertAdjacentHTML('beforeend', authDialog);
-    const form = document.querySelector('#authForm');
+    modal.innerHTML = "";
+    modal.insertAdjacentHTML("beforeend", authDialog);
+    const form = document.querySelector("#authForm");
 
-    form?.addEventListener('submit', (evt) => {
+    form?.addEventListener("submit", (evt) => {
       evt.preventDefault();
       formLogin();
     });
@@ -164,8 +164,8 @@ const renderForms = (isLogin: boolean | null): void => {
     (modal as any)?.showModal();
   } else {
     updateForm(isLogin);
-    const form = document.querySelector('#authForm');
-    form?.addEventListener('submit', (evt) => {
+    const form = document.querySelector("#authForm");
+    form?.addEventListener("submit", (evt) => {
       evt.preventDefault();
       if (isLogin) {
         formLogin();
@@ -177,12 +177,12 @@ const renderForms = (isLogin: boolean | null): void => {
 };
 const formRegister = async (): Promise<void> => {
   const username = (
-    document.querySelector('#usernameInput') as HTMLInputElement
+    document.querySelector("#usernameInput") as HTMLInputElement
   ).value;
-  const email = (document.querySelector('#emailInput') as HTMLInputElement)
+  const email = (document.querySelector("#emailInput") as HTMLInputElement)
     .value;
   const password = (
-    document.querySelector('#passwordInput') as HTMLInputElement
+    document.querySelector("#passwordInput") as HTMLInputElement
   ).value;
   const formData = {
     username: username,
@@ -190,52 +190,52 @@ const formRegister = async (): Promise<void> => {
     email: email,
   };
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
   };
-  console.log('Register');
+  console.log("Register");
   // TODO: post data to backend, store token to localstorage
   // const postData = await fetchData(url + '/users', options);
   // localStorage.setItem('token', loginData.token);
 };
 const formLogin = async (): Promise<void> => {
   const username = (
-    document.querySelector('#usernameInput') as HTMLInputElement
+    document.querySelector("#usernameInput") as HTMLInputElement
   ).value;
   const password = (
-    document.querySelector('#passwordInput') as HTMLInputElement
+    document.querySelector("#passwordInput") as HTMLInputElement
   ).value;
   const formData = {
     username: username,
     password: password,
   };
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
   };
   // TODO: post data to backend, store token to localstorage
   // const loginData = await fetchData(url + '/auth/login', options);
   // localStorage.setItem('token', loginData.token);
-  console.log('Login');
+  console.log("Login");
 };
 
 const showAdminTools = () => {
-  const adminSection = document.querySelector('#adminSection');
+  const adminSection = document.querySelector("#adminSection");
   if (!adminSection) {
-    console.log('ERROR: No admin section found');
+    console.log("ERROR: No admin section found");
     return;
   }
 
   const orderManagementHtml = orderManagementModel(orders);
-  adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  adminSection.innerHTML = "";
+  adminSection.insertAdjacentHTML("beforeend", orderManagementHtml);
   addOrderActionsListeners();
 };
 
-export { showSuperAdminTools, showAdminTools, renderForms };
+export { showSuperAdminTools, showAdminTools, renderForms, fetchData };

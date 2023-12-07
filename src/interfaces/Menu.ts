@@ -4,12 +4,16 @@ interface Ingredients {
   price: number;
   topping_type: "sampyla" | "makkara" | "täyte" | "kastike";
 }
-
+/* 
 interface Beverages {
   beverage_id: number;
   order_id: number;
   beverage_name: string;
   beverage_price: number;
+} */
+interface CustomIngredient {
+  price: number;
+  toppingId: number;
 }
 
 interface ChefChoice {
@@ -19,4 +23,4 @@ interface ChefChoice {
   toppings: string;
   base_price: number;
 }
-export type { Ingredients, Beverages, ChefChoice };
+export type { Ingredients, CustomIngredient, ChefChoice };

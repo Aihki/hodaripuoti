@@ -2,7 +2,7 @@ import { promisePool } from "../utils/database.mjs";
 
 const getChefChoices = async () => {
   try {
-    const [results] = await promisePool.query("SELECT * FROM Custom");
+    const [results] = await promisePool.query("SELECT * FROM hod_custom");
     console.log(results);
     return results;
   } catch (error) {
