@@ -96,13 +96,10 @@ const postUser = async (req, res) => {
  */
 const putUserById = async (req, res) => {
   try {
-    const data = [
-      req.body.username,
-      req.body.password,
-      req.body.email,
-      parseInt(req.body.user_level_id),
-      req.params.id,
-    ];
+    const salt = await bcrypt.genSalt(10);
+    // replace plain text password with hash
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    const data = [req.body.username, hashedPassword, req.params.id];
     const result = await updateUser(data);
     if (!result) {
       res.status(404);

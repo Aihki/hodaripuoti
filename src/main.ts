@@ -1,38 +1,38 @@
-import * as L from "leaflet";
-import { displayChefchoice, displayOptions } from "./function";
+import * as L from 'leaflet';
+import { displayChefchoice, displayOptions } from './function';
 
-import { runAppStarterListeners } from "./listeners";
-import { customIngredients } from "./function";
-import { Hotdog } from "./interfaces/Order";
-import { Location } from "./interfaces/Location";
-import { createNewOrder, fetchData, showAdminTools } from "./functions";
-import { url } from "./variables";
+import { runAppStarterListeners } from './listeners';
+import { customIngredients } from './function';
+import { Hotdog } from './interfaces/Order';
+import { Location } from './interfaces/Location';
+import { createNewOrder, fetchData, showAdminTools } from './functions';
+import { url } from './variables';
 
-const burger: HTMLElement | null = document.querySelector(".burgermenu");
-const navMenu: HTMLElement | null = document.querySelector(".nav-menu");
+const burger: HTMLElement | null = document.querySelector('.burgermenu');
+const navMenu: HTMLElement | null = document.querySelector('.nav-menu');
 let allCartItems: Hotdog[] = [];
 
 if (burger && navMenu) {
-  burger.addEventListener("click", () => {
-    burger.classList.toggle("active");
-    navMenu.classList.toggle("active");
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('active');
+    navMenu.classList.toggle('active');
   });
 
-  document.querySelectorAll(".nav-link").forEach((n) =>
-    n.addEventListener("click", () => {
-      burger.classList.remove("active");
-      navMenu.classList.remove("active");
+  document.querySelectorAll('.nav-link').forEach((n) =>
+    n.addEventListener('click', () => {
+      burger.classList.remove('active');
+      navMenu.classList.remove('active');
     })
   );
 }
 
 const checkbox: HTMLInputElement | null = document.getElementById(
-  "checkbox"
+  'checkbox'
 ) as HTMLInputElement;
 
 if (checkbox) {
-  checkbox.addEventListener("change", () => {
-    document.body.classList.toggle("dark");
+  checkbox.addEventListener('change', () => {
+    document.body.classList.toggle('dark');
   });
 }
 const isPartiallyVisible = (el: Element): boolean => {
@@ -44,36 +44,36 @@ const isPartiallyVisible = (el: Element): boolean => {
 
 const handleScroll = () => {
   const menuItems = document.querySelectorAll<Element>(
-    "#menu .menu-item-container"
+    '#menu .menu-item-container'
   );
 
   menuItems.forEach((item) => {
     if (isPartiallyVisible(item)) {
-      item.classList.add("reveal");
+      item.classList.add('reveal');
     }
   });
 };
 
-window.addEventListener("scroll", handleScroll);
-window.addEventListener("load", handleScroll);
+window.addEventListener('scroll', handleScroll);
+window.addEventListener('load', handleScroll);
 
 let slideIndex: number = 0;
 const slides: NodeListOf<Element> =
-  document.querySelectorAll(".custom-container");
-const prevButton: HTMLElement | null = document.querySelector(".prev");
-const nextButton: HTMLElement | null = document.querySelector(".next");
+  document.querySelectorAll('.custom-container');
+const prevButton: HTMLElement | null = document.querySelector('.prev');
+const nextButton: HTMLElement | null = document.querySelector('.next');
 
 function showSlide(n: number): void {
   slides.forEach((slide: Element) => {
-    (slide as HTMLElement).style.display = "none";
+    (slide as HTMLElement).style.display = 'none';
   });
 
-  (slides[n] as HTMLElement).style.display = "";
+  (slides[n] as HTMLElement).style.display = '';
 }
 
 showSlide(slideIndex);
 
-prevButton?.addEventListener("click", () => {
+prevButton?.addEventListener('click', () => {
   slideIndex--;
   if (slideIndex < 0) {
     slideIndex = slides.length - 1;
@@ -81,7 +81,7 @@ prevButton?.addEventListener("click", () => {
   showSlide(slideIndex);
 });
 
-nextButton?.addEventListener("click", () => {
+nextButton?.addEventListener('click', () => {
   slideIndex++;
   if (slideIndex >= slides.length) {
     slideIndex = 0;
@@ -94,25 +94,25 @@ displayOptions();
 
 const locations: Location[] = [
   {
-    name: "Hodaripuoti",
-    address: "Messukeskus",
-    city: "Helsinki",
+    name: 'Hodaripuoti',
+    address: 'Messukeskus',
+    city: 'Helsinki',
     coords: [60.20322568649935, 24.93696528041362] as [number, number],
     popupText:
-      "<b>Hodaripuoti</b><br>Messukeskus , Helsinki<br>Parhaat hodarit tapahtumissa!",
+      '<b>Hodaripuoti</b><br>Messukeskus , Helsinki<br>Parhaat hodarit tapahtumissa!',
   },
   {
-    name: "Ravintola Hodaripuoti",
-    address: "Helsingin katu 4",
-    city: "Espoo",
+    name: 'Ravintola Hodaripuoti',
+    address: 'Helsingin katu 4',
+    city: 'Espoo',
     coords: [60.187394224490475, 24.959375673402533] as [number, number],
     popupText:
-      "<b>Hodaripuoti </b><br>Helsingin katu 4, Helsinki<br>Herkullisia annoksia!, avaamme pian!",
+      '<b>Hodaripuoti </b><br>Helsingin katu 4, Helsinki<br>Herkullisia annoksia!, avaamme pian!',
   },
 ];
 
-const map = L.map("map").setView([60.1699, 24.9384], 8);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+const map = L.map('map').setView([60.1699, 24.9384], 8);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 19,
 }).addTo(map);
 
@@ -121,24 +121,24 @@ locations.forEach((location: Location) => {
   marker.bindPopup(location.popupText).openPopup();
 });
 const locationSelect = document.getElementById(
-  "location-select"
+  'location-select'
 ) as HTMLSelectElement;
 
 locations.forEach((location: Location) => {
-  const option = document.createElement("option");
+  const option = document.createElement('option');
   option.value = location.name;
   option.textContent = `${location.name} - ${location.address}, ${location.city}`;
   locationSelect.appendChild(option);
 });
 
-locationSelect.addEventListener("change", () => {
+locationSelect.addEventListener('change', () => {
   const selectedLocation = locationSelect.value;
 
   const selectedCoords = locations.find(
     (loc: Location) => loc.name === selectedLocation
   )?.coords;
   if (selectedCoords) {
-    console.log("Valitun toimipaikan koordinaatit:", selectedCoords);
+    console.log('Valitun toimipaikan koordinaatit:', selectedCoords);
   }
 });
 /**
@@ -149,29 +149,29 @@ locationSelect.addEventListener("change", () => {
 
 runAppStarterListeners();
 
-const cartIcon: HTMLElement | null = document.querySelector("#cart-icon");
-const cart: HTMLElement | null = document.querySelector(".cart");
-const closeCart: HTMLElement | null = document.querySelector("#cart-close");
+const cartIcon: HTMLElement | null = document.querySelector('#cart-icon');
+const cart: HTMLElement | null = document.querySelector('.cart');
+const closeCart: HTMLElement | null = document.querySelector('#cart-close');
 
 if (cartIcon && cart && closeCart) {
-  cartIcon.addEventListener("click", () => {
+  cartIcon.addEventListener('click', () => {
     if (cart) {
-      cart.classList.add("active");
+      cart.classList.add('active');
     }
   });
 
-  closeCart.addEventListener("click", () => {
+  closeCart.addEventListener('click', () => {
     if (cart) {
-      cart.classList.remove("active");
+      cart.classList.remove('active');
     }
   });
 }
 
 const purchaseClicked = (cart: object) => {
-  const cartItems: HTMLElement | null = document.querySelector(".cart-content");
-  const token = localStorage.getItem("token");
+  const cartItems: HTMLElement | null = document.querySelector('.cart-content');
+  const token = localStorage.getItem('token');
   if (!token) {
-    throw new Error("Token not found");
+    throw new Error('Token not found');
   }
   if (allCartItems.length > 0) {
     console.log(allCartItems);
@@ -187,23 +187,23 @@ const removeCartItem = (event: Event) => {
 };
 const quantityChanged = (event: Event) => {
   const input = event.target as HTMLInputElement;
-  input.setAttribute("data-quantity", input.value);
-  const quantityString = input.getAttribute("data-quantity");
-  let quantity = parseInt(quantityString || "0", 10);
-  console.log("quantity", quantity);
+  input.setAttribute('data-quantity', input.value);
+  const quantityString = input.getAttribute('data-quantity');
+  let quantity = parseInt(quantityString || '0', 10);
+  console.log('quantity', quantity);
   if (quantity < 0) {
-    console.log("quantity < 0", quantity);
+    console.log('quantity < 0', quantity);
     quantity = 0;
-    input.setAttribute("data-quantity", quantity.toString());
-    input.value = "0";
+    input.setAttribute('data-quantity', quantity.toString());
+    input.value = '0';
   }
   updateCartTotal();
 };
 
 const addToCartClicked = async (event: Event) => {
   const button = event.target as HTMLElement;
-  const menuItem = button.closest(".menu-item-container") as HTMLElement | null;
-  const customItem = button.closest(".total-box") as HTMLElement | null;
+  const menuItem = button.closest('.menu-item-container') as HTMLElement | null;
+  const customItem = button.closest('.total-box') as HTMLElement | null;
   if (customItem) {
     const customPrice = Object.values(customIngredients).reduce(
       (acc, ingredient) => {
@@ -212,33 +212,33 @@ const addToCartClicked = async (event: Event) => {
       },
       0
     );
-    const customTitle = "Custom Hotdog";
+    const customTitle = 'Custom Hotdog';
     if (!customPrice || !customTitle) {
       return;
     }
 
-    const ingredients = Object.keys(customIngredients).join(", ");
-    console.log("name", customIngredients[0].topping_name);
+    const ingredients = Object.keys(customIngredients).join(', ');
+    console.log('name', customIngredients[0].topping_name);
 
     if (customPrice && customTitle) {
-      let toppingString = "";
+      let toppingString = '';
       customIngredients.forEach((ingredient, index) => {
         if (index === customIngredients.length - 1) {
           toppingString += ingredient.topping_name;
         } else {
-          toppingString += ingredient.topping_name + ", ";
+          toppingString += ingredient.topping_name + ', ';
         }
       });
-      addItemToCart(customTitle, customPrice.toFixed(2) + "€, ", toppingString);
+      addItemToCart(customTitle, customPrice.toFixed(2) + '€, ', toppingString);
       updateCartTotal();
       const topping_ids = customIngredients.map(
         (ingredient) => ingredient.topping_id
       );
 
       console.log(
-        "customIngredients",
+        'customIngredients',
         customIngredients,
-        "topping_ids",
+        'topping_ids',
         topping_ids
       );
       allCartItems.push({
@@ -250,30 +250,30 @@ const addToCartClicked = async (event: Event) => {
     }
   }
   if (menuItem) {
-    const titleElement = menuItem.querySelector(".menu-food-title");
-    const priceElement = menuItem.querySelector(".menu-price");
-    const ingredientsElement = menuItem.querySelector(".menu-ingredients");
+    const titleElement = menuItem.querySelector('.menu-food-title');
+    const priceElement = menuItem.querySelector('.menu-price');
+    const ingredientsElement = menuItem.querySelector('.menu-ingredients');
     if (!titleElement || !priceElement || !ingredientsElement) {
       return;
     }
-    const menuId = titleElement.id.split("-")[1];
+    const menuId = titleElement.id.split('-')[1];
     const parsedId = parseInt(menuId, 10);
 
-    const menuCartItem = await fetchData(url + "/hotdog/" + menuId);
+    const menuCartItem = await fetchData(url + '/hotdog/' + menuId);
     const hotdog_id = menuCartItem[0].hotdog_id;
-    const toppings = await fetchData(url + "/hotdog/hotdogToppings/" + menuId);
-    let toppingString = "";
-    toppings.forEach((ingredient, index) => {
+    const toppings = await fetchData(url + '/hotdog/hotdogToppings/' + menuId);
+    let toppingString = '';
+    toppings.forEach((ingredient: any, index: number) => {
       if (index === toppings.length - 1) {
         toppingString += ingredient.topping_name;
       } else {
-        toppingString += ingredient.topping_name + ", ";
+        toppingString += ingredient.topping_name + ', ';
       }
     });
 
     if (titleElement && priceElement && parsedId && ingredientsElement) {
-      const title = titleElement.textContent || "";
-      const price = priceElement.textContent || "";
+      const title = titleElement.textContent || '';
+      const price = priceElement.textContent || '';
       const id = parsedId;
 
       allCartItems.push({ hotdog_id: hotdog_id, ordersHotdogsAmount: 1 }); // TODO: quantity
@@ -285,30 +285,30 @@ const addToCartClicked = async (event: Event) => {
   }
 };
 
-document.addEventListener("click", (event: Event) => {
+document.addEventListener('click', (event: Event) => {
   const target = event.target as HTMLElement;
-  if (target && target.classList.contains("add-to-cart-btn")) {
+  if (target && target.classList.contains('add-to-cart-btn')) {
     addToCartClicked(event);
   }
 });
 
 const addItemToCart = (title: string, price: string, ingredients: string) => {
-  const cartShopBox = document.createElement("div");
-  cartShopBox.classList.add("cart-box");
+  const cartShopBox = document.createElement('div');
+  cartShopBox.classList.add('cart-box');
   const cartItems = document.querySelector(
-    ".cart-content"
+    '.cart-content'
   ) as HTMLElement | null;
 
   if (!cartItems) {
     return;
   }
 
-  const cartItemNames = cartItems.querySelectorAll(".cart-product-title");
+  const cartItemNames = cartItems.querySelectorAll('.cart-product-title');
   let customHotdogCount = 0;
   console.log(customHotdogCount);
   for (let i = 0; i < cartItemNames.length; i++) {
     console.log(cartItemNames[i]);
-    if ((cartItemNames[i] as HTMLElement).innerText === "Custom Hotdog") {
+    if ((cartItemNames[i] as HTMLElement).innerText === 'Custom Hotdog') {
       customHotdogCount++;
     } else if ((cartItemNames[i] as HTMLElement).innerText === title) {
       return;
@@ -329,86 +329,86 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
 
   cartItems.appendChild(cartShopBox);
 
-  const cartRemove = cartShopBox.querySelectorAll(".cart-remove");
-  const cartQuantity = cartShopBox.querySelectorAll(".cart-product-quantity");
+  const cartRemove = cartShopBox.querySelectorAll('.cart-remove');
+  const cartQuantity = cartShopBox.querySelectorAll('.cart-product-quantity');
 
   if (cartRemove) {
     cartRemove.forEach((cart) => {
-      cart.addEventListener("click", removeCartItem);
+      cart.addEventListener('click', removeCartItem);
     });
   }
 
   if (cartQuantity) {
     cartRemove.forEach((cartRemoveBtn) => {
-      cartRemoveBtn.addEventListener("change", quantityChanged);
+      cartRemoveBtn.addEventListener('change', quantityChanged);
     });
   }
 };
 
 const updateCartTotal = () => {
   const cartContent = document.querySelector(
-    ".cart-content"
+    '.cart-content'
   ) as HTMLElement | null;
   if (!cartContent) {
     return;
   }
 
-  const cartBoxes = cartContent.querySelectorAll(".cart-box");
+  const cartBoxes = cartContent.querySelectorAll('.cart-box');
   let total = 0;
 
   for (let i = 0; i < cartBoxes.length; i++) {
     const cartBox = cartBoxes[i] as HTMLElement;
     const priceElement = cartBox.querySelector(
-      ".cart-product-price"
+      '.cart-product-price'
     ) as HTMLElement | null;
     const quantityElement = cartBox.querySelector(
-      ".cart-product-quantity"
+      '.cart-product-quantity'
     ) as HTMLInputElement | null;
 
     if (priceElement && quantityElement) {
-      const priceText = priceElement.innerText.replace("€", "");
+      const priceText = priceElement.innerText.replace('€', '');
       const price = parseFloat(priceText);
       const quantity = parseFloat(quantityElement.value);
       total += price * quantity;
     }
   }
 
-  const cartTotalPrice = document.querySelector(".cart-total-price");
+  const cartTotalPrice = document.querySelector('.cart-total-price');
   if (cartTotalPrice) {
-    cartTotalPrice.textContent = total.toFixed(2) + "€";
+    cartTotalPrice.textContent = total.toFixed(2) + '€';
   }
 };
 
 const ready = () => {
-  const removeCartItemButtons = document.querySelectorAll(".cart-remove");
+  const removeCartItemButtons = document.querySelectorAll('.cart-remove');
   removeCartItemButtons.forEach((button) => {
-    button.addEventListener("click", removeCartItem);
+    button.addEventListener('click', removeCartItem);
   });
 
-  const quantityInputs = document.querySelectorAll(".cart-product-quantity");
+  const quantityInputs = document.querySelectorAll('.cart-product-quantity');
   quantityInputs.forEach((input) => {
-    input.addEventListener("change", quantityChanged);
+    input.addEventListener('change', quantityChanged);
   });
 
   const addToCartButtons = document.querySelectorAll(
-    ".add-to-cart-btn, .add-custom-to-cart-btn"
+    '.add-to-cart-btn, .add-custom-to-cart-btn'
   );
   addToCartButtons.forEach((button) => {
-    button.addEventListener("click", addToCartClicked);
+    button.addEventListener('click', addToCartClicked);
   });
 
-  const purchaseButton = document.querySelectorAll(".cart-checkout")[0] as
+  const purchaseButton = document.querySelectorAll('.cart-checkout')[0] as
     | HTMLElement
     | undefined;
   if (purchaseButton) {
-    purchaseButton.addEventListener("click", (allCartItems) => {
+    purchaseButton.addEventListener('click', (allCartItems) => {
       purchaseClicked(allCartItems);
     });
   }
 };
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", ready);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', ready);
 } else {
   ready();
 }

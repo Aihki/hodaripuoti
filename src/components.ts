@@ -270,6 +270,37 @@ const infoModal = (modaltext: string): string => {
   </div> `;
   return html;
 };
+const addUserDataToModal = (user: User): string => {
+  return `
+  <div class="dialog-profile-container">
+  <div class="dialog-profile-main profile-item-container">
+    <h2 class="profile-username">Hei ${user.username}!</h2>
+    <form method="dialog" id="updateForm">
+      <input type="text" name="username" id="usernameInput" class="modal-input" autocomplete="name" placeholder="${user.username}" value="${user.username}" minlenght="3" required></input><br>
+      <input type="password" name="password" id="passwordInput" name="password" class="modal-input" autocomplete="password" placeholder="Password" minlenght=8" required></input>
+      <button class="form-button" type="submit" value="submit" id="saveProfileButton">Tallenna</button>
+    </form>
+  </div>
+  <div class="dialog-profile-settings profile-side profile-item-container">
+    <div class="profile-setting-top profile-top">
+      <h3>Sivusto asetukset</h3>
+      <button class="dialog-close-button" id="dialogCloseButton">X</button>
+    </div><hr>
+    <div class="profile-setting-main">
+      <button class="form-button" id="logOutButton">Kirjaudu ulos</button>
+    </div>
+  </div>
+  <div class="dialog-profile-favourite profile-side profile-item-container">
+    <div class="profile-favourite-top profile-top">
+      <h3>Tilauksesi</h3>
+    </div><hr>
+    <div class="profile-favourite-main"  id="favouriteMain">
+      <p>Ei tilauksia :)</p>
+    </div>
+  </div>
+  </div>
+  `;
+};
 
 export {
   userManagementModel,
@@ -280,4 +311,5 @@ export {
   confirmModal,
   updateUserManagementModel,
   infoModal,
+  addUserDataToModal,
 };

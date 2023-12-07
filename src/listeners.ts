@@ -1,7 +1,9 @@
-import { confirmModal } from './components';
+import { addUserDataToModal, confirmModal } from './components';
 import {
   fetchData,
+  formUpdate,
   getToken,
+  getUserData,
   renderForms,
   showAdminTools,
   showInfoModal,
@@ -99,14 +101,50 @@ const addOrderFilterListeners = (role: number) => {
 const addProfileBtnListener = () => {
   const profileButtons = document.querySelectorAll('#profileButton');
   profileButtons.forEach((profileButton) => {
-    profileButton.addEventListener('click', () => {
+    profileButton.addEventListener('click', async () => {
+      const modal = document.querySelector('dialog');
       const token = getToken();
-      if (token !== null) {
+      if (modal && token !== null) {
         console.log('token found render profile');
         //TODO: render profile
+        const userData = await getUserData(token);
+        const profileModal = addUserDataToModal(userData);
+        modal.innerHTML = '';
+        modal.insertAdjacentHTML('beforeend', profileModal);
+        addModalCloseListener();
+        addLogOutListener();
+        addUpdateListener();
+        (modal as any).showModal();
         return;
       }
       renderForms(true);
+    });
+  });
+};
+const addModalCloseListener = () => {
+  const modal = document.querySelector('dialog');
+  if (!modal) {
+    return;
+  }
+  const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
+  modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      console.log('close');
+      (modal as any).close();
+    });
+  });
+};
+const addLogOutListener = () => {
+  const logOutBtns = document.querySelectorAll('#logOutButton');
+  const adminSection = document.querySelector('#adminSection');
+  logOutBtns.forEach((logOutBtn) => {
+    logOutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      renderForms(true);
+      if (!adminSection) {
+        return;
+      }
+      adminSection.innerHTML = '';
     });
   });
 };
@@ -278,6 +316,13 @@ const checkActionHandler = (role: number, event: Event) => {
     (modal as any).showModal();
   }
 };
+const addUpdateListener = () => {
+  const updateForm = document.querySelector('#updateForm');
+  updateForm?.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    formUpdate();
+  });
+};
 
 export {
   runAppStarterListeners,
@@ -287,4 +332,7 @@ export {
   viewActionHandler,
   checkActionHandler,
   addOrderFilterListeners,
+  addModalCloseListener,
+  addLogOutListener,
+  addUpdateListener,
 };

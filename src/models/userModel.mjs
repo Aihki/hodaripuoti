@@ -89,7 +89,7 @@ const checkIfEmailExists = async (emailToCheck) => {
 const updateUser = async (user) => {
   try {
     const [rows] = await promisePool.execute(
-      `UPDATE Users set username = ?, email = ?, password = ?, user_level_id = ? WHERE user_id = ?;`,
+      `UPDATE Users set username = ?, password = ? WHERE user_id = ?;`,
       user
     );
     return rows;
