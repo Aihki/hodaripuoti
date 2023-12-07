@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import { url } from './variables';
-import { Beverages, ChefChoice, Ingredients } from './interfaces/Menu';
-=======
-import { url } from "./variables";
-import { ChefChoice, CustomIngredient, Ingredients } from "./interfaces/Menu";
->>>>>>> shoppingCart
+import { ChefChoice, CustomIngredient, Ingredients } from './interfaces/Menu';
 
 const getOptions = async (url: string, options = {}) => {
   const response = await fetch(url, options);
@@ -18,12 +13,7 @@ let customIngredients: { [key: string]: CustomIngredient } = {};
 
 const displayOptions = async () => {
   try {
-<<<<<<< HEAD
-    const options: Ingredients[] = await getOptions(url + '/custom/products');
-    console.log(options);
-=======
-    const options: Ingredients[] = await getOptions(url + "/ingridients");
->>>>>>> shoppingCart
+    const options: Ingredients[] = await getOptions(url + '/ingridients');
     const productByType: { [key: string]: Ingredients[] } = {};
 
     options.forEach((option: Ingredients) => {
@@ -47,52 +37,46 @@ const displayOptions = async () => {
           <span style="margin-right: 10px;"></span> 
           <label for="Topping-${option.topping_id}">${option.topping_name}</label>
           <span class="price">${option.price}€</span>
-<<<<<<< HEAD
-          </div>
-        `;
-          container.insertAdjacentHTML('beforeend', html);
-=======
       </div>
             `;
-          container.insertAdjacentHTML("beforeend", html);
->>>>>>> shoppingCart
+          container.insertAdjacentHTML('beforeend', html);
         });
         const checkboxes: NodeListOf<HTMLInputElement> =
-          container.querySelectorAll(".productChekcbox");
+          container.querySelectorAll('.productChekcbox');
 
         checkboxes.forEach((checkbox: HTMLInputElement) => {
-          checkbox.addEventListener("change", (event: Event) => {
+          checkbox.addEventListener('change', (event: Event) => {
             const targetCheckbox = event.target as HTMLInputElement;
-            const id = targetCheckbox.id.split("-")[1];
+            const id = targetCheckbox.id.split('-')[1];
             const parsedId = parseInt(id, 10);
             const priceElement =
               targetCheckbox.nextElementSibling?.nextElementSibling
                 ?.nextElementSibling;
             const productName =
               priceElement?.previousElementSibling?.textContent;
-            const price = parseFloat(priceElement?.textContent || "0");
+            const price = parseFloat(priceElement?.textContent || '0');
 
             if (targetCheckbox.checked) {
-              customIngredients[productName || ""] = {
+              customIngredients[productName || ''] = {
                 price,
                 toppingId: parsedId,
               };
             } else {
-              delete customIngredients[productName || ""];
+              delete customIngredients[productName || ''];
             }
 
             let totalSum = 0;
             Object.values(customIngredients).forEach((ingredient) => {
               totalSum += ingredient.price;
-              const totalBox = document.querySelector(".total");
+              const totalBox = document.querySelector('.total');
               if (totalBox) {
                 totalBox.textContent = `Total Sum: ${totalSum.toFixed(2)}`;
               }
               const addToCartButton = document.querySelector(
-                ".add-custom-to-cart-btn"
+                '.add-custom-to-cart-btn'
               );
               if (addToCartButton) {
-                addToCartButton.addEventListener("click", () => {
+                addToCartButton.addEventListener('click', () => {
                   checkboxes.forEach((checkbox) => {
                     checkbox.checked = false;
                     customIngredients = {};
@@ -111,11 +95,7 @@ const displayOptions = async () => {
 
 const displayChefchoice = async () => {
   try {
-<<<<<<< HEAD
-    const allProducts: ChefChoice[] = await getOptions(url + '/menu/chef');
-=======
-    const allProducts: ChefChoice[] = await getOptions(url + "/menu");
->>>>>>> shoppingCart
+    const allProducts: ChefChoice[] = await getOptions(url + '/menu');
 
     const menuContainer = document.querySelector('.menu-container');
     if (menuContainer) {
