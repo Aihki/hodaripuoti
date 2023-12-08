@@ -214,6 +214,8 @@ nav {
   flex: 1 0 100%;
   scroll-snap-align: start;
   object-fit: cover;
+  height: 100%;
+  width: 100%;
 }
 
 .slider-nav {
@@ -241,6 +243,10 @@ nav {
 
 .slider-nav a:target {
   opacity: 1;
+}
+
+.slider::-webkit-scrollbar {
+  display: none;
 }
 
 /* content css */
@@ -340,7 +346,7 @@ input {
   flex-direction: column;
   opacity: 0;
   transform: translateY(100px);
-  transition: opacity 1s ease, transform 1s ease;
+  transition: opacity 2s ease, transform 2s ease;
 }
 
 .menu-item-container.reveal {
@@ -368,6 +374,7 @@ input {
   color: var(--light);
   margin-bottom: 20px;
   font-size: 0.9em;
+  padding: 0 20px 0 20px;
 }
 
 .menu-price {

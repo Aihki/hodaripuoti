@@ -9,15 +9,15 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
   <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF">
   <meta name="theme-color" content="#ffffff">
-  <link rel="stylesheet" href="./src/css/style.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="./src/css/style.css" />
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAe-XvcQh2vhjXxEP40ot3iVWyfhV4xy-s&callback=initMap"
+    defer></script>
+  <meta http-equiv="Content-Encoding" content="gzip">
   <script src="https://kit.fontawesome.com/b4b9814ab0.js" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/c02d3fc986.js" crossorigin="anonymous"></script>
   <script type="module" src="./src/main.ts"></script>
+  <script type="module" src="./src/location.ts"></script>
 </head>
 
 <body>
@@ -41,16 +41,16 @@
 
 
         <li class="nav-item">
-          <a href="#" class="nav-link">Home</a>
+          <a href="#" class="nav-link">etusivu</a>
         </li>
         <li class="nav-item">
-          <a href="#custom" class="nav-link">custom</a>
+          <a href="#custom" class="nav-link">oma hodari</a>
         </li>
         <li class="nav-item">
-          <a href="#menu" class="nav-link">menu</a>
+          <a href="#menu" class="nav-link">Kokin parhaat</a>
         </li>
         <li class="nav-item">
-          <a href="#contact" class="nav-link">contact</a>
+          <a href="#contact" class="nav-link">Tietoa meistä</a>
         </li>
         <li class="nav-item">
           <a href="#" class="nav-link" id="profileButton">Profiili</a>
@@ -89,9 +89,9 @@
     <section class="caruselContainer">
       <div class="slider-wrapper">
         <div class="slider">
-          <img id="slide-1" src="/public/images/slide1.png" alt="kuva tulisesta hotdogista" />
-          <img id="slide-2" src="/public/images/slide2.png" alt="kuva hodaripuidista" />
-          <img id="slide-3" src="/public/images/slide3.png" alt="kuva Vegehotdogista" />
+          <img id="slide-1" src="/public/images/slide1.webp" alt="kuva tulisesta hotdogista" />
+          <img id="slide-2" src="/public/images/slide2.webp" alt="kuva hodaripuidista" />
+          <img id="slide-3" src="/public/images/slide3.webp" alt="kuva Vegehotdogista" />
         </div>
         <div class="slider-nav">
           <a href="#slide-1" id="nav-1" class="visually-hidden">slide 1</a>
@@ -103,7 +103,7 @@
 
 
     <section id="custom">
-      <h2 class="custom-menu-title">custom hodari</h2>
+      <h2 class="custom-menu-title">Oma hodari</h2>
       <div id="menu-carousel">
         <div class="sampyla-container custom-container"></div>
         <div class="makkara-container custom-container"></div>
@@ -126,12 +126,12 @@
 
 
     <section id="menu">
-      <h2 class="menu-filter-title">Valmiit hodarit</h2>
+      <h2 class="menu-filter-title">Kokin parhaat</h2>
       <div class="menu-container"></div>
     </section>
 
     <section id="contact">
-      <h2 class="contact-filter-title">About Us</h2>
+      <h2 class="contact-filter-title">Tietoa meistä</h2>
       <div class="location-container">
         <div class="location-map" id="map"></div>
         <div class="about">

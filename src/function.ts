@@ -71,6 +71,7 @@ const displayOptions = async () => {
               totalSum += ingredient.topping_price;
               const totalBox = document.querySelector(".total");
               if (totalBox) {
+                console.log(totalSum);
                 totalBox.textContent = `Total Sum: ${totalSum.toFixed(2)}`;
               }
               const addToCartButton = document.querySelector(
@@ -81,6 +82,12 @@ const displayOptions = async () => {
                   checkboxes.forEach((checkbox) => {
                     checkbox.checked = false;
                     customIngredients = [];
+                    /*    if (totalBox) {
+                      totalSum = 0;
+                      totalBox.textContent = `Total Sum: ${totalSum.toFixed(
+                        2
+                      )}`;
+                    } */
                   });
                 });
               }
@@ -135,27 +142,4 @@ const displayChefchoice = async () => {
     console.error("Error fetching products:", error);
   }
 };
-
-/* const displayBeverage = async () => {
-  try {
-    const allProducts: Beverages[] = await getOptions(url + '/beverage');
-
-    const beverageContainer = document.querySelector('.drink-container');
-    if (beverageContainer) {
-      allProducts.forEach((option: Beverages) => {
-        const html = `
-            <div class='drink-item-container'>
-              <h3 class='drink-title'>${option.beverage_name}</h3>
-              <p class='drink-price'>${option.beverage_price}€</p>
-              <a class='add-to-cart-btn'>Lisää koriin</a>
-            </div>
-          `;
-        beverageContainer.insertAdjacentHTML('beforeend', html);
-      });
-    }
-  } catch (error) {
-    console.error('Error fetching products:', error);
-  }
-}; */
-
 export { displayChefchoice, displayOptions, customIngredients };

@@ -2,7 +2,7 @@ interface Location {
   name: string;
   address: string;
   city: string;
-  coords: [number, number];
+  coords: google.maps.LatLngLiteral;
   popupText: string;
 }
 

@@ -7,6 +7,7 @@ import { Hotdog } from "./interfaces/Order";
 import { Location } from "./interfaces/Location";
 import { createNewOrder, fetchData, showAdminTools } from "./functions";
 import { url } from "./variables";
+import e from "express";
 
 const burger: HTMLElement | null = document.querySelector(".burgermenu");
 const navMenu: HTMLElement | null = document.querySelector(".nav-menu");
@@ -92,55 +93,6 @@ nextButton?.addEventListener("click", () => {
 displayChefchoice();
 displayOptions();
 
-const locations: Location[] = [
-  {
-    name: "Hodaripuoti",
-    address: "Messukeskus",
-    city: "Helsinki",
-    coords: [60.20322568649935, 24.93696528041362] as [number, number],
-    popupText:
-      "<b>Hodaripuoti</b><br>Messukeskus , Helsinki<br>Parhaat hodarit tapahtumissa!",
-  },
-  {
-    name: "Ravintola Hodaripuoti",
-    address: "Helsingin katu 4",
-    city: "Espoo",
-    coords: [60.187394224490475, 24.959375673402533] as [number, number],
-    popupText:
-      "<b>Hodaripuoti </b><br>Helsingin katu 4, Helsinki<br>Herkullisia annoksia!, avaamme pian!",
-  },
-];
-
-const map = L.map("map").setView([60.1699, 24.9384], 8);
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-}).addTo(map);
-
-locations.forEach((location: Location) => {
-  const marker: L.Marker = L.marker(location.coords).addTo(map);
-  marker.bindPopup(location.popupText).openPopup();
-});
-const locationSelect = document.getElementById(
-  "location-select"
-) as HTMLSelectElement;
-
-locations.forEach((location: Location) => {
-  const option = document.createElement("option");
-  option.value = location.name;
-  option.textContent = `${location.name} - ${location.address}, ${location.city}`;
-  locationSelect.appendChild(option);
-});
-
-locationSelect.addEventListener("change", () => {
-  const selectedLocation = locationSelect.value;
-
-  const selectedCoords = locations.find(
-    (loc: Location) => loc.name === selectedLocation
-  )?.coords;
-  if (selectedCoords) {
-    console.log("Valitun toimipaikan koordinaatit:", selectedCoords);
-  }
-});
 /**
  * Checks if user is admin and its status
  * 0 is regular user, 1 is chef or cashier, 2 is super admin
@@ -185,12 +137,13 @@ const removeCartItem = (event: Event) => {
     updateCartTotal();
   }
 };
+
 const quantityChanged = (event: Event) => {
   const input = event.target as HTMLInputElement;
   input.setAttribute("data-quantity", input.value);
   const quantityString = input.getAttribute("data-quantity");
   let quantity = parseInt(quantityString || "0", 10);
-  console.log("quantity", quantity);
+
   if (quantity < 0) {
     console.log("quantity < 0", quantity);
     quantity = 0;
@@ -204,6 +157,7 @@ const addToCartClicked = async (event: Event) => {
   const button = event.target as HTMLElement;
   const menuItem = button.closest(".menu-item-container") as HTMLElement | null;
   const customItem = button.closest(".total-box") as HTMLElement | null;
+
   if (customItem) {
     const customPrice = Object.values(customIngredients).reduce(
       (acc, ingredient) => {
@@ -331,6 +285,9 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
 
   const cartRemove = cartShopBox.querySelectorAll(".cart-remove");
   const cartQuantity = cartShopBox.querySelectorAll(".cart-product-quantity");
+  const productQuantity = cartShopBox.querySelectorAll(
+    ".cart-product-quantity"
+  );
 
   if (cartRemove) {
     cartRemove.forEach((cart) => {
@@ -338,11 +295,16 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
     });
   }
 
-  if (cartQuantity) {
+  /*   if (cartQuantity) {
     cartRemove.forEach((cartRemoveBtn) => {
       cartRemoveBtn.addEventListener("change", quantityChanged);
     });
   }
+ */
+  if (productQuantity)
+    productQuantity.forEach((productQuantity) => {
+      productQuantity.addEventListener("change", quantityChanged);
+    });
 };
 
 const updateCartTotal = () => {
@@ -379,36 +341,27 @@ const updateCartTotal = () => {
   }
 };
 
-const ready = () => {
-  const removeCartItemButtons = document.querySelectorAll(".cart-remove");
-  removeCartItemButtons.forEach((button) => {
-    button.addEventListener("click", removeCartItem);
+const removeCartItemButtons = document.querySelectorAll(".cart-remove");
+removeCartItemButtons.forEach((button) => {
+  button.addEventListener("click", removeCartItem);
+});
+
+const addToCartButtons = document.querySelectorAll(
+  ".add-to-cart-btn, .add-custom-to-cart-btn"
+);
+addToCartButtons.forEach((button) => {
+  button.addEventListener("click", addToCartClicked);
+});
+
+const purchaseButton = document.querySelectorAll(".cart-checkout")[0] as
+  | HTMLElement
+  | undefined;
+if (purchaseButton) {
+  purchaseButton.addEventListener("click", (allCartItems) => {
+    purchaseClicked(allCartItems);
   });
-
-  const quantityInputs = document.querySelectorAll(".cart-product-quantity");
-  quantityInputs.forEach((input) => {
-    input.addEventListener("change", quantityChanged);
-  });
-
-  const addToCartButtons = document.querySelectorAll(
-    ".add-to-cart-btn, .add-custom-to-cart-btn"
-  );
-  addToCartButtons.forEach((button) => {
-    button.addEventListener("click", addToCartClicked);
-  });
-
-  const purchaseButton = document.querySelectorAll(".cart-checkout")[0] as
-    | HTMLElement
-    | undefined;
-  if (purchaseButton) {
-    purchaseButton.addEventListener("click", (allCartItems) => {
-      purchaseClicked(allCartItems);
-    });
-  }
-};
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", ready);
-} else {
-  ready();
 }
+const quantityInputs = document.querySelectorAll(".cart-product-quantity");
+quantityInputs.forEach((input) => {
+  input.addEventListener("change", quantityChanged);
+});

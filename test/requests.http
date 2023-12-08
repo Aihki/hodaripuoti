@@ -1,6 +1,12 @@
 
-### GET /products
-GET http://127.0.0.1:3000/api/ingridients
+### PUT
+PUT http://localhost:3000/api/menu/3
+Content-Type: application/json
+
+{
+    "hotdog_name": "Tulinen vegedog",
+    "base_price": "10.00"
+}
 
 
 ### post /products
@@ -12,3 +18,7 @@ Content-Type: application/json
     "topping_type": "testi",
     "price": "1.00"
 }
+
+
+###Get
+GET http://localhost:3000/api/menu
