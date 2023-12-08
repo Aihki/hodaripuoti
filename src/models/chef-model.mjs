@@ -61,4 +61,4 @@ const deleteChefChoice = async (id) => {
   }
 };
 
-export { getChefChoices, updateChefChoice };
+export { getChefChoices, updateChefChoice, newChefChoice };

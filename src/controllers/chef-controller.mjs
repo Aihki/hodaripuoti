@@ -1,4 +1,8 @@
-import { getChefChoices, updateChefChoice } from "../models/chef-model.mjs";
+import {
+  getChefChoices,
+  newChefChoice,
+  updateChefChoice,
+} from "../models/chef-model.mjs";
 
 const chef = async (req, res) => {
   const menuItem = await getChefChoices();
@@ -11,23 +15,20 @@ const chef = async (req, res) => {
 
 const postMenuItem = async (req, res) => {
   try {
-    const menuItem = [
-      req.body.topping_name,
-      req.body.topping_type,
-      req.body.price,
-    ];
+    const { hotdog_name, base_price, topping_ids } = req.body; // Ota tiedot pyynnön mukana tulevasta bodysta
+    const menuItem = { hotdog_name, base_price, topping_ids }; // Luo menuItem-objekti
+
     const result = await newChefChoice(menuItem);
-    if (!result) {
-      res.status(404);
+    if (!result || result.error) {
+      res.status(404).json({ message: "Error adding menu item" });
       return;
     }
-    res.status(200);
-    res.json(result);
-    res.json({ message: "Menu Item added" });
+    res.status(200).json({ message: "Menu Item added" }); // Vastaa, kun hotdog ja toppingit on lisätty onnistuneesti
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 const putMenuItem = async (req, res) => {
   console.log("req.body", req.body);
   const menuItem = req.params.id;
@@ -56,4 +57,4 @@ const deleteMenuItemById = async (req, res) => {
   }
 };
 
-export { chef, putMenuItem };
+export { chef, putMenuItem, postMenuItem };

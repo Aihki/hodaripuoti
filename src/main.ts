@@ -4,7 +4,6 @@ import { displayChefchoice, displayOptions } from "./function";
 import { runAppStarterListeners } from "./listeners";
 import { customIngredients } from "./function";
 import { Hotdog } from "./interfaces/Order";
-import { Location } from "./interfaces/Location";
 import { createNewOrder, fetchData, showAdminTools } from "./functions";
 import { url } from "./variables";
 import e from "express";
@@ -132,6 +131,7 @@ const purchaseClicked = (cart: object) => {
 };
 const removeCartItem = (event: Event) => {
   const buttonClicked = event.target as HTMLElement;
+
   if (buttonClicked.parentElement) {
     buttonClicked.parentElement.remove();
     updateCartTotal();
