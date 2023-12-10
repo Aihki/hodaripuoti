@@ -1,4 +1,4 @@
-import { Order } from './interfaces/Order';
+import { HotdogsAndToppings, Order, orderHotdogs } from './interfaces/Order';
 import { User } from './interfaces/User';
 const userManagementModel = (users: User[]): string => {
   let html = `
@@ -21,23 +21,13 @@ const userManagementModel = (users: User[]): string => {
         `;
   users.forEach((user: User) => {
     const { user_id, username, email, role, points } = user;
-
-    const formId = `form_${user_id}`;
-    const inputId = `roleInput_${user_id}`;
-
     html += `
               <tr>
                 <td><p>${user_id}</p></td>
                 <td><p>${username}</p></td>
                 <td><p>${email}</p></td>
                 <td><p>${points}</p></td>
-                <td>
-                  <form id="${formId}">
-                    <input id="${inputId}" value="${role}">
-                    <button type="submit">Go</button>
-                  </form>
-  
-                </td>
+                <td><p>${role}</p></td>
               </tr>
               `;
   });
@@ -91,6 +81,13 @@ const orderManagementModel = (order: Order[]): string => {
                 <p class="order-filter-text">Tilaukset</p>
               </div>
             </div>
+            <div class="order-info-button order-info-btn-recieved">
+              <i class="fa-solid fa-box"></i>
+              <div class="order-info">
+                <p class="order-amount">0</p>
+                <p class="order-filter-text">Vastaanotetut</p>
+              </div>
+            </div>
             <div class="order-info-button order-info-btn-in-progress">
               <i class="fa-regular fa-clock"></i>
               <div class="order-info">
@@ -105,11 +102,11 @@ const orderManagementModel = (order: Order[]): string => {
                 <p class="order-filter-text">Valmiit</p>
               </div>
             </div>
-            <div class="order-info-button order-info-btn-recieved">
-              <i class="fa-solid fa-box"></i>
+            <div class="order-info-button order-info-btn-picked-up">
+              <i class="fa-solid fa-check"></i>
               <div class="order-info">
                 <p class="order-amount">0</p>
-                <p class="order-filter-text">Vastaanotetut</p>
+                <p class="order-filter-text">Noudetut</p>
               </div>
             </div>
         </div>
@@ -150,6 +147,10 @@ const orderManagementModel = (order: Order[]): string => {
         statusString = 'Valmis';
         statusStringClass = 'completed';
         break;
+      case 3:
+        statusString = 'Noudettu';
+        statusStringClass = 'picked-up';
+        break;
       default:
         statusString = 'Kelpuuton';
         statusStringClass = 'unvalid';
@@ -170,7 +171,7 @@ const orderManagementModel = (order: Order[]): string => {
                   <i class="fa-regular fa-eye"></i>
                 </div>
                 ${
-                  status !== 2
+                  status !== 3
                     ? `
                 <div class="status-container-completed action-btn checkActionBtn" data-order-id="${order.order_id}" data-order-status="${order.status}">
                   <i class="fa-solid fa-check"></i>
@@ -270,16 +271,75 @@ const infoModal = (modaltext: string): string => {
   </div> `;
   return html;
 };
-const addUserDataToModal = (user: User): string => {
-  return `
+const orderReviewModal = (order: orderHotdogs[]): string => {
+  const { order_id, order_date, status } = order[0];
+  const originalDate = new Date(order_date);
+  const formattedDate = originalDate.toLocaleString('fi-FI', {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  let statusString: string;
+  let statusStringClass: string;
+  switch (status) {
+    case 0:
+      statusString = 'Vastaanotettu';
+      statusStringClass = 'recieved';
+      break;
+    case 1:
+      statusString = 'Työn alla';
+      statusStringClass = 'in-progress';
+      break;
+    case 2:
+      statusString = 'Valmis';
+      statusStringClass = 'completed';
+      break;
+    case 3:
+      statusString = 'Noudettu';
+      statusStringClass = 'picked-up';
+      break;
+    default:
+      statusString = 'Kelpuuton';
+      statusStringClass = 'unvalid';
+      console.log('status is unvalid');
+  }
+  let html = `
+  <div class="order-review-container">
+    <div class="order-review-top">
+      <div class="order-id-container"><h2>${order_id}</h2></div>
+    </div>
+    <div class="order-review-bottom">
+    <p>Tilattu: ${formattedDate}</p>
+    <div class="status-container status-container-${statusStringClass}"><p>${statusString}</p></div>
+    </div>
+  </div> `;
+  return html;
+};
+const addUserDataToModal = (user: User, orders?: Order[]): string => {
+  let html = `
   <div class="dialog-profile-container">
-  <div class="dialog-profile-main profile-item-container">
-    <h2 class="profile-username">Hei ${user.username}!</h2>
-    <form method="dialog" id="updateForm">
-      <input type="text" name="username" id="usernameInput" class="modal-input" autocomplete="name" placeholder="${user.username}" value="${user.username}" minlenght="3" required></input><br>
-      <input type="password" name="password" id="passwordInput" name="password" class="modal-input" autocomplete="password" placeholder="Password" minlenght=8" required></input>
-      <button class="form-button" type="submit" value="submit" id="saveProfileButton">Tallenna</button>
-    </form>
+    <div class="dialog-profile-main-container">
+      <div class="dialog-profile-main">
+      <div class="rotating-card">
+        <div class="rotating-card-front profile-item-container">
+          <h2 class="profile-username">Hei ${user.username}!</h2>
+          <form method="dialog" id="updateForm">
+            <input type="text" name="username" id="usernameInput" class="modal-input" autocomplete="name" placeholder="${user.username}" value="${user.username}" minlenght="3" required></input><br>
+            <input type="password" name="password" id="passwordInput" name="password" class="modal-input" autocomplete="password" placeholder="Password" minlenght=8" required></input>
+            <button class="form-button" type="submit" value="submit" id="saveProfileButton">Tallenna</button>
+          </form>
+        </div>
+        <div class="rotating-card-back">
+          <div class="back-main-content">
+          </div>
+          <div class="back-bottom-content">
+            <button class="back-button" id="backButton"><i class="fa-solid fa-arrow-right-arrow-left"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="dialog-profile-settings profile-side profile-item-container">
     <div class="profile-setting-top profile-top">
@@ -293,13 +353,138 @@ const addUserDataToModal = (user: User): string => {
   <div class="dialog-profile-favourite profile-side profile-item-container">
     <div class="profile-favourite-top profile-top">
       <h3>Tilauksesi</h3>
-    </div><hr>
-    <div class="profile-favourite-main"  id="favouriteMain">
-      <p>Ei tilauksia :)</p>
     </div>
-  </div>
-  </div>
+    <hr>
+    <div class="profile-favourite-main"  id="favouriteMain">
+      <table>`;
+  if (!orders) {
+    return '';
+  }
+  if (!Array.isArray(orders) || orders.length === 0) {
+    html += `
+        <tr>
+                <td><p>No orders found</p></td>
+              </tr></table></div></div></div>
+        `;
+    return html;
+  }
+
+  const newOrdersFirstArray = [...orders].reverse();
+  newOrdersFirstArray.forEach((order) => {
+    const { order_id, total_price, order_date, status } = order;
+    const originalDate = new Date(order_date);
+    const formattedDate = originalDate.toLocaleString('fi-FI', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    let statusString: string;
+    let statusStringClass: string;
+    switch (status) {
+      case 0:
+        statusString = 'Vastaanotettu';
+        statusStringClass = 'recieved';
+        break;
+      case 1:
+        statusString = 'Työn alla';
+        statusStringClass = 'in-progress';
+        break;
+      case 2:
+        statusString = 'Valmis';
+        statusStringClass = 'completed';
+        break;
+      case 3:
+        statusString = 'Noudettu';
+        statusStringClass = 'picked-up';
+        break;
+      default:
+        statusString = 'Kelpuuton';
+        statusStringClass = 'unvalid';
+        console.log('status is unvalid');
+    }
+    html += `
+              <tr class="profile-order-tr" data-order-id="${order.order_id}">
+                <td><p>${order_id}</p></td>
+                <td><p>${formattedDate}</p></td>
+                <td><div class="status-container status-container-${statusStringClass}"><p>${statusString}</p></div></td>
+              </tr>
+              `;
+  });
+  html += `</table></div></div>`;
+  return html;
+};
+const adminOrderViewModal = (
+  orderHotdogs: orderHotdogs[],
+  hotdogToppings: HotdogsAndToppings[]
+): string => {
+  const { order_id, order_date, status, total_price, user_id } =
+    orderHotdogs[0];
+
+  const originalDate = new Date(order_date);
+  const formattedDate = originalDate.toLocaleString('fi-FI', {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  let statusString: string;
+  let statusStringClass: string;
+  switch (status) {
+    case 0:
+      statusString = 'Vastaanotettu';
+      statusStringClass = 'recieved';
+      break;
+    case 1:
+      statusString = 'Työn alla';
+      statusStringClass = 'in-progress';
+      break;
+    case 2:
+      statusString = 'Valmis';
+      statusStringClass = 'completed';
+      break;
+    case 3:
+      statusString = 'Noudettu';
+      statusStringClass = 'picked-up';
+      break;
+    default:
+      statusString = 'Kelpuuton';
+      statusStringClass = 'unvalid';
+      console.log('status is unvalid');
+  }
+  let html = `
+  <div class="admin-orders-container">
+    <div class="admin-orders-top-container">
+      <div class="order-top-info-container" style="display:flex; flex-direction:column;">
+        <h2>Tilaus numero: ${order_id}</h2>
+        <p>Asiakas: ${user_id}, teki tilauksen: ${formattedDate}</p>
+      </div>
+      <div class="order-top-info-container" style="display:flex; flex-direction:column;">
+        <div class="status-container status-container-${statusStringClass}"><p>${statusString}: ${status}</p></div>
+        <p style="padding: 5px;">Hinta: ${total_price}</p>
+      </div>
+      <button class="dialog-close-button" id="dialogCloseButton">X</button>
+    </div>
+    <div class="admin-orders-bottom-container">
   `;
+  // TODO: lisää foreachilla jokainen hotdog
+  let hotdogsHtml = '';
+  hotdogToppings.map((hotdogsToppings: HotdogsAndToppings) => {
+    hotdogsHtml += `
+      <div class="admin-hotdog-container">
+        <h3>${hotdogsToppings.hotdog_name}</h3>
+        <p>${hotdogsToppings.amount} kpl</p>
+        <p>${hotdogsToppings.toppings}</p>
+      </div>
+    `;
+
+    console.log(hotdogsHtml);
+  });
+
+  console.log('hre', hotdogsHtml);
+  // DATAA hotdog_name, amount, toppings
+  html += hotdogsHtml + '</div></div>';
+  return html;
 };
 
 export {
@@ -312,4 +497,6 @@ export {
   updateUserManagementModel,
   infoModal,
   addUserDataToModal,
+  adminOrderViewModal,
+  orderReviewModal,
 };

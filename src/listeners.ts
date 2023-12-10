@@ -1,4 +1,9 @@
-import { addUserDataToModal, confirmModal } from './components';
+import {
+  addUserDataToModal,
+  adminOrderViewModal,
+  confirmModal,
+  orderReviewModal,
+} from './components';
 import {
   fetchData,
   formUpdate,
@@ -85,6 +90,8 @@ const addOrderFilterListeners = (role: number) => {
         fetchUrl = url + '/order/getFilteredOrders/2';
       } else if (button.classList.contains('order-info-btn-recieved')) {
         fetchUrl = url + '/order/getFilteredOrders/0';
+      } else if (button.classList.contains('order-info-btn-picked-up')) {
+        fetchUrl = url + '/order/getFilteredOrders/3';
       } else {
         console.log(button.className);
         fetchUrl = null;
@@ -108,12 +115,17 @@ const addProfileBtnListener = () => {
         console.log('token found render profile');
         //TODO: render profile
         const userData = await getUserData(token);
-        const profileModal = addUserDataToModal(userData);
+        const orders = await fetchData(
+          url + '/order/getMyOrders/' + userData.user_id
+        );
+        const profileModal = addUserDataToModal(userData, orders);
         modal.innerHTML = '';
         modal.insertAdjacentHTML('beforeend', profileModal);
         addModalCloseListener();
         addLogOutListener();
         addUpdateListener();
+        addProfileOrderTrListener();
+        addBackButtonListener();
         (modal as any).showModal();
         return;
       }
@@ -131,6 +143,47 @@ const addModalCloseListener = () => {
     button.addEventListener('click', () => {
       console.log('close');
       (modal as any).close();
+    });
+  });
+};
+const addBackButtonListener = () => {
+  const backBtn = document.querySelector('#backButton');
+  if (!backBtn) {
+    return;
+  }
+
+  backBtn.addEventListener('click', () => {
+    const rotatingCard = document.querySelector('.rotating-card');
+    if (rotatingCard?.classList.contains('show-back')) {
+      rotatingCard?.classList.remove('show-back');
+    }
+  });
+};
+const addProfileOrderTrListener = () => {
+  const profileTrs = document.querySelectorAll('.profile-order-tr');
+  if (!profileTrs || profileTrs.length < 1) {
+    return;
+  }
+  profileTrs.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const orderId = button.getAttribute('data-order-id');
+      const rotatingCard = document.querySelector('.rotating-card');
+      console.log('profileOrder', orderId, rotatingCard);
+
+      //TODO: add order info here
+      const order = await fetchData(url + '/order/orderHotdogs/' + orderId);
+
+      const orderReviewModalHtml = orderReviewModal(order);
+      const backMainContent = document.querySelector('.back-main-content');
+
+      if (!backMainContent) {
+        return;
+      }
+      backMainContent.innerHTML = '';
+      backMainContent.insertAdjacentHTML('beforeend', orderReviewModalHtml);
+      if (rotatingCard?.classList.contains('show-back') === false) {
+        rotatingCard.classList.add('show-back');
+      }
     });
   });
 };
@@ -221,7 +274,7 @@ const addUserManageFormSubmitListener = () => {
   });
 };
 
-const viewActionHandler = (event: Event) => {
+const viewActionHandler = async (event: Event) => {
   const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
     'data-order-id'
   );
@@ -235,11 +288,22 @@ const viewActionHandler = (event: Event) => {
     if (!modal) {
       return;
     }
-    const viewOrderModal = 'Heree';
+    const orderHotdogs = await fetchData(
+      url + '/order/orderHotdogs/' + orderId
+    );
+    const hotdogAndToppings = await fetchData(
+      url + '/order/hotdogsAndToppings/' + orderId
+    );
+
+    if (orderHotdogs.message || hotdogAndToppings.message) {
+      return;
+    }
+    const viewOrderModal = adminOrderViewModal(orderHotdogs, hotdogAndToppings);
 
     modal.innerHTML = '';
     modal.insertAdjacentHTML('beforeend', viewOrderModal);
     (modal as any).showModal();
+    addModalCloseListener();
   }
 };
 
@@ -269,12 +333,17 @@ const checkActionHandler = (role: number, event: Event) => {
     switch (orderStatus) {
       case 0: // Recieved
         confirmModalHtml = confirmModal(
-          `Oletko varma haluavasi ottaa tilauksen <strong>${orderId} vastaan</strong>?`
+          `Oletko varma haluavasi ottaa tilauksen <strong class="text-in-progress">${orderId} vastaan</strong>?`
         );
         break;
       case 1: // In progress
         confirmModalHtml = confirmModal(
-          `Oletko varma haluavasi merkata tilauksen <strong>${orderId} valmiiksi</strong>?`
+          `Oletko varma haluavasi merkata tilauksen <strong class="text-ready">${orderId} valmiiksi</strong>?`
+        );
+        break;
+      case 2: // Ready
+        confirmModalHtml = confirmModal(
+          `Oletko varma haluavasi merkata tilauksen <strong class="text-picked-up">${orderId} noudetuksi</strong>?`
         );
         break;
       default:
@@ -302,10 +371,13 @@ const checkActionHandler = (role: number, event: Event) => {
       };
       const result = await fetchData(url + '/order/changeOrderStatus', options);
       if (orderStatus === 0) {
-        const orders = await fetchData(url + '/order/getFilteredOrders/' + 0);
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 1);
         showAdminTools(role, orders);
       } else if (orderStatus === 1) {
-        const orders = await fetchData(url + '/order/getFilteredOrders/' + 1);
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 2);
+        showAdminTools(role, orders);
+      } else if (orderStatus === 2) {
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 3);
         showAdminTools(role, orders);
       } else {
         showAdminTools(role);
@@ -335,4 +407,6 @@ export {
   addModalCloseListener,
   addLogOutListener,
   addUpdateListener,
+  addProfileOrderTrListener,
+  addBackButtonListener,
 };

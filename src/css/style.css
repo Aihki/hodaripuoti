@@ -445,13 +445,12 @@ input {
   z-index: 1;
   top: 0px;
   background-color: white;
-  border: 1px black solid;
+  border-bottom: 3px grey solid;
 }
 
 .user-management-table-container {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px black solid;
 }
 
 .admin-section th,
@@ -460,23 +459,25 @@ input {
   text-align: left;
 }
 
+.admin-section tr:hover {
+  background-color: var(--dark) !important;
+  color: white;
+}
+
 .admin-section tr {
   background-color: var(--pure-light);
 }
 
-.admin-section tr:nth-child(2n) {
-  background-color: var(--light-green);
-}
-
-.admin-section tr:hover {
-  background-color: var(--green);
-  color: var(--pure-light);
-}
-
 .admin-orders-container {
   display: flex;
+  gap: 20px;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 20px 10px;
+  border-radius: 10px;
+}
+.admin-orders-container table {
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 x .orders-con .orders-nav h2 {
@@ -506,7 +507,7 @@ x .orders-con .orders-nav h2 {
 .orders-container {
   max-height: 400px;
   overflow-y: auto;
-  border: #111 1px solid;
+  border-radius: 10px;
 }
 
 .order-info-button:hover {
@@ -535,9 +536,36 @@ x .orders-con .orders-nav h2 {
 .order-info-btn-completed {
   background-color: rgb(0, 160, 0);
 }
+.order-info-btn-picked-up {
+  background-color: rgb(224, 199, 114);
+}
 
 .order-info-btn-recieved {
   background-color: #3498db;
+}
+.order-top-info-container {
+  margin-bottom: 10px;
+}
+
+.order-review-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  height: 100%;
+}
+.order-review-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 7px solid var(--light-green);
+}
+.order-id-container h2 {
+  font-size: 2rem !important;
+  margin: 0 !important;
 }
 
 .status-container {
@@ -566,6 +594,10 @@ x .orders-con .orders-nav h2 {
 .status-container-completed {
   background-color: rgb(124, 212, 124);
   color: rgb(0, 75, 0);
+}
+.status-container-picked-up {
+  background-color: rgb(224, 199, 114);
+  color: rgb(75, 57, 0);
 }
 
 .actions-container {
@@ -867,17 +899,21 @@ x .orders-con .orders-nav h2 {
 .user-management-table-container {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px black solid;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+}
+.user-management-table-container table {
+  border-radius: 10px;
+  border-top-left-radius: 0px;
 }
 
 .admin-container {
   margin: 0px 10px;
 }
 
-.admin-section table,
 .admin-section th,
 .admin-section td {
-  border: 1px solid var(--dark);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
 }
 
 .admin-section th,
@@ -887,13 +923,7 @@ x .orders-con .orders-nav h2 {
 }
 
 .admin-section tr:hover {
-  background-color: var(--light-green);
-}
-
-.admin-orders-container {
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
+  background-color: var(black) !important;
 }
 
 .orders-nav h2 {
@@ -946,7 +976,9 @@ x .orders-con .orders-nav h2 {
 .order-info-btn-completed {
   background-color: rgb(0, 160, 0);
 }
-
+.order-info-btn-picked-up {
+  background-color: rgb(224, 199, 114);
+}
 .order-info-btn-recieved {
   background-color: #3498db;
 }
@@ -974,6 +1006,20 @@ x .orders-con .orders-nav h2 {
   background-color: rgb(124, 212, 124);
   color: rgb(0, 75, 0);
 }
+.status-container-picked-up {
+  background-color: rgb(224, 199, 114);
+  color: rgb(75, 57, 0);
+}
+
+.text-picked-up {
+  color: rgb(224, 199, 114);
+}
+.text-in-progress {
+  color: rgb(164, 136, 194);
+}
+.text-ready {
+  color: rgb(124, 212, 124);
+}
 
 .actions-container {
   display: flex;
@@ -992,6 +1038,17 @@ x .orders-con .orders-nav h2 {
   transform: scale(1.2);
 }
 
+.admin-orders-bottom-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+.admin-hotdog-container {
+  background-color: #f2f2f2;
+  padding: 20px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
 /* ************* */
 /* footer nav css */
 
@@ -1128,20 +1185,12 @@ dialog:has(.dialog-profile-container) {
   -moz-box-shadow: 0px 0px 10px 2px rgba(92, 131, 116, 1);
   box-shadow: 0px 0px 10px 2px rgba(92, 131, 116, 1);
 }
-.dialog-profile-main {
-  background: var(--light-green);
-  border: 2px solid var(--dark-green);
-  padding: 1em;
-  max-width: 100%;
-}
+
 .profile-top {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0.5em 1em;
-}
-hr {
-  margin-bottom: 10px;
 }
 .profile-side {
   width: 100%;
@@ -1173,11 +1222,128 @@ hr {
   justify-content: center;
   margin-bottom: 10px;
 }
+.profile-favourite-main {
+  overflow-y: auto;
+  max-height: 210px;
+}
+.profile-favourite-main table {
+  margin: auto;
+}
+.profile-favourite-main td p {
+  margin: 5px 5px;
+}
+.profile-favourite-main tbody {
+  width: 100%;
+  table-layout: fixed; /* Ensure that column widths are respected */
+  border-collapse: collapse;
+}
+.profile-favourite-main tr {
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+.profile-favourite-main tr:hover {
+  transform: scale(1.05);
+}
+.profile-favourite-main .status-container {
+  transform: scale(0.8);
+}
+.dialog-profile-main {
+  position: relative;
+  max-width: 100%;
+  height: 300px;
+}
+.dialog-profile-main-container {
+  position: relative;
+}
+@keyframes scaleAnimation {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.rotating-card {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: all 0.5s ease;
+}
+
+.show-back {
+  transform: rotateY(180deg);
+}
+.rotating-card-front {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-color: var(--light-green);
+  border: 2px solid var(--dark-green);
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+
+  -webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+}
+.rotating-card-back {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  backface-visibility: hidden;
+  transform: rotateY(180deg);
+
+  background-color: var(--pure-light);
+  border-radius: 10px;
+  border: solid 1px var(--light-green);
+  -webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+  -moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+  display: flex;
+  flex-direction: column;
+}
+.back-main-content {
+  height: 100%;
+}
+.back-bottom-content {
+  position: relative;
+  height: 50px;
+  width: 100%;
+}
+.rotating-card-back button {
+  position: absolute;
+  top: 0;
+  margin: 0;
+  right: 10px;
+  border-radius: 10px;
+  outline: none;
+  border: none;
+  height: 100%;
+  width: 30px;
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.3s ease;
+}
+.rotating-card-back button:hover {
+  color: var(--light-green);
+  transform: scale(1.3);
+}
 
 form {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .slider-container {
@@ -1278,10 +1444,6 @@ dialog:has(.confirm-modal-container) {
 
 .forms-top-container h2 {
   font-size: 1.2em;
-}
-
-.forms-top-container strong {
-  color: var(--green);
 }
 
 .form-button {
@@ -1392,18 +1554,15 @@ dialog:has(.confirm-modal-container) {
     display: flex;
     flex-direction: row;
   }
-
-  .dialog-profile-container {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
-  }
-  .dialog-profile-main {
+  .dialog-profile-main-container {
+    position: relative;
+    max-width: 300px;
     grid-column: 1 / 2;
     grid-row: 1 / 4;
-    max-width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    height: 100%;
+  }
+  .dialog-profile-main {
+    height: 100%;
   }
   .dialog-profile-settings {
     grid-column: 2 / 3;
@@ -1417,6 +1576,21 @@ dialog:has(.confirm-modal-container) {
   dialog:has(.dialog-profile-container) {
     background-color: var(--light);
     width: 675px;
+  }
+  .order-top-info-container {
+    margin-bottom: 0;
+  }
+  .admin-orders-top-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+  }
+  dialog:has(.admin-orders-top-container) {
+    max-width: 900px;
+  }
+  dialog:has(.admin-orders-top-container) .dialog-close-button {
+    margin: 0;
   }
 }
 

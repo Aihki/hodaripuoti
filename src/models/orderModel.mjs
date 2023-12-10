@@ -8,7 +8,62 @@ const listAllOrders = async () => {
     console.error('listAllOrders', e.message);
   }
 };
+const listOrderById = async (id) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT * FROM Orders WHERE order_id = ?`,
+      [id]
+    );
+    return rows;
+  } catch (e) {
+    console.error('listOrderById', e.message);
+  }
+};
 
+const listMyOrders = async (id) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT * FROM Orders WHERE user_id = ?`,
+      [id]
+    );
+    return rows;
+  } catch (e) {
+    console.error('listMyOrders', e.message);
+  }
+};
+const listHotdogPrices = async (id) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT
+      O.order_id,
+      HD.hotdog_name,
+      HD.hotdog_id,
+      HD.base_price AS hotdog_base_price,
+      COALESCE(SUM(T.topping_price), 0) AS total_topping_price,
+      OH.amount AS hotdog_amount,
+      (HD.base_price + COALESCE(SUM(T.topping_price), 0)) * OH.amount AS total_price
+    FROM
+      Orders O
+    JOIN
+      Orders_hotdogs OH ON O.order_id = OH.order_id
+    JOIN
+      Hotdogs HD ON OH.hotdog_id = HD.hotdog_id
+    LEFT JOIN
+      Hotdog_toppings HT ON OH.hotdog_id = HT.hotdog_id
+    LEFT JOIN
+      Toppings T ON HT.topping_id = T.topping_id
+    WHERE
+      O.order_id = ?
+    GROUP BY
+      O.order_id, HD.hotdog_id, HD.hotdog_name, HD.base_price, OH.amount;
+    `,
+      [id]
+    );
+    return rows;
+  } catch (e) {
+    console.error('listHotdogPrices', e.message);
+  }
+};
 const listFilteredOrders = async (id) => {
   try {
     const [rows] = await promisePool.execute(
@@ -27,7 +82,8 @@ const listOrdersCounts = async () => {
       COUNT(*) AS totalOrders,
       SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) AS recievedCount,
       SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS inProgressCount,
-      SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) AS completedCount
+      SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) AS completedCount,
+      SUM(CASE WHEN status = 3 THEN 1 ELSE 0 END) AS pickedUpCount
       FROM Orders;`
     );
     return rows;
@@ -35,7 +91,24 @@ const listOrdersCounts = async () => {
     console.error('listOrdersCounts', e.message);
   }
 };
-
+const listOrderHotdogsAndToppings = async (order_id) => {
+  try {
+    const [rows] = await promisePool.execute(
+      `SELECT H.hotdog_id, H.hotdog_name, OH.amount, GROUP_CONCAT(T.topping_name SEPARATOR ', ') AS toppings
+      FROM Orders AS O
+      JOIN Orders_hotdogs AS OH ON O.order_id = OH.order_id
+      JOIN Hotdog_toppings AS HT ON OH.hotdog_id = HT.hotdog_id
+      JOIN Toppings AS T ON HT.topping_id = T.topping_id
+      JOIN Hotdogs AS H ON OH.hotdog_id = H.hotdog_id
+      WHERE O.order_id = ?
+      GROUP BY H.hotdog_id;`,
+      [order_id]
+    );
+    return rows;
+  } catch (e) {
+    console.error('listOrderHotdogsAndToppings', e.message);
+  }
+};
 const addOrder = async (order) => {
   try {
     const sql = `INSERT INTO Orders (total_price, user_id)
@@ -72,22 +145,21 @@ const listOrderHotdogs = async (order_id) => {
     );
     return rows;
   } catch (e) {
-    console.error('listOrderHotdogs', e.message);
-    throw httpError('Database error', 500);
+    console.error('error', e.message);
+    return { error: e.message };
   }
 };
 
-// NOT IN USE
-const updateOrderTotalPrice = async (order_id) => {
+const updateOrderTotalPrice = async (data) => {
   try {
     const [rows] = await promisePool.execute(
-      `UPDATE Orders set total_price WHERE user_id = ?;`,
-      [order_id]
+      `UPDATE Orders set total_price = ? WHERE order_id = ?;`,
+      data
     );
     return rows;
   } catch (e) {
-    console.error('listOrderHotdogs', e.message);
-    throw httpError('Database error', 500);
+    console.error('error', e.message);
+    return { error: e.message };
   }
 };
 
@@ -113,4 +185,8 @@ export {
   updateOrderStatus,
   listFilteredOrders,
   listOrdersCounts,
+  listOrderById,
+  listMyOrders,
+  listOrderHotdogsAndToppings,
+  listHotdogPrices,
 };

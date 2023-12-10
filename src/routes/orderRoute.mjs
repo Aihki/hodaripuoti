@@ -2,9 +2,13 @@ import express from 'express';
 import { body } from 'express-validator';
 import {
   getFilteredOrders,
+  getHotdogsAndToppings,
+  getMyOrders,
+  getOrderById,
   getOrders,
   getOrdersCounts,
   getOrdersHotdogs,
+  getOrderTotalPrice,
   postOrders,
   postOrdersHotdogs,
   putOrderStatus,
@@ -21,6 +25,9 @@ orderRouter
     body('total_price').isNumeric(),
     postOrders
   );
+orderRouter.route('/ordersCounts').get(getOrdersCounts);
+orderRouter.route('/getMyOrders/:id').get(getMyOrders);
+orderRouter.route('/:id').get(getOrderById);
 orderRouter.route('/changeOrderStatus').put(putOrderStatus);
 orderRouter.route('/getFilteredOrders/:id').get(getFilteredOrders);
 
@@ -34,7 +41,8 @@ orderRouter
     postOrdersHotdogs
   );
 orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
-orderRouter.route('/ordersCounts').get(getOrdersCounts);
-orderRouter.route('/orderTotalPrice/:id').put(putOrderTotalPrice);
+orderRouter.route('/hotdogsAndToppings/:id').get(getHotdogsAndToppings);
+orderRouter.route('/orderTotalPrice/:id').get(getOrderTotalPrice);
+orderRouter.route('/orderTotalPrice').put(putOrderTotalPrice);
 
 export default orderRouter;

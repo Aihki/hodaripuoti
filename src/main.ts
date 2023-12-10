@@ -181,10 +181,35 @@ const purchaseClicked = (cart: object) => {
 const removeCartItem = (event: Event) => {
   const buttonClicked = event.target as HTMLElement;
   if (buttonClicked.parentElement) {
+    const indexToDelete = buttonClicked.getAttribute('data-hotdog-index');
+    if (!indexToDelete) {
+      return;
+    }
+
+    const deleteIndex = parseInt(indexToDelete);
+
+    const hotdogRemoveButtons = document.querySelectorAll(
+      '[data-hotdog-index]'
+    );
+    hotdogRemoveButtons.forEach((btn) => {
+      const currentBtnIndex = btn.getAttribute('data-hotdog-index');
+      if (!currentBtnIndex) {
+        return;
+      }
+
+      const currentIndex = parseInt(currentBtnIndex);
+      if (currentIndex > deleteIndex) {
+        btn.setAttribute('data-hotdog-index', (currentIndex - 1).toString());
+      }
+    });
+
     buttonClicked.parentElement.remove();
+    allCartItems.splice(deleteIndex, 1);
+    console.log(allCartItems);
     updateCartTotal();
   }
 };
+
 const quantityChanged = (event: Event) => {
   const input = event.target as HTMLInputElement;
   input.setAttribute('data-quantity', input.value);
@@ -314,7 +339,7 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
       return;
     }
   }
-
+  const dataHotdogIndex = allCartItems.length - 1;
   const cartBoxContent = `
   <div class="detail-box">
     <div class="cart-product-title">${title}</div>
@@ -323,7 +348,7 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
     </div>
   
   <div class="cart-product-ingredients">${ingredients}</div>
-  <i class="fa-solid fa-trash cart-remove"></i>
+  <i class="fa-solid fa-trash cart-remove" data-hotdog-index="${dataHotdogIndex}"></i>
 `;
   cartShopBox.innerHTML = cartBoxContent;
 

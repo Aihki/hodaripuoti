@@ -11,13 +11,16 @@ import {
   CreateOrderResponse,
   FetchDataResponse,
   Hotdog,
+  HotdogPrices,
 } from './interfaces/Order';
 import { User } from './interfaces/User';
 import {
   addAuthFormListeners,
+  addBackButtonListener,
   addLogOutListener,
   addModalCloseListener,
   addOrderFilterListeners,
+  addProfileOrderTrListener,
   addUpdateListener,
   addUserManageFormSubmitListener,
   addUserManageNavListener,
@@ -62,8 +65,12 @@ const fetchData = async (url: string, options = {}): Promise<any> => {
   if (!response.ok) {
     throw new Error(`Error ${response.status} occured`);
   }
-  const json = await response.json();
-  return json;
+  try {
+    const json = await response.json();
+    return json;
+  } catch (error: any) {
+    throw new Error(`Error parsing JSON: ${error.message}`);
+  }
 };
 const getToken = (): string | null => {
   const token = localStorage.getItem('token');
@@ -173,7 +180,8 @@ const showAdminTools = async (role: number, incomingOrders?: any) => {
 };
 const updateOrderInfoBtnAmount = async () => {
   const counts = await fetchData(url + '/order/ordersCounts');
-  if (!counts) {
+  console.log(counts);
+  if (counts.length < 1) {
     return;
   }
   const orderInfoBtnOrders = document
@@ -188,11 +196,15 @@ const updateOrderInfoBtnAmount = async () => {
   const orderInfoBtnInProgress = document
     .querySelector('.order-info-btn-in-progress')
     ?.querySelector('.order-amount');
+  const orderInfoBtnPickedUp = document
+    .querySelector('.order-info-btn-picked-up')
+    ?.querySelector('.order-amount');
   if (
     !orderInfoBtnCompleted ||
     !orderInfoBtnInProgress ||
     !orderInfoBtnOrders ||
-    !orderInfoBtnRecieved
+    !orderInfoBtnRecieved ||
+    !orderInfoBtnPickedUp
   ) {
     return;
   }
@@ -200,6 +212,7 @@ const updateOrderInfoBtnAmount = async () => {
   orderInfoBtnInProgress.innerHTML = counts[0].inProgressCount;
   orderInfoBtnOrders.innerHTML = counts[0].totalOrders;
   orderInfoBtnRecieved.innerHTML = counts[0].recievedCount;
+  orderInfoBtnPickedUp.innerHTML = counts[0].pickedUpCount;
 };
 
 const renderForms = (isLogin: boolean | null): void => {
@@ -407,7 +420,7 @@ const createNewOrder = async (
         if (!hotdogResponse || !hotdogResponse.hotdog_id) {
           throw new Error('Failed to create hotdog');
         }
-        hotdog_id = hotdogResponse.hotdog_id; // TODO:check if neccessary
+        hotdog_id = hotdogResponse.hotdog_id;
         debugString += ' hotdog_id' + hotdog_id;
       } catch (error) {
         console.error('Error creating hotdog:', (error as Error).message);
@@ -471,6 +484,9 @@ const createNewOrder = async (
         }
         hotdogToppingsId = hotdogToppings.message;
         debugString += ' hotdog_id ' + hotdog_id;
+        if (order_id) {
+          calculateTotal(order_id);
+        }
       } catch (error) {
         console.error(
           'Error creating hotdogToppings:',
@@ -484,31 +500,65 @@ const createNewOrder = async (
     }
   });
 
-  // Handle total price update
-  // const totalPriceOptions = {
-  //   method: 'PUT',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // };
-  // let totalPrice: number | undefined;
-  // try {
-  //   const ordersTotalPrice = await fetchData(
-  //     url + '/order/orderTotalPrice/' + order_id,
-  //     totalPriceOptions
-  //   );
-  //   if (!ordersTotalPrice) {
-  //     throw new Error('Failed to PUT ordersTotalPrice');
-  //   }
-  //   totalPrice = ordersTotalPrice.message;
-  //   debugString += ' totalPrice' + totalPrice;
-  // } catch (error) {
-  //   console.error('Error creating ordersTotalPrice:', (error as Error).message);
-  //   // Return an error message to the customer
-  //   return { error: 'Failed to create ordersTotalPrice' };
-  // }
   console.log('Order done');
   console.log(debugString);
+};
+const calculateTotal = async (order_id: number) => {
+  // Handle total price calculation and total_price updating
+  let countedPrice: number = 0;
+  try {
+    const countedPriceResponse = await fetchData(
+      url + '/order/orderTotalPrice/' + order_id
+    );
+
+    if (!countedPriceResponse) {
+      throw new Error('Failed to get order');
+    }
+    console.log('order', order_id, countedPriceResponse);
+
+    countedPriceResponse.forEach((hotdog: HotdogPrices) => {
+      console.log('hotdog', hotdog);
+      if (hotdog.hotdog_name === 'Custom') {
+        console.log('custom', parseFloat(hotdog.total_price));
+        countedPrice += parseFloat(hotdog.total_topping_price);
+      } else {
+        countedPrice += parseFloat(hotdog.hotdog_base_price);
+        console.log(parseFloat(hotdog.hotdog_base_price));
+      }
+      console.log('updated', countedPrice);
+    });
+    // handle total price updating
+    const totalPriceOptions = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        total_price: countedPrice,
+        order_id,
+      }),
+    };
+    try {
+      const ordersTotalPrice = await fetchData(
+        url + '/order/orderTotalPrice',
+        totalPriceOptions
+      );
+      if (!ordersTotalPrice) {
+        throw new Error('Failed to PUT ordersTotalPrice');
+      }
+    } catch (error) {
+      console.error(
+        'Error creating ordersTotalPrice:',
+        (error as Error).message
+      );
+      // Return an error message to the customer
+      return { error: 'Failed to create ordersTotalPrice' };
+    }
+  } catch (error) {
+    console.error('Error creating order:', (error as Error).message);
+    // Return an error message to the customer
+    return { error: 'Failed to create order' };
+  }
 };
 
 const formUpdate = async (): Promise<void> => {
@@ -540,12 +590,17 @@ const formUpdate = async (): Promise<void> => {
     url + '/user/' + userData.user_id,
     options
   );
-  const profileModal = addUserDataToModal(userData);
+  const orders = await fetchData(
+    url + '/order/getMyOrders/' + userData.user_id
+  );
+  const profileModal = addUserDataToModal(userData, orders);
   modal.innerHTML = '';
   modal.insertAdjacentHTML('beforeend', profileModal);
   addModalCloseListener();
   addLogOutListener();
   addUpdateListener();
+  addProfileOrderTrListener();
+  addBackButtonListener();
 };
 
 checkUserRole();
