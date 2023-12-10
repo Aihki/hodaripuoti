@@ -22,14 +22,14 @@ const newIngrident = async (ingredients) => {
   }
 };
 
-const updateIngrident = async (ingredients) => {
-  const { topping_name, topping_type, price } = ingredients;
+const updateIngrident = async (id, update) => {
+  const { topping_name, topping_type, price } = update;
   const sql = `UPDATE Toppings SET topping_name = ?, topping_type = ?, price = ? WHERE id = ?`;
-  const params = [topping_name, topping_type, price];
+  const params = [topping_name, topping_type, price, id];
   try {
     const results = await promisePool.query(sql, params);
     return results[0].affectedRows > 0
-      ? { success: "Updated" }
+      ? { success: "Ingridient price updated" }
       : { error: "Not found" };
   } catch (error) {
     return { error: error.message };
@@ -49,4 +49,4 @@ const deleteIngrident = async (id) => {
   }
 };
 
-export { getProducts, newIngrident };
+export { getProducts, updateIngrident };

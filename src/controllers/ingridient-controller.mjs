@@ -1,5 +1,5 @@
 import { json } from "express";
-import { getProducts, newIngrident } from "../models/ingridient-model.mjs";
+import { getProducts, updateIngrident } from "../models/ingridient-model.mjs";
 
 const customIngriedirents = async (req, res) => {
   const ingredients = await getProducts();
@@ -32,13 +32,9 @@ const postIngridient = async (req, res) => {
 };
 
 const putIngridient = async (req, res) => {
+  const ingridient = req.params.id;
   try {
-    const ingredients = [
-      req.body.topping_name,
-      req.body.topping_type,
-      req.body.price,
-    ];
-    const result = await updateIngrident(ingredients);
+    const result = await updateIngrident(ingridient, req.body);
     if (!result) {
       res.status(404);
       return;

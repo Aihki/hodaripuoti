@@ -15,15 +15,15 @@ const chef = async (req, res) => {
 
 const postMenuItem = async (req, res) => {
   try {
-    const { hotdog_name, base_price, topping_ids } = req.body; // Ota tiedot pyynnön mukana tulevasta bodysta
-    const menuItem = { hotdog_name, base_price, topping_ids }; // Luo menuItem-objekti
+    const { hotdog_name, base_price, topping_ids } = req.body;
+    const menuItem = { hotdog_name, base_price, topping_ids };
 
     const result = await newChefChoice(menuItem);
     if (!result || result.error) {
       res.status(404).json({ message: "Error adding menu item" });
       return;
     }
-    res.status(200).json({ message: "Menu Item added" }); // Vastaa, kun hotdog ja toppingit on lisätty onnistuneesti
+    res.status(200).json({ message: "Menu Item added" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

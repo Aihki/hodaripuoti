@@ -1,4 +1,3 @@
-import e from "express";
 import { Location } from "./interfaces/Location";
 
 const locations: Location[] = [

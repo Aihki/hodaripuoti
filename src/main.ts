@@ -1,12 +1,9 @@
-import * as L from "leaflet";
 import { displayChefchoice, displayOptions } from "./function";
-
 import { runAppStarterListeners } from "./listeners";
 import { customIngredients } from "./function";
 import { Hotdog } from "./interfaces/Order";
-import { createNewOrder, fetchData, showAdminTools } from "./functions";
+import { createNewOrder, fetchData } from "./functions";
 import { url } from "./variables";
-import e from "express";
 
 const burger: HTMLElement | null = document.querySelector(".burgermenu");
 const navMenu: HTMLElement | null = document.querySelector(".nav-menu");
@@ -119,6 +116,7 @@ if (cartIcon && cart && closeCart) {
 }
 
 const purchaseClicked = (cart: object) => {
+  console.log(cart);
   const cartItems: HTMLElement | null = document.querySelector(".cart-content");
   const token = localStorage.getItem("token");
   if (!token) {
@@ -129,11 +127,35 @@ const purchaseClicked = (cart: object) => {
     createNewOrder(allCartItems, 100);
   }
 };
+
 const removeCartItem = (event: Event) => {
   const buttonClicked = event.target as HTMLElement;
-
   if (buttonClicked.parentElement) {
+    const indexToDelete = buttonClicked.getAttribute("data-hotdog-index");
+    if (!indexToDelete) {
+      return;
+    }
+
+    const deleteIndex = parseInt(indexToDelete);
+
+    const hotdogRemoveButtons = document.querySelectorAll(
+      "[data-hotdog-index]"
+    );
+    hotdogRemoveButtons.forEach((btn) => {
+      const currentBtnIndex = btn.getAttribute("data-hotdog-index");
+      if (!currentBtnIndex) {
+        return;
+      }
+
+      const currentIndex = parseInt(currentBtnIndex);
+      if (currentIndex > deleteIndex) {
+        btn.setAttribute("data-hotdog-index", (currentIndex - 1).toString());
+      }
+    });
+
     buttonClicked.parentElement.remove();
+    allCartItems.splice(deleteIndex, 1);
+    console.log(allCartItems);
     updateCartTotal();
   }
 };
@@ -143,7 +165,7 @@ const quantityChanged = (event: Event) => {
   input.setAttribute("data-quantity", input.value);
   const quantityString = input.getAttribute("data-quantity");
   let quantity = parseInt(quantityString || "0", 10);
-
+  console.log(quantity);
   if (quantity < 0) {
     console.log("quantity < 0", quantity);
     quantity = 0;
@@ -171,7 +193,7 @@ const addToCartClicked = async (event: Event) => {
       return;
     }
 
-    const ingredients = Object.keys(customIngredients).join(", ");
+    /*   const ingredients = Object.keys(customIngredients).join(", "); */
     console.log("name", customIngredients[0].topping_name);
 
     if (customPrice && customTitle) {
@@ -217,7 +239,7 @@ const addToCartClicked = async (event: Event) => {
     const hotdog_id = menuCartItem[0].hotdog_id;
     const toppings = await fetchData(url + "/hotdog/hotdogToppings/" + menuId);
     let toppingString = "";
-    toppings.forEach((ingredient, index) => {
+    toppings.forEach((ingredient, index: number) => {
       if (index === toppings.length - 1) {
         toppingString += ingredient.topping_name;
       } else {
@@ -228,7 +250,6 @@ const addToCartClicked = async (event: Event) => {
     if (titleElement && priceElement && parsedId && ingredientsElement) {
       const title = titleElement.textContent || "";
       const price = priceElement.textContent || "";
-      const id = parsedId;
 
       allCartItems.push({ hotdog_id: hotdog_id, ordersHotdogsAmount: 1 }); // TODO: quantity
       /*     console.log(menu); */
@@ -269,41 +290,41 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
     }
   }
 
+  const dataHotdogIndex = allCartItems.length - 1;
   const cartBoxContent = `
   <div class="detail-box">
-    <div class="cart-product-title">${title}</div>
-    <div class="cart-product-price">${price}</div>
-    <input type="number" class="cart-product-quantity" value="1">
-    </div>
-  
-  <div class="cart-product-ingredients">${ingredients}</div>
-  <i class="fa-solid fa-trash cart-remove"></i>
+  <div class="cart-product-title">${title}</div>
+  <div class="cart-product-price">${price}</div>
+  <input type="number" class="cart-product-quantity" value="1">
+  </div>
+
+<div class="cart-product-ingredients">${ingredients}</div>
+<i class="fa-solid fa-trash cart-remove"  data-hotdog-index="${dataHotdogIndex}"></i>
 `;
+
   cartShopBox.innerHTML = cartBoxContent;
 
   cartItems.appendChild(cartShopBox);
 
   const cartRemove = cartShopBox.querySelectorAll(".cart-remove");
   const cartQuantity = cartShopBox.querySelectorAll(".cart-product-quantity");
-  const productQuantity = cartShopBox.querySelectorAll(
+  /*   const productQuantity = cartShopBox.querySelectorAll(
     ".cart-product-quantity"
-  );
+  ); */
 
   if (cartRemove) {
-    cartRemove.forEach((cart) => {
-      cart.addEventListener("click", removeCartItem);
+    cartRemove.forEach((remove) => {
+      remove.addEventListener("click", removeCartItem);
     });
   }
-
   /*   if (cartQuantity) {
     cartRemove.forEach((cartRemoveBtn) => {
       cartRemoveBtn.addEventListener("change", quantityChanged);
     });
-  }
- */
-  if (productQuantity)
-    productQuantity.forEach((productQuantity) => {
-      productQuantity.addEventListener("change", quantityChanged);
+  } */
+  if (cartQuantity)
+    cartQuantity.forEach((quantity) => {
+      quantity.addEventListener("change", quantityChanged);
     });
 };
 
