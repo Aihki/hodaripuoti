@@ -616,4 +616,5 @@ export {
   checkUserRole,
   showInfoModal,
   formUpdate,
+  validateData,
 };

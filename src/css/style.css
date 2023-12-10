@@ -1255,6 +1255,7 @@ dialog:has(.dialog-profile-container) {
 }
 .dialog-profile-main-container {
   position: relative;
+  min-height: 300px;
 }
 @keyframes scaleAnimation {
   0% {

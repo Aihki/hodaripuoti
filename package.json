@@ -7,13 +7,17 @@
     "start": "nodemon src/index.mjs",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "jest": "jest"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "jest": "^29.7.0",
     "typescript": "^5.0.2",
     "vite": "^4.5.1",
-    "vite-plugin-pwa": "^0.17.3"
+    "vite-plugin-pwa": "^0.17.3",
+    "vitest": "^1.0.4"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.12",
