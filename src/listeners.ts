@@ -59,11 +59,9 @@ const addUserManageNavListener = () => {
           break;
       }
       if (fetchString === null) {
-        console.log('ERROR: Button id is unvalid');
         return;
       }
       const users = await fetchData(fetchString);
-      console.log(users);
       if (users) {
         updateUserManagementTable(users);
       } else {
@@ -93,7 +91,6 @@ const addOrderFilterListeners = (role: number) => {
       } else if (button.classList.contains('order-info-btn-picked-up')) {
         fetchUrl = url + '/order/getFilteredOrders/3';
       } else {
-        console.log(button.className);
         fetchUrl = null;
       }
 
@@ -112,8 +109,6 @@ const addProfileBtnListener = () => {
       const modal = document.querySelector('dialog');
       const token = getToken();
       if (modal && token !== null) {
-        console.log('token found render profile');
-        //TODO: render profile
         const userData = await getUserData(token);
         const orders = await fetchData(
           url + '/order/getMyOrders/' + userData.user_id
@@ -141,7 +136,6 @@ const addModalCloseListener = () => {
   const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
   modalCloseButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      console.log('close');
       (modal as any).close();
     });
   });
@@ -168,9 +162,7 @@ const addProfileOrderTrListener = () => {
     button.addEventListener('click', async () => {
       const orderId = button.getAttribute('data-order-id');
       const rotatingCard = document.querySelector('.rotating-card');
-      console.log('profileOrder', orderId, rotatingCard);
 
-      //TODO: add order info here
       const order = await fetchData(url + '/order/orderHotdogs/' + orderId);
 
       const orderReviewModalHtml = orderReviewModal(order);
@@ -226,7 +218,6 @@ const addAuthFormListeners = () => {
   const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
   modalCloseButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      console.log('close');
       (modal as any).close();
     });
   });
@@ -262,12 +253,9 @@ const addUserManageFormSubmitListener = () => {
           },
           body: JSON.stringify(formData),
         };
-        console.log(formData);
 
         const changeRole = await fetchData(url + '/user/updateRole', options);
-        console.log('changeRole', changeRole);
       } catch (e) {
-        console.log('error', e);
         return;
       }
     }
@@ -281,7 +269,6 @@ const viewActionHandler = async (event: Event) => {
 
   if (orderId !== null && orderId !== undefined) {
     // Call a function or perform an action with orderId
-    console.log(`View clicked for order ID: ${orderId}`);
 
     const modal = document.querySelector('dialog');
 
@@ -347,7 +334,6 @@ const checkActionHandler = (role: number, event: Event) => {
         );
         break;
       default:
-        console.log('Remove this btn');
         break;
     }
 
@@ -381,7 +367,6 @@ const checkActionHandler = (role: number, event: Event) => {
         showAdminTools(role, orders);
       } else {
         showAdminTools(role);
-        console.log('Order status is < 0 or status > 1');
       }
       (modal as any).close();
     });

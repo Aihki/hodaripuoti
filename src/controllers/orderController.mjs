@@ -122,8 +122,6 @@ const postOrdersHotdogs = async (req, res, next) => {
   if (orderHotdogs.error) {
     return next(new Error(orderHotdogs.error));
   }
-
-  console.log('postOrdersHotdogs', orderHotdogs);
   res.status(201).json({ message: 'orderHotdogs added', orderHotdogs });
 };
 

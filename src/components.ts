@@ -1,5 +1,11 @@
 import { HotdogsAndToppings, Order, orderHotdogs } from './interfaces/Order';
 import { User } from './interfaces/User';
+
+/**
+ * Create user management modal and loop every user in there
+ * @param users - Array of all user objects
+ * @returns - Html as string
+ */
 const userManagementModel = (users: User[]): string => {
   let html = `
     <div class="admin-container">
@@ -19,6 +25,7 @@ const userManagementModel = (users: User[]): string => {
                 <th>Rooli</th>
             </tr>
         `;
+  // Add every user to table
   users.forEach((user: User) => {
     const { user_id, username, email, role, points } = user;
     html += `
@@ -35,6 +42,12 @@ const userManagementModel = (users: User[]): string => {
 
   return html;
 };
+
+/**
+ * Create update user management modal and loop every user in there
+ * @param users - Array of all user objects
+ * @returns - Html as string
+ */
 const updateUserManagementModel = (users: User[]): string => {
   const userManagementTableContainer = document.querySelector(
     '.user-management-table-container'
@@ -52,6 +65,7 @@ const updateUserManagementModel = (users: User[]): string => {
                 <th>Rooli</th>
             </tr>
         `;
+  // Add every user to table
   users.forEach((user: User) => {
     const { user_id, username, email, role, points } = user;
     html += `
@@ -67,7 +81,13 @@ const updateUserManagementModel = (users: User[]): string => {
   html += `</table></div>`;
   return html;
 };
-const orderManagementModel = (order: Order[]): string => {
+
+/**
+ * Create orders management modal and loop every order in there
+ * @param orders - Array of all order objects
+ * @returns - Html as string
+ */
+const orderManagementModel = (orders: Order[]): string => {
   let html = `
     <div class="admin-orders-container">
         <div class="orders-nav">
@@ -116,12 +136,13 @@ const orderManagementModel = (order: Order[]): string => {
                 <th>Tilauksen ID</th>
                 <th>Tilaaja</th>
                 <th>Hinta</th>
-                <th>Tilattu</th>
+                <th>Tilattu<i class="fa-solid fa-arrow-up-wide-short "></i></th>
                 <th>Tila</th>
                 <th>Toiminnot</th>
             </tr>
         `;
-  order.forEach((order: Order) => {
+  // Add every order to table
+  orders.forEach((order: Order) => {
     const { order_id, status, order_date, total_price, user_id } = order;
     const originalDate = new Date(order_date);
     const formattedDate = originalDate.toLocaleString('fi-FI', {
@@ -132,6 +153,7 @@ const orderManagementModel = (order: Order[]): string => {
       year: 'numeric',
     });
 
+    // Give status name and color with classname
     let statusString: string;
     let statusStringClass: string;
     switch (status) {
@@ -154,7 +176,6 @@ const orderManagementModel = (order: Order[]): string => {
       default:
         statusString = 'Kelpuuton';
         statusStringClass = 'unvalid';
-        console.log('status is unvalid');
     }
     html += `
               <tr>
@@ -186,6 +207,11 @@ const orderManagementModel = (order: Order[]): string => {
   html += `</table></div>`;
   return html;
 };
+
+/**
+ * Create login form modal
+ * @returns - Html as string
+ */
 const loginFormModal = (): string => {
   let html = `
   <div class="forms-container">
@@ -205,6 +231,11 @@ const loginFormModal = (): string => {
     </div> `;
   return html;
 };
+
+/**
+ * Create register form modal
+ * @returns - Html as string
+ */
 const registerFormModal = (): string => {
   let html = `
   <div class="forms-container">
@@ -224,6 +255,12 @@ const registerFormModal = (): string => {
   </div> `;
   return html;
 };
+
+/**
+ * Create update form modal, change string if it is login or register form
+ * @param isLoginForm - boolean if true return login form else return register form
+ * @returns - Html as string
+ */
 const updateForm = (isLoginForm: boolean): void => {
   const form = document.querySelector('#authForm');
   if (!form) {
@@ -231,7 +268,7 @@ const updateForm = (isLoginForm: boolean): void => {
   }
   form.innerHTML = '';
   const newForm = `
-      <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlenght="3" required><br>
+      <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlength="3" required><br>
       ${
         isLoginForm
           ? ''
@@ -248,6 +285,12 @@ const updateForm = (isLoginForm: boolean): void => {
   }
   loginH2.textContent = `${isLoginForm ? 'Kirjaudu' : 'Luo Käyttäjä'}`;
 };
+
+/**
+ * Create confirm modal, change text
+ * @param modaltext - Text to show on confirm modal
+ * @returns - Html as string
+ */
 const confirmModal = (modaltext: string): string => {
   let html = `
   <div class="confirm-modal-container">
@@ -261,6 +304,12 @@ const confirmModal = (modaltext: string): string => {
   </div> `;
   return html;
 };
+
+/**
+ * Create info modal, change text
+ * @param modaltext - Text to show on info modal
+ * @returns - Html as string
+ */
 const infoModal = (modaltext: string): string => {
   let html = `
   <div class="confirm-modal-container">
@@ -271,8 +320,14 @@ const infoModal = (modaltext: string): string => {
   </div> `;
   return html;
 };
-const orderReviewModal = (order: orderHotdogs[]): string => {
-  const { order_id, order_date, status } = order[0];
+
+/**
+ * Create order review modal, get time orders status
+ * @param order - orders data
+ * @returns - Html as string
+ */
+const orderReviewModal = (orders: orderHotdogs[]): string => {
+  const { order_id, order_date, status } = orders[0];
   const originalDate = new Date(order_date);
   const formattedDate = originalDate.toLocaleString('fi-FI', {
     hour: '2-digit',
@@ -281,6 +336,8 @@ const orderReviewModal = (order: orderHotdogs[]): string => {
     month: '2-digit',
     year: 'numeric',
   });
+
+  // Give status name and color with classname
   let statusString: string;
   let statusStringClass: string;
   switch (status) {
@@ -303,7 +360,6 @@ const orderReviewModal = (order: orderHotdogs[]): string => {
     default:
       statusString = 'Kelpuuton';
       statusStringClass = 'unvalid';
-      console.log('status is unvalid');
   }
   let html = `
   <div class="order-review-container">
@@ -317,6 +373,13 @@ const orderReviewModal = (order: orderHotdogs[]): string => {
   </div> `;
   return html;
 };
+
+/**
+ * Create user data modal
+ * @param user - user object to show
+ * @param orders - orders data array if user has any orders
+ * @returns - Html as string
+ */
 const addUserDataToModal = (user: User, orders?: Order[]): string => {
   let html = `
   <div class="dialog-profile-container">
@@ -326,8 +389,8 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
         <div class="rotating-card-front profile-item-container">
           <h2 class="profile-username">Hei ${user.username}!</h2>
           <form method="dialog" id="updateForm">
-            <input type="text" name="username" id="usernameInput" class="modal-input" autocomplete="name" placeholder="${user.username}" value="${user.username}" minlenght="3" required></input><br>
-            <input type="password" name="password" id="passwordInput" name="password" class="modal-input" autocomplete="password" placeholder="Password" minlenght=8" required></input>
+            <input type="text" name="username" id="usernameInput" class="modal-input" autocomplete="name" placeholder="${user.username}" value="${user.username}" minlength="3" required></input><br>
+            <input type="password" name="password" id="passwordInput" name="password" class="modal-input" autocomplete="password" placeholder="Password" minlength=8" required></input>
             <button class="form-button" type="submit" value="submit" id="saveProfileButton">Tallenna</button>
           </form>
         </div>
@@ -357,6 +420,7 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
     <hr>
     <div class="profile-favourite-main"  id="favouriteMain">
       <table>`;
+  // If orders not found return No orders found to the page
   if (!orders) {
     return '';
   }
@@ -368,16 +432,20 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
         `;
     return html;
   }
-
+  // reverse array
   const newOrdersFirstArray = [...orders].reverse();
+
+  // Add every order to profile
   newOrdersFirstArray.forEach((order) => {
-    const { order_id, total_price, order_date, status } = order;
+    const { order_id, order_date, status } = order;
     const originalDate = new Date(order_date);
     const formattedDate = originalDate.toLocaleString('fi-FI', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
     });
+
+    // Give status name and color with classname
     let statusString: string;
     let statusStringClass: string;
     switch (status) {
@@ -400,7 +468,6 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
       default:
         statusString = 'Kelpuuton';
         statusStringClass = 'unvalid';
-        console.log('status is unvalid');
     }
     html += `
               <tr class="profile-order-tr" data-order-id="${order.order_id}">
@@ -413,6 +480,13 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
   html += `</table></div></div>`;
   return html;
 };
+
+/**
+ * Create admin order view modal
+ * @param orderHotdogs - order's hotdogs
+ * @param hotdogToppings - toppings of hotdogs
+ * @returns - Html as string
+ */
 const adminOrderViewModal = (
   orderHotdogs: orderHotdogs[],
   hotdogToppings: HotdogsAndToppings[]
@@ -428,6 +502,8 @@ const adminOrderViewModal = (
     month: '2-digit',
     year: 'numeric',
   });
+
+  // Give status name and color with classname
   let statusString: string;
   let statusStringClass: string;
   switch (status) {
@@ -450,7 +526,6 @@ const adminOrderViewModal = (
     default:
       statusString = 'Kelpuuton';
       statusStringClass = 'unvalid';
-      console.log('status is unvalid');
   }
   let html = `
   <div class="admin-orders-container">
@@ -467,7 +542,7 @@ const adminOrderViewModal = (
     </div>
     <div class="admin-orders-bottom-container">
   `;
-  // TODO: lisää foreachilla jokainen hotdog
+  // add every hotdog
   let hotdogsHtml = '';
   hotdogToppings.map((hotdogsToppings: HotdogsAndToppings) => {
     hotdogsHtml += `
@@ -477,12 +552,7 @@ const adminOrderViewModal = (
         <p>${hotdogsToppings.toppings}</p>
       </div>
     `;
-
-    console.log(hotdogsHtml);
   });
-
-  console.log('hre', hotdogsHtml);
-  // DATAA hotdog_name, amount, toppings
   html += hotdogsHtml + '</div></div>';
   return html;
 };

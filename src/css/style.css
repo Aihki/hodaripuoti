@@ -101,7 +101,7 @@ body.dark .support a {
   left: 2px;
   top: 2px;
   border-radius: 50%;
-  transition: transform 0.4os linear;
+  transition: transform 0.4s linear;
 }
 
 .checkbox:checked + .checkbox-label .ball {
@@ -923,7 +923,7 @@ x .orders-con .orders-nav h2 {
 }
 
 .admin-section tr:hover {
-  background-color: var(black) !important;
+  background-color: black !important;
 }
 
 .orders-nav h2 {

@@ -147,8 +147,6 @@ locationSelect.addEventListener('change', () => {
  * @returns role status - [0, 1, 2]
  */
 
-runAppStarterListeners();
-
 const cartIcon: HTMLElement | null = document.querySelector('#cart-icon');
 const cart: HTMLElement | null = document.querySelector('.cart');
 const closeCart: HTMLElement | null = document.querySelector('#cart-close');
@@ -437,3 +435,5 @@ if (document.readyState === 'loading') {
 } else {
   ready();
 }
+
+runAppStarterListeners();

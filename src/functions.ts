@@ -28,32 +28,6 @@ import {
   viewActionHandler,
 } from './listeners';
 import { url } from './variables';
-
-// const testHotdogsOrder: Hotdog[] = [
-//   {
-//     hotdog_id: null,
-//     base_price: 1.0,
-//     ordersHotdogsAmount: 1,
-//     toppings: [1, 2, 4, 21],
-//   },
-//   {
-//     // Menu hotdogs dont need toppings or base_price
-//     hotdog_id: 1,
-//     ordersHotdogsAmount: 3,
-//   },
-//   {
-//     // Menu hotdogs dont need toppings or base_price
-//     hotdog_id: 3,
-//     ordersHotdogsAmount: 2,
-//   },
-//   {
-//     hotdog_id: null,
-//     base_price: 1.0,
-//     ordersHotdogsAmount: 4,
-//     toppings: [2, 4, 19, 20, 22],
-//   },
-// ];
-
 /**
  * Fetch data from url, returns as json
  * @param url - url to fetch data
@@ -72,36 +46,38 @@ const fetchData = async (url: string, options = {}): Promise<any> => {
     throw new Error(`Error parsing JSON: ${error.message}`);
   }
 };
+/**
+ * Get token from local storage
+ * @returns - Token
+ */
 const getToken = (): string | null => {
   const token = localStorage.getItem('token');
   if (!token) {
-    console.log('token not found');
     return null;
   }
   return token;
 };
+
+/**
+ * Check users role and rights to admin content
+ */
 const checkUserRole = async (): Promise<void> => {
   try {
     const token = getToken();
     if (token !== null) {
       const user = await getUserData(token);
-      console.log(user.role);
-      const userRole = user.role; // Fixed to super admin
+      const userRole = user.role;
       if (userRole > 0) {
         showAdminTools(userRole);
       } else if (userRole === 0) {
-        console.log('Regular user');
         const adminSection = document.querySelector(
           '#adminSection'
         ) as HTMLElement;
         if (adminSection) {
           adminSection.style.display = 'none';
         }
-      } else {
-        console.log('ERROR: User role is invalid');
       }
     } else {
-      console.log('Unregistered user');
       const adminSection = document.querySelector(
         '#adminSection'
       ) as HTMLElement;
@@ -111,10 +87,14 @@ const checkUserRole = async (): Promise<void> => {
     }
   } catch (error) {
     console.error('Error:', error);
-    // Handle the error as needed
   }
 };
 
+/**
+ * Get user data from server with bearer token
+ * @param token -
+ * @returns - User object
+ */
 const getUserData = async (token: string): Promise<User> => {
   const options: RequestInit = {
     headers: {
@@ -124,29 +104,37 @@ const getUserData = async (token: string): Promise<User> => {
   return await fetchData(url + '/auth/me', options);
 };
 
+/**
+ * Shows admin tools based on user role (1 or 2)
+ * Adds listeners for admin tool functions
+ * @param role - users role
+ * @param incomingOrders - filtered order list
+ */
 const showAdminTools = async (role: number, incomingOrders?: any) => {
   const adminSection = document.querySelector(
     '#adminSection'
   ) as HTMLDivElement;
   if (!adminSection) {
-    console.log('ERROR: No admin section found');
     return;
   }
 
-  // Get orders
+  // Get all orders or filtered arrays
   let orders;
   if (!incomingOrders) {
+    // Get orders
     orders = await fetchData(url + '/order');
   } else {
     orders = incomingOrders;
   }
 
+  // Add orderManagemtnHtml to html page and add listeners
   const orderManagementHtml = orderManagementModel(orders);
   adminSection.innerHTML = '';
   adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
   addOrderFilterListeners(role);
   updateOrderInfoBtnAmount();
 
+  // if user role is 2 show superadmin tools, add listeners
   if (role === 2) {
     // Get users
     const users = await fetchData(url + '/user');
@@ -176,11 +164,16 @@ const showAdminTools = async (role: number, incomingOrders?: any) => {
     btn.addEventListener('click', (event) => checkActionHandler(role, event));
   });
 
+  // show adminSection
   adminSection.style.display = 'block';
 };
+
+/**
+ * Add admin menu filter button's counts
+ */
 const updateOrderInfoBtnAmount = async () => {
+  // get counts from database
   const counts = await fetchData(url + '/order/ordersCounts');
-  console.log(counts);
   if (counts.length < 1) {
     return;
   }
@@ -215,6 +208,11 @@ const updateOrderInfoBtnAmount = async () => {
   orderInfoBtnPickedUp.innerHTML = counts[0].pickedUpCount;
 };
 
+/**
+ * Add register or login form to modal.
+ * Show modal and add form listeners
+ * @param isLogin - boolean, if (true) render login form. else render register form
+ */
 const renderForms = (isLogin: boolean | null): void => {
   const modal = document.querySelector('dialog');
   if (!modal) {
@@ -247,6 +245,9 @@ const renderForms = (isLogin: boolean | null): void => {
   }
 };
 
+/**
+ * Get register form values, validate data and post to server
+ */
 const formRegister = async (): Promise<void> => {
   const username = (
     document.querySelector('#usernameInput') as HTMLInputElement
@@ -275,9 +276,12 @@ const formRegister = async (): Promise<void> => {
     body: JSON.stringify(formData),
   };
   const postData = await fetchData(url + '/user', options);
-  console.log('LoginData:', postData);
   renderForms(true);
 };
+/**
+ * Get login form values, validate data and post to server
+ * Add token to local storage
+ */
 const formLogin = async (): Promise<void> => {
   const email = (document.querySelector('#emailInput') as HTMLInputElement)
     .value;
@@ -304,11 +308,18 @@ const formLogin = async (): Promise<void> => {
   const loginData = await fetchData(url + '/auth/login', options);
 
   localStorage.setItem('token', loginData.token);
-  console.log('LoginData:', loginData);
   (document.querySelector('dialog') as any)?.close(); // close modal
   checkUserRole();
 };
 
+/**
+ * Add register or login form to modal.
+ * Show modal and add form listeners
+ * @param email - email string
+ * @param password - password string
+ * @param username - Optional username string
+ * @return - Returns boolean if validation successfull or failed
+ */
 const validateData = (
   email: string,
   password: string,
@@ -332,12 +343,16 @@ const validateData = (
   return true;
 };
 
+/**
+ * Update user management table
+ * @param users - Users array
+ * @return - Returns boolean if validation successfull or failed
+ */
 const updateUserManagementTable = (users: User[]) => {
   const userManagementTableContainer = document.querySelector(
     '.user-management-table-container'
   );
   if (!userManagementTableContainer) {
-    console.log('ERROR: No admin section found');
     return;
   }
   const userManagementHtml = updateUserManagementModel(users);
@@ -347,6 +362,11 @@ const updateUserManagementTable = (users: User[]) => {
     userManagementHtml
   );
 };
+
+/**
+ * Add info text to modal and show info
+ * @param text - Info's text
+ */
 const showInfoModal = (text: string) => {
   const modal = document.querySelector('dialog');
   if (!modal) {
@@ -357,7 +377,12 @@ const showInfoModal = (text: string) => {
   modal.insertAdjacentHTML('beforeend', infoModalHtml);
 };
 
-// create order, insert hotdogs (link to order), link toppings, update totalprice
+/**
+ * Create order, insert hotdogs (link to order), link toppings, update totalprice
+ * Show modal and add form listeners
+ * @param hotdogOrder - Array of all hotdog objects
+ * @param total_price - Base total price. Updated later in script (calculated in database so customer can not inspect element)
+ */
 const createNewOrder = async (
   hotdogOrder: Hotdog[],
   total_price: number
@@ -368,7 +393,7 @@ const createNewOrder = async (
   }
   const userData = await getUserData(token);
   const user_id = userData.user_id;
-  let debugString: string = ''; // TODO: Remove this
+
   // Handle order creation
   const orderOptions = {
     method: 'POST',
@@ -387,12 +412,12 @@ const createNewOrder = async (
       throw new Error('Failed to create order');
     }
     order_id = orderResponse.order_id;
-    debugString += 'order_id' + order_id;
   } catch (error) {
     console.error('Error creating order:', (error as Error).message);
     // Return an error message to the customer
     return { error: 'Failed to create order' };
   }
+
   // for each hotdog in order
   hotdogOrder.forEach(async (hotdog) => {
     let hotdog_id: number | undefined;
@@ -421,17 +446,14 @@ const createNewOrder = async (
           throw new Error('Failed to create hotdog');
         }
         hotdog_id = hotdogResponse.hotdog_id;
-        debugString += ' hotdog_id' + hotdog_id;
       } catch (error) {
         console.error('Error creating hotdog:', (error as Error).message);
         // Return an error message to the customer
         return { error: 'Failed to create hotdog' };
       }
     } else {
-      // if hotdog does exist, do not create new just send the hotdog_id
-
+      // if hotdog does exist(menu item), just send the hotdog_id
       hotdog_id = hotdog.hotdog_id;
-      debugString += ' hotdog_id' + hotdog_id;
     }
 
     // Handle orders_hotdogs creation
@@ -456,7 +478,6 @@ const createNewOrder = async (
         throw new Error('Failed to create orderHotdogs');
       }
       orderHotdogsId = ordersHotdogs.insertId;
-      debugString += ' orderHotdogsId' + orderHotdogsId;
     } catch (error) {
       console.error('Error creating orderHotdogs:', (error as Error).message);
       // Return an error message to the customer
@@ -474,7 +495,6 @@ const createNewOrder = async (
         body: JSON.stringify({ hotdog_id, topping_ids: hotdog.toppings }),
       } as RequestInit;
       try {
-        console.log('CREATING HOTDOG TOPPINGS');
         const hotdogToppings = await fetchData(
           url + '/hotdog/hotdogToppings',
           hotdogToppingsOptions
@@ -483,7 +503,6 @@ const createNewOrder = async (
           throw new Error('Failed to create hotdogToppings');
         }
         hotdogToppingsId = hotdogToppings.message;
-        debugString += ' hotdog_id ' + hotdog_id;
         if (order_id) {
           calculateTotal(order_id);
         }
@@ -495,14 +514,14 @@ const createNewOrder = async (
         // Return an error message to the customer
         return { error: 'Failed to create hotdogToppings' };
       }
-    } else {
-      console.log('NOT CREATING HOTDOG TOPPINGS');
     }
   });
-
-  console.log('Order done');
-  console.log(debugString);
 };
+
+/**
+ * Get all hotdogs in order from database, calculate price and update total_price to database
+ * @param order_id - Orders ID
+ */
 const calculateTotal = async (order_id: number) => {
   // Handle total price calculation and total_price updating
   let countedPrice: number = 0;
@@ -514,18 +533,13 @@ const calculateTotal = async (order_id: number) => {
     if (!countedPriceResponse) {
       throw new Error('Failed to get order');
     }
-    console.log('order', order_id, countedPriceResponse);
 
     countedPriceResponse.forEach((hotdog: HotdogPrices) => {
-      console.log('hotdog', hotdog);
       if (hotdog.hotdog_name === 'Custom') {
-        console.log('custom', parseFloat(hotdog.total_price));
         countedPrice += parseFloat(hotdog.total_topping_price);
       } else {
         countedPrice += parseFloat(hotdog.hotdog_base_price);
-        console.log(parseFloat(hotdog.hotdog_base_price));
       }
-      console.log('updated', countedPrice);
     });
     // handle total price updating
     const totalPriceOptions = {
@@ -561,6 +575,9 @@ const calculateTotal = async (order_id: number) => {
   }
 };
 
+/**
+ * Get data from form and update user data, add listeners and reload profile
+ */
 const formUpdate = async (): Promise<void> => {
   const username = (
     document.querySelector('#usernameInput') as HTMLInputElement
@@ -603,6 +620,7 @@ const formUpdate = async (): Promise<void> => {
   addBackButtonListener();
 };
 
+// On start get users role
 checkUserRole();
 
 export {

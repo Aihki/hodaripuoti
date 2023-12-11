@@ -9,7 +9,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "jest": "jest"
+    "jest": "jest",
+    "apidoc": "apidoc -i src/ -o docs/"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
@@ -33,5 +34,13 @@
     "mysql2": "^3.6.3",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.0.1"
+  },
+  "apidoc": {
+    "title": "My API docs",
+    "url": "https://example.com/api",
+    "order": [
+      "Authentication",
+      "User"
+    ]
   }
 }

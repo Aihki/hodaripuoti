@@ -17,7 +17,9 @@ const login = async (email) => {
 
 const listAllUsers = async () => {
   try {
-    const [rows] = await promisePool.execute(`SELECT * FROM Users`);
+    const [rows] = await promisePool.execute(
+      `SELECT user_id, username, email, role, points FROM Users`
+    );
     return rows;
   } catch (e) {
     console.error('listAllUsers', e.message);
@@ -26,7 +28,7 @@ const listAllUsers = async () => {
 const listAllWorkers = async () => {
   try {
     const [rows] = await promisePool.execute(
-      `SELECT * FROM Users WHERE role = 1 OR role = 2`
+      `SELECT user_id, username, email, role, points FROM Users WHERE role = 1 OR role = 2`
     );
     return rows;
   } catch (e) {
@@ -37,7 +39,7 @@ const listAllWorkers = async () => {
 const listAllUsersWithRole = async (role) => {
   try {
     const [rows] = await promisePool.execute(
-      `SELECT * FROM Users WHERE role = ?`,
+      `SELECT user_id, username, email, role, points FROM Users WHERE role = ?`,
       [role]
     );
     return rows;
@@ -49,7 +51,7 @@ const listAllUsersWithRole = async (role) => {
 const findUserById = async (id) => {
   try {
     const [rows] = await promisePool.query(
-      'SELECT * FROM Users WHERE user_id = ?',
+      'SELECT user_id, username, email, role, points FROM Users WHERE user_id = ?',
       [id]
     );
     return rows[0];
