@@ -8,6 +8,7 @@ import { url } from "./variables";
 const burger: HTMLElement | null = document.querySelector(".burgermenu");
 const navMenu: HTMLElement | null = document.querySelector(".nav-menu");
 let allCartItems: Hotdog[] = [];
+let customCartIds: number[] = [];
 
 if (burger && navMenu) {
   burger.addEventListener("click", () => {
@@ -115,15 +116,18 @@ if (cartIcon && cart && closeCart) {
   });
 }
 
-const purchaseClicked = (cart: object) => {
-  console.log(cart);
-  const cartItems: HTMLElement | null = document.querySelector(".cart-content");
+const purchaseClicked = () => {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("Token not found");
   }
   if (allCartItems.length > 0) {
     console.log(allCartItems);
+    allCartItems.forEach((item) => {
+      if (item.hotdog_id && item.hotdog_id >= 1000) {
+        item.hotdog_id = null;
+      }
+    });
     createNewOrder(allCartItems, 100);
   }
 };
@@ -165,13 +169,12 @@ const quantityChanged = (event: Event) => {
   input.setAttribute("data-quantity", input.value);
   const quantityString = input.getAttribute("data-quantity");
   let quantity = parseInt(quantityString || "0", 10);
-  console.log(quantity);
-  if (quantity < 0) {
-    console.log("quantity < 0", quantity);
-    quantity = 0;
-    input.setAttribute("data-quantity", quantity.toString());
-    input.value = "0";
-  }
+  const id = input.dataset.id;
+  allCartItems.forEach((item) => {
+    if (item.hotdog_id === parseInt(id || "0", 10)) {
+      item.ordersHotdogsAmount = quantity;
+    }
+  });
   updateCartTotal();
 };
 
@@ -205,7 +208,19 @@ const addToCartClicked = async (event: Event) => {
           toppingString += ingredient.topping_name + ", ";
         }
       });
-      addItemToCart(customTitle, customPrice.toFixed(2) + "€, ", toppingString);
+      let currentCustomId: number = 1000;
+      if (customCartIds.length < 1) {
+        customCartIds.push(currentCustomId);
+      } else {
+        currentCustomId = customCartIds[customCartIds.length - 1] + 1;
+        customCartIds.push(currentCustomId);
+      }
+      addItemToCart(
+        customTitle,
+        customPrice.toFixed(2) + "€, ",
+        toppingString,
+        currentCustomId
+      );
       updateCartTotal();
       const topping_ids = customIngredients.map(
         (ingredient) => ingredient.topping_id
@@ -218,8 +233,8 @@ const addToCartClicked = async (event: Event) => {
         topping_ids
       );
       allCartItems.push({
-        hotdog_id: null,
-        ordersHotdogsAmount: 1, // TODO: quantity
+        hotdog_id: currentCustomId,
+        ordersHotdogsAmount: 1,
         base_price: 1.0,
         toppings: topping_ids,
       });
@@ -253,7 +268,7 @@ const addToCartClicked = async (event: Event) => {
 
       allCartItems.push({ hotdog_id: hotdog_id, ordersHotdogsAmount: 1 }); // TODO: quantity
       /*     console.log(menu); */
-      addItemToCart(title, price, toppingString);
+      addItemToCart(title, price, toppingString, hotdog_id);
 
       updateCartTotal();
     }
@@ -267,7 +282,12 @@ document.addEventListener("click", (event: Event) => {
   }
 });
 
-const addItemToCart = (title: string, price: string, ingredients: string) => {
+const addItemToCart = (
+  title: string,
+  price: string,
+  ingredients: string,
+  id: number
+) => {
   const cartShopBox = document.createElement("div");
   cartShopBox.classList.add("cart-box");
   const cartItems = document.querySelector(
@@ -295,7 +315,7 @@ const addItemToCart = (title: string, price: string, ingredients: string) => {
   <div class="detail-box">
   <div class="cart-product-title">${title}</div>
   <div class="cart-product-price">${price}</div>
-  <input type="number" class="cart-product-quantity" value="1">
+  <input type="number" class="cart-product-quantity" value="1" min="1" data-id="${id}">
   </div>
 
 <div class="cart-product-ingredients">${ingredients}</div>
@@ -378,10 +398,9 @@ const purchaseButton = document.querySelectorAll(".cart-checkout")[0] as
   | HTMLElement
   | undefined;
 if (purchaseButton) {
-  purchaseButton.addEventListener("click", (allCartItems) => {
-    purchaseClicked(allCartItems);
-  });
+  purchaseButton.addEventListener("click", purchaseClicked);
 }
+
 const quantityInputs = document.querySelectorAll(".cart-product-quantity");
 quantityInputs.forEach((input) => {
   input.addEventListener("change", quantityChanged);
