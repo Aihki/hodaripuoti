@@ -39,8 +39,6 @@ const hotdogRouter = express.Router();
     "message": "Hotdog added",
     "hotdog_id": 163
     }
- *
- * @apiUse UnauthorizedError
  */
 hotdogRouter
   .route('/')
@@ -73,7 +71,6 @@ hotdogRouter
     }
 ]
  *
- * @apiUse UnauthorizedError
  */
 
 hotdogRouter.route('/:id').get(getHotdogById);
@@ -107,7 +104,6 @@ hotdogRouter.route('/:id').get(getHotdogById);
     }
 }
  *
- * @apiUse UnauthorizedError
  */
 
 hotdogRouter
@@ -142,7 +138,6 @@ hotdogRouter
         }
       ]
  *
- * @apiUse UnauthorizedError
  */
 hotdogRouter.route('/hotdogToppings/:id').get(getHotdogToppings);
 
@@ -171,7 +166,6 @@ hotdogRouter.route('/hotdogToppings/:id').get(getHotdogToppings);
         }
       ]
  *
- * @apiUse UnauthorizedError
  */
 hotdogRouter.route('/menu').get(getMenuHotdogs);
 
@@ -200,7 +194,6 @@ hotdogRouter.route('/menu').get(getMenuHotdogs);
         }
       ]
  *
- * @apiUse UnauthorizedError
  */
 hotdogRouter.route('/customer').get(getCustomerHotdogs);
 

@@ -47,7 +47,6 @@ const userRouter = express.Router();
     },
 ]
  *
- * @apiUse UnauthorizedError
  */
 /**
  * @api {post} / Add User
@@ -87,7 +86,6 @@ const userRouter = express.Router();
     }
 }
  *
- * @apiUse UnauthorizedError
  */
 userRouter
   .route('/')
@@ -133,7 +131,6 @@ userRouter
     }
 ]
  *
- * @apiUse UnauthorizedError
  */
 userRouter.route('/workers').get(getWorkers);
 
@@ -162,7 +159,6 @@ userRouter.route('/workers').get(getWorkers);
     "points": 0
 }
  *
- * @apiUse UnauthorizedError
  */
 /**
  * @api {put} /:id Update user data
@@ -190,7 +186,6 @@ userRouter.route('/workers').get(getWorkers);
     "message": "user updated"
 }
  *
- * @apiUse UnauthorizedError
  */
 userRouter.route('/:id').get(getUserById).put(putUserById);
 
@@ -226,7 +221,6 @@ userRouter.route('/:id').get(getUserById).put(putUserById);
         "points": 0
     },]
  *
- * @apiUse UnauthorizedError
  */
 userRouter.route('/role/:id').get(getUsersWithRole);
 

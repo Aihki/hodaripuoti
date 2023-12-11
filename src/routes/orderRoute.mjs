@@ -348,7 +348,6 @@ orderRouter
     }
 ]
  *
- * @apiUse UnauthorizedError
  */
 orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
 
@@ -383,7 +382,6 @@ orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
     },
 ]
  *
- * @apiUse UnauthorizedError
  */
 orderRouter.route('/hotdogsAndToppings/:id').get(getHotdogsAndToppings);
 
@@ -427,7 +425,6 @@ orderRouter.route('/hotdogsAndToppings/:id').get(getHotdogsAndToppings);
     },
 ]
  *
- * @apiUse UnauthorizedError
  */
 orderRouter.route('/orderTotalPrice/:id').get(getOrderTotalPrice);
 
@@ -461,7 +458,6 @@ orderRouter.route('/orderTotalPrice/:id').get(getOrderTotalPrice);
     }
 }
  *
- * @apiUse UnauthorizedError
  */
 orderRouter.route('/orderTotalPrice').put(putOrderTotalPrice);
 
