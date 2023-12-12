@@ -130,12 +130,14 @@ const purchaseClicked = () => {
 
     // Empty cart
     const cartContent = document.querySelector('.cart-content');
+    console.log('cart content');
     if (!cartContent) {
       return;
     }
     allCartItems = [];
     customCartIds = [];
     cartContent.innerHTML = '';
+    console.log(allCartItems, ' and ', customCartIds);
   }
 };
 
