@@ -1,3 +1,3 @@
-const url = 'http://localhost:3000/api';
+const url = 'https://hodaripuoti.northeurope.cloudapp.azure.com/api';
 
 export { url };
