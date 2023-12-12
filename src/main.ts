@@ -127,6 +127,15 @@ const purchaseClicked = () => {
       }
     });
     createNewOrder(allCartItems, 100);
+
+    // Empty cart
+    const cartContent = document.querySelector('.cart-content');
+    if (!cartContent) {
+      return;
+    }
+    allCartItems = [];
+    customCartIds = [];
+    cartContent.innerHTML = '';
   }
 };
 
