@@ -2,7 +2,7 @@ interface Ingredients {
   topping_id: number;
   topping_name: string;
   topping_price: number;
-  topping_type: 'sampylä' | 'makkara' | 'täyte' | 'kastike';
+  topping_type: 'sämpylä' | 'makkara' | 'täyte' | 'kastike';
 }
 /* 
 interface Beverages {
