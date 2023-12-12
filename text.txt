@@ -133,3 +133,25 @@ cartCheckout?.addEventListener("click", () => {
   // Implement checkout functionality here
   // For example, send the cart items to the server
 });
+
+
+
+SELECT
+  O.order_id,
+  HD.hotdog_name,
+  HD.base_price AS hotdog_base_price,
+  SUM(T.topping_price) AS total_topping_price,
+  OH.amount AS hotdog_amount,
+  (HD.base_price * OH.amount + COALESCE(SUM(T.topping_price), 0)) AS total_price
+FROM
+  Orders O
+JOIN
+  Orders_hotdogs OH ON O.order_id = OH.order_id
+JOIN
+  Hotdogs HD ON OH.hotdog_id = HD.hotdog_id
+LEFT JOIN
+  Hotdog_toppings HT ON OH.hotdog_id = HT.hotdog_id
+LEFT JOIN
+  Toppings T ON HT.topping_id = T.topping_id
+GROUP BY
+  O.order_id, HD.hotdog_name, HD.base_price, OH.amount;

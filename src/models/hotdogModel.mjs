@@ -1,4 +1,4 @@
-import { promisePool } from "../utils/database.mjs";
+import { promisePool } from '../utils/database.mjs';
 
 const listAllMenuHotdogs = async () => {
   try {
@@ -9,7 +9,7 @@ const listAllMenuHotdogs = async () => {
      `);
     return rows;
   } catch (e) {
-    console.error("listAllMenuHotdogs", e.message);
+    console.error('listAllMenuHotdogs', e.message);
   }
 };
 const listHotdogById = async (id) => {
@@ -22,7 +22,7 @@ const listHotdogById = async (id) => {
     );
     return rows;
   } catch (e) {
-    console.error("listHotdogById", e.message);
+    console.error('listHotdogById', e.message);
   }
 };
 
@@ -34,7 +34,7 @@ const listAllCustomerHotdogs = async () => {
        `);
     return rows;
   } catch (e) {
-    console.error("listAllCustomerHotdogs", e.message);
+    console.error('listAllCustomerHotdogs', e.message);
   }
 };
 
@@ -46,21 +46,19 @@ const addHotDog = async (hotdog) => {
     const result = await promisePool.query(sql, params);
     return result[0].insertId;
   } catch (e) {
-    console.error("error", e.message);
+    console.error('error', e.message);
     return { error: e.message };
   }
 };
 const addHotDogToppings = async (hotdog_id, topping_ids) => {
   try {
     const values = topping_ids.map((topping_id) => [hotdog_id, topping_id]);
-    values.forEach((value) => {
-      console.log("value:", value);
-    });
+    values.forEach((value) => {});
     const sql = `INSERT INTO Hotdog_toppings (hotdog_id, topping_id) VALUES ?`;
     const result = await promisePool.query(sql, [values]);
     return { insertId: result[0].insertId };
   } catch (e) {
-    console.error("Error adding hotdogToppings:", e.message);
+    console.error('Error adding hotdogToppings:', e.message);
     return { error: e.message };
   }
 };
@@ -76,8 +74,8 @@ const listHotdogToppings = async (hotdog_id) => {
     );
     return rows;
   } catch (e) {
-    console.error("listHotdogToppings", e.message);
-    throw httpError("Database error", 500);
+    console.error('listHotdogToppings', e.message);
+    throw httpError('Database error', 500);
   }
 };
 

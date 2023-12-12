@@ -7,14 +7,19 @@
     "start": "nodemon src/index.mjs",
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest",
+    "jest": "jest",
+    "apidoc": "apidoc -i src/ -o docs/"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/google.maps": "^3.54.10",
+    "jest": "^29.7.0",
     "typescript": "^5.0.2",
     "vite": "^4.5.1",
-    "vite-plugin-pwa": "^0.17.3"
+    "vite-plugin-pwa": "^0.17.3",
+    "vitest": "^1.0.4"
   },
   "dependencies": {
     "@types/geojson": "^7946.0.12",
@@ -30,5 +35,13 @@
     "mysql2": "^3.6.3",
     "node-fetch": "^3.3.2",
     "nodemon": "^3.0.1"
+  },
+  "apidoc": {
+    "title": "My API docs",
+    "url": "https://example.com/api",
+    "order": [
+      "Authentication",
+      "User"
+    ]
   }
 }

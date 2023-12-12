@@ -1,7 +1,14 @@
-import { confirmModal } from './components';
+import {
+  addUserDataToModal,
+  adminOrderViewModal,
+  confirmModal,
+  orderReviewModal,
+} from './components';
 import {
   fetchData,
+  formUpdate,
   getToken,
+  getUserData,
   renderForms,
   showAdminTools,
   showInfoModal,
@@ -52,11 +59,9 @@ const addUserManageNavListener = () => {
           break;
       }
       if (fetchString === null) {
-        console.log('ERROR: Button id is unvalid');
         return;
       }
       const users = await fetchData(fetchString);
-      console.log(users);
       if (users) {
         updateUserManagementTable(users);
       } else {
@@ -83,8 +88,9 @@ const addOrderFilterListeners = (role: number) => {
         fetchUrl = url + '/order/getFilteredOrders/2';
       } else if (button.classList.contains('order-info-btn-recieved')) {
         fetchUrl = url + '/order/getFilteredOrders/0';
+      } else if (button.classList.contains('order-info-btn-picked-up')) {
+        fetchUrl = url + '/order/getFilteredOrders/3';
       } else {
-        console.log(button.className);
         fetchUrl = null;
       }
 
@@ -99,14 +105,91 @@ const addOrderFilterListeners = (role: number) => {
 const addProfileBtnListener = () => {
   const profileButtons = document.querySelectorAll('#profileButton');
   profileButtons.forEach((profileButton) => {
-    profileButton.addEventListener('click', () => {
+    profileButton.addEventListener('click', async () => {
+      const modal = document.querySelector('dialog');
       const token = getToken();
-      if (token !== null) {
-        console.log('token found render profile');
-        //TODO: render profile
+      if (modal && token !== null) {
+        const userData = await getUserData(token);
+        const orders = await fetchData(
+          url + '/order/getMyOrders/' + userData.user_id
+        );
+        const profileModal = addUserDataToModal(userData, orders);
+        modal.innerHTML = '';
+        modal.insertAdjacentHTML('beforeend', profileModal);
+        addModalCloseListener();
+        addLogOutListener();
+        addUpdateListener();
+        addProfileOrderTrListener();
+        addBackButtonListener();
+        (modal as any).showModal();
         return;
       }
       renderForms(true);
+    });
+  });
+};
+const addModalCloseListener = () => {
+  const modal = document.querySelector('dialog');
+  if (!modal) {
+    return;
+  }
+  const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
+  modalCloseButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      (modal as any).close();
+    });
+  });
+};
+const addBackButtonListener = () => {
+  const backBtn = document.querySelector('#backButton');
+  if (!backBtn) {
+    return;
+  }
+
+  backBtn.addEventListener('click', () => {
+    const rotatingCard = document.querySelector('.rotating-card');
+    if (rotatingCard?.classList.contains('show-back')) {
+      rotatingCard?.classList.remove('show-back');
+    }
+  });
+};
+const addProfileOrderTrListener = () => {
+  const profileTrs = document.querySelectorAll('.profile-order-tr');
+  if (!profileTrs || profileTrs.length < 1) {
+    return;
+  }
+  profileTrs.forEach((button) => {
+    button.addEventListener('click', async () => {
+      const orderId = button.getAttribute('data-order-id');
+      const rotatingCard = document.querySelector('.rotating-card');
+
+      const order = await fetchData(url + '/order/orderHotdogs/' + orderId);
+
+      const orderReviewModalHtml = orderReviewModal(order);
+      const backMainContent = document.querySelector('.back-main-content');
+
+      if (!backMainContent) {
+        return;
+      }
+      backMainContent.innerHTML = '';
+      backMainContent.insertAdjacentHTML('beforeend', orderReviewModalHtml);
+      if (rotatingCard?.classList.contains('show-back') === false) {
+        rotatingCard.classList.add('show-back');
+      }
+    });
+  });
+};
+const addLogOutListener = () => {
+  const logOutBtns = document.querySelectorAll('#logOutButton');
+  const adminSection = document.querySelector('#adminSection');
+  logOutBtns.forEach((logOutBtn) => {
+    logOutBtn.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      renderForms(true);
+      if (!adminSection) {
+        return;
+      }
+      adminSection.innerHTML = '';
     });
   });
 };
@@ -135,7 +218,6 @@ const addAuthFormListeners = () => {
   const modalCloseButtons = document.querySelectorAll('#dialogCloseButton');
   modalCloseButtons.forEach((button) => {
     button.addEventListener('click', () => {
-      console.log('close');
       (modal as any).close();
     });
   });
@@ -171,37 +253,44 @@ const addUserManageFormSubmitListener = () => {
           },
           body: JSON.stringify(formData),
         };
-        console.log(formData);
 
         const changeRole = await fetchData(url + '/user/updateRole', options);
-        console.log('changeRole', changeRole);
       } catch (e) {
-        console.log('error', e);
         return;
       }
     }
   });
 };
 
-const viewActionHandler = (event: Event) => {
+const viewActionHandler = async (event: Event) => {
   const orderId = (event.currentTarget as HTMLElement)?.getAttribute(
     'data-order-id'
   );
 
   if (orderId !== null && orderId !== undefined) {
     // Call a function or perform an action with orderId
-    console.log(`View clicked for order ID: ${orderId}`);
 
     const modal = document.querySelector('dialog');
 
     if (!modal) {
       return;
     }
-    const viewOrderModal = 'Heree';
+    const orderHotdogs = await fetchData(
+      url + '/order/orderHotdogs/' + orderId
+    );
+    const hotdogAndToppings = await fetchData(
+      url + '/order/hotdogsAndToppings/' + orderId
+    );
+
+    if (orderHotdogs.message || hotdogAndToppings.message) {
+      return;
+    }
+    const viewOrderModal = adminOrderViewModal(orderHotdogs, hotdogAndToppings);
 
     modal.innerHTML = '';
     modal.insertAdjacentHTML('beforeend', viewOrderModal);
     (modal as any).showModal();
+    addModalCloseListener();
   }
 };
 
@@ -231,16 +320,20 @@ const checkActionHandler = (role: number, event: Event) => {
     switch (orderStatus) {
       case 0: // Recieved
         confirmModalHtml = confirmModal(
-          `Oletko varma haluavasi ottaa tilauksen <strong>${orderId} vastaan</strong>?`
+          `Oletko varma haluavasi ottaa tilauksen <strong class="text-in-progress">${orderId} vastaan</strong>?`
         );
         break;
       case 1: // In progress
         confirmModalHtml = confirmModal(
-          `Oletko varma haluavasi merkata tilauksen <strong>${orderId} valmiiksi</strong>?`
+          `Oletko varma haluavasi merkata tilauksen <strong class="text-ready">${orderId} valmiiksi</strong>?`
+        );
+        break;
+      case 2: // Ready
+        confirmModalHtml = confirmModal(
+          `Oletko varma haluavasi merkata tilauksen <strong class="text-picked-up">${orderId} noudetuksi</strong>?`
         );
         break;
       default:
-        console.log('Remove this btn');
         break;
     }
 
@@ -264,19 +357,28 @@ const checkActionHandler = (role: number, event: Event) => {
       };
       const result = await fetchData(url + '/order/changeOrderStatus', options);
       if (orderStatus === 0) {
-        const orders = await fetchData(url + '/order/getFilteredOrders/' + 0);
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 1);
         showAdminTools(role, orders);
       } else if (orderStatus === 1) {
-        const orders = await fetchData(url + '/order/getFilteredOrders/' + 1);
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 2);
+        showAdminTools(role, orders);
+      } else if (orderStatus === 2) {
+        const orders = await fetchData(url + '/order/getFilteredOrders/' + 3);
         showAdminTools(role, orders);
       } else {
         showAdminTools(role);
-        console.log('Order status is < 0 or status > 1');
       }
       (modal as any).close();
     });
     (modal as any).showModal();
   }
+};
+const addUpdateListener = () => {
+  const updateForm = document.querySelector('#updateForm');
+  updateForm?.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    formUpdate();
+  });
 };
 
 export {
@@ -287,4 +389,9 @@ export {
   viewActionHandler,
   checkActionHandler,
   addOrderFilterListeners,
+  addModalCloseListener,
+  addLogOutListener,
+  addUpdateListener,
+  addProfileOrderTrListener,
+  addBackButtonListener,
 };

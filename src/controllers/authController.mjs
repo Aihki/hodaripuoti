@@ -4,7 +4,6 @@ import { login } from '../models/userModel.mjs';
 import bcrypt from 'bcryptjs';
 
 const postLogin = async (req, res, next) => {
-  // TODO: input validation
   const user = await login(req.body.email);
   // user is undefined (username not found in db)
   if (!user) {
@@ -17,7 +16,6 @@ const postLogin = async (req, res, next) => {
     return next(new Error(result.error));
   }
 
-  console.log('postLogin', user);
   const match = await bcrypt.compare(req.body.password, user.password);
   if (match) {
     delete user.password;
@@ -31,7 +29,6 @@ const postLogin = async (req, res, next) => {
 };
 
 const getMe = (req, res) => {
-  console.log('getMe user', req.user);
   res.json(req.user);
 };
 
