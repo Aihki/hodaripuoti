@@ -24,4 +24,10 @@ interface ChefChoice {
   toppings: string;
   base_price: number;
 }
-export type { Ingredients, CustomIngredient, ChefChoice };
+
+interface Ingredient {
+  topping_id: number;
+  topping_name: string;
+  topping_price: number;
+}
+export type { Ingredients, CustomIngredient, ChefChoice, Ingredient };
