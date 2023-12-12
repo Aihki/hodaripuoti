@@ -275,7 +275,7 @@ const formRegister = async (): Promise<void> => {
     },
     body: JSON.stringify(formData),
   };
-  const postData = await fetchData(url + '/user', options);
+  await fetchData(url + '/user', options);
   renderForms(true);
 };
 /**
@@ -468,7 +468,6 @@ const createNewOrder = async (
         amount: ordersHotdogsAmount,
       }),
     } as RequestInit;
-    let orderHotdogsId: number | undefined;
     try {
       const ordersHotdogs = await fetchData(
         url + '/order/orderHotdogs',
@@ -477,7 +476,6 @@ const createNewOrder = async (
       if (!ordersHotdogs) {
         throw new Error('Failed to create orderHotdogs');
       }
-      orderHotdogsId = ordersHotdogs.insertId;
     } catch (error) {
       console.error('Error creating orderHotdogs:', (error as Error).message);
       // Return an error message to the customer
@@ -486,7 +484,6 @@ const createNewOrder = async (
 
     // Handle hotdog_toppings creation
     if (hotdog.hotdog_id === null) {
-      let hotdogToppingsId;
       const hotdogToppingsOptions = {
         method: 'POST',
         headers: {
@@ -502,7 +499,6 @@ const createNewOrder = async (
         if (!hotdogToppings) {
           throw new Error('Failed to create hotdogToppings');
         }
-        hotdogToppingsId = hotdogToppings.message;
         if (order_id) {
           calculateTotal(order_id);
         }
@@ -603,10 +599,7 @@ const formUpdate = async (): Promise<void> => {
     body: JSON.stringify(formData),
   };
   const userData = await getUserData(token);
-  const updateData = await fetchData(
-    url + '/user/' + userData.user_id,
-    options
-  );
+  await fetchData(url + '/user/' + userData.user_id, options);
   const orders = await fetchData(
     url + '/order/getMyOrders/' + userData.user_id
   );

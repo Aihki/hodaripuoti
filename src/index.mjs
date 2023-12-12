@@ -27,6 +27,7 @@ app.disable('x-powered-by');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('src'));
+app.use('/dist', express.static(path.join(__dirname, '../dist')));
 app.use('/css', express.static(path.join(__dirname, './css')));
 app.use('/docs', express.static(path.join(__dirname, '../docs')));
 

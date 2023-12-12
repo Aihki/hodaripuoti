@@ -254,7 +254,7 @@ const addUserManageFormSubmitListener = () => {
           body: JSON.stringify(formData),
         };
 
-        const changeRole = await fetchData(url + '/user/updateRole', options);
+        await fetchData(url + '/user/updateRole', options);
       } catch (e) {
         return;
       }
@@ -355,7 +355,7 @@ const checkActionHandler = (role: number, event: Event) => {
         },
         body: JSON.stringify(formData),
       };
-      const result = await fetchData(url + '/order/changeOrderStatus', options);
+      await fetchData(url + '/order/changeOrderStatus', options);
       if (orderStatus === 0) {
         const orders = await fetchData(url + '/order/getFilteredOrders/' + 1);
         showAdminTools(role, orders);

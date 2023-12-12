@@ -12,19 +12,6 @@ interface Hotdog {
   base_price?: number;
   toppings?: number[];
 }
-
-interface Custom {
-  hotdogID: number;
-  toppings: Toppings[];
-  basePrice: number;
-}
-
-interface Toppings {
-  toppingID: number;
-  toppingName: string;
-  toppingType: number;
-  price: number;
-}
 interface FetchDataResponse {
   order_id?: number;
   hotdog_id?: number;
