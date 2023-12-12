@@ -380,6 +380,7 @@ const addUpdateListener = () => {
     formUpdate();
   });
 };
+runAppStarterListeners();
 
 export {
   runAppStarterListeners,

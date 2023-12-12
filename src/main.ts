@@ -1,5 +1,4 @@
 import { displayChefchoice, displayOptions } from './function';
-import { runAppStarterListeners } from './listeners';
 import { customIngredients } from './function';
 import { Hotdog } from './interfaces/Order';
 import { createNewOrder, fetchData } from './functions';
