@@ -58,9 +58,13 @@ window.addEventListener('load', handleScroll);
 let slideIndex: number = 0;
 const slides: NodeListOf<Element> =
   document.querySelectorAll('.custom-container');
-const prevButton: HTMLElement | null = document.querySelector('.prev');
-const nextButton: HTMLElement | null = document.querySelector('.next');
+const prevButton = document.querySelectorAll('.prev');
+const nextButton = document.querySelectorAll('.next');
+const nextText = document.querySelectorAll('#nextText');
+const prevText = document.querySelectorAll('#prevText');
 
+let previousToppingType = '<- Kastike';
+let nextToppingType = 'Makkara ->';
 function showSlide(n: number): void {
   slides.forEach((slide: Element) => {
     (slide as HTMLElement).style.display = 'none';
@@ -71,21 +75,84 @@ function showSlide(n: number): void {
 
 showSlide(slideIndex);
 
-prevButton?.addEventListener('click', () => {
-  slideIndex--;
-  if (slideIndex < 0) {
-    slideIndex = slides.length - 1;
-  }
-  showSlide(slideIndex);
-});
+if (nextText && prevText) {
+  nextText.forEach((btn) => {
+    btn.innerHTML = nextToppingType;
+  });
+  prevText.forEach((btn) => {
+    btn.innerHTML = previousToppingType;
+  });
+}
 
-nextButton?.addEventListener('click', () => {
-  slideIndex++;
-  if (slideIndex >= slides.length) {
-    slideIndex = 0;
-  }
-  showSlide(slideIndex);
+prevButton.forEach((btn) => {
+  btn?.addEventListener('click', () => {
+    slideIndex--;
+    if (slideIndex < 0) {
+      slideIndex = slides.length - 1;
+      if (prevText && nextText) {
+        nextText.forEach((btn) => {
+          btn.innerHTML = 'Sämpylä ->';
+        });
+        prevText.forEach((btn) => {
+          btn.innerHTML = '<- Täyte';
+        });
+      }
+    } else {
+      setCustomButtonText(slideIndex);
+    }
+    showSlide(slideIndex);
+  });
 });
+nextButton.forEach((btn) => {
+  btn?.addEventListener('click', () => {
+    slideIndex++;
+    if (slideIndex >= slides.length) {
+      if (prevText && nextText) {
+        nextText.forEach((btn) => {
+          btn.innerHTML = 'Makkara ->';
+        });
+        prevText.forEach((btn) => {
+          btn.innerHTML = '<- Kastike';
+        });
+      }
+      slideIndex = 0;
+    } else {
+      setCustomButtonText(slideIndex);
+    }
+    showSlide(slideIndex);
+  });
+});
+const setCustomButtonText = (slideIndex: number) => {
+  if (prevText && nextText) {
+    console.log(slideIndex);
+    switch (slideIndex) {
+      case 0:
+        previousToppingType = '<- Kastike';
+        nextToppingType = 'Makkara ->';
+        break;
+      case 1:
+        previousToppingType = '<- Sämpylä';
+        nextToppingType = 'Täyte ->';
+        break;
+      case 2:
+        previousToppingType = '<- Makkara';
+        nextToppingType = 'Kastike ->';
+        break;
+      case 3:
+        previousToppingType = '<- Täyte';
+        nextToppingType = 'Sämpylä ->';
+        break;
+      default:
+        break;
+    }
+  }
+  nextText.forEach((btn) => {
+    btn.innerHTML = nextToppingType;
+  });
+  prevText.forEach((btn) => {
+    btn.innerHTML = previousToppingType;
+  });
+};
 
 displayChefchoice();
 displayOptions();
@@ -191,7 +258,7 @@ const addToCartClicked = async (event: Event) => {
   const menuItem = button.closest('.menu-item-container') as HTMLElement | null;
   const customItem = button.closest('.total-box') as HTMLElement | null;
 
-  if (customItem) {
+  if (customItem && button.classList.contains('add-custom-to-cart-btn')) {
     const customPrice = Object.values(customIngredients).reduce(
       (acc, ingredient) => {
         acc += ingredient.topping_price;
@@ -248,7 +315,7 @@ const addToCartClicked = async (event: Event) => {
       });
     }
   }
-  if (menuItem) {
+  if (menuItem && button.classList.contains('add-to-cart-btn')) {
     const titleElement = menuItem.querySelector('.menu-food-title');
     const priceElement = menuItem.querySelector('.menu-price');
     const ingredientsElement = menuItem.querySelector('.menu-ingredients');

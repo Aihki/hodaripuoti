@@ -1,5 +1,5 @@
-import { HotdogsAndToppings, Order, orderHotdogs } from "./interfaces/Order";
-import { User } from "./interfaces/User";
+import { HotdogsAndToppings, Order, orderHotdogs } from './interfaces/Order';
+import { User } from './interfaces/User';
 
 /**
  * Create user management modal and loop every user in there
@@ -50,10 +50,10 @@ const userManagementModel = (users: User[]): string => {
  */
 const updateUserManagementModel = (users: User[]): string => {
   const userManagementTableContainer = document.querySelector(
-    ".user-management-table-container"
+    '.user-management-table-container'
   );
   if (userManagementTableContainer) {
-    userManagementTableContainer.innerHTML = "";
+    userManagementTableContainer.innerHTML = '';
   }
   let html = `
             <table>
@@ -137,20 +137,20 @@ const orderManagementModel = (orders: Order[]): string => {
                 <th>Tilaaja</th>
                 <th>Hinta</th>
                 <th>Tilattu</th>
-                <th>Tila</th>
-                <th>Toiminnot</th>
+                <th style="text-align: center;">Tila</th>
+                <th style="text-align: center;">Toiminnot</th>
             </tr>
         `;
   // Add every order to table
   orders.forEach((order: Order) => {
     const { order_id, status, order_date, total_price, user_id } = order;
     const originalDate = new Date(order_date);
-    const formattedDate = originalDate.toLocaleString("fi-FI", {
-      hour: "2-digit",
-      minute: "2-digit",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+    const formattedDate = originalDate.toLocaleString('fi-FI', {
+      hour: '2-digit',
+      minute: '2-digit',
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
 
     // Give status name and color with classname
@@ -158,24 +158,24 @@ const orderManagementModel = (orders: Order[]): string => {
     let statusStringClass: string;
     switch (status) {
       case 0:
-        statusString = "Vastaanotettu";
-        statusStringClass = "recieved";
+        statusString = 'Vastaanotettu';
+        statusStringClass = 'recieved';
         break;
       case 1:
-        statusString = "Työn alla";
-        statusStringClass = "in-progress";
+        statusString = 'Työn alla';
+        statusStringClass = 'in-progress';
         break;
       case 2:
-        statusString = "Valmis";
-        statusStringClass = "completed";
+        statusString = 'Valmis';
+        statusStringClass = 'completed';
         break;
       case 3:
-        statusString = "Noudettu";
-        statusStringClass = "picked-up";
+        statusString = 'Noudettu';
+        statusStringClass = 'picked-up';
         break;
       default:
-        statusString = "Kelpuuton";
-        statusStringClass = "unvalid";
+        statusString = 'Kelpuuton';
+        statusStringClass = 'unvalid';
     }
     html += `
               <tr>
@@ -197,7 +197,7 @@ const orderManagementModel = (orders: Order[]): string => {
                 <div class="status-container-completed action-btn checkActionBtn" data-order-id="${order.order_id}" data-order-status="${order.status}">
                   <i class="fa-solid fa-check"></i>
                 </div>`
-                    : ""
+                    : ''
                 }
                   </div>
                 </td>
@@ -262,28 +262,28 @@ const registerFormModal = (): string => {
  * @returns - Html as string
  */
 const updateForm = (isLoginForm: boolean): void => {
-  const form = document.querySelector("#authForm");
+  const form = document.querySelector('#authForm');
   if (!form) {
     return;
   }
-  form.innerHTML = "";
+  form.innerHTML = '';
   const newForm = `
       <input type="text" id="usernameInput" name="username" class="modal-input" autocomplete="name" placeholder="Käyttäjätunnus" minlength="3" required><br>
       ${
         isLoginForm
-          ? ""
+          ? ''
           : `<input type="email" id="emailInput" name="email"  class="modal-input" autocomplete="email" placeholder="Sähköposti" required><br>`
       }
       <input type="password" id="passwordInput" name="password" class="modal-input" placeholder="Salasana"  required><br>
       <button class="form-button" type="submit" value="submit" id="${
-        isLoginForm ? "loginButton" : "registerButton"
-      }">${isLoginForm ? "Kirjaudu" : "Luo käyttäjä"}</button>`;
-  form.insertAdjacentHTML("beforeend", newForm);
-  const loginH2 = document.querySelector("#loginH2");
+        isLoginForm ? 'loginButton' : 'registerButton'
+      }">${isLoginForm ? 'Kirjaudu' : 'Luo käyttäjä'}</button>`;
+  form.insertAdjacentHTML('beforeend', newForm);
+  const loginH2 = document.querySelector('#loginH2');
   if (!loginH2) {
     return;
   }
-  loginH2.textContent = `${isLoginForm ? "Kirjaudu" : "Luo Käyttäjä"}`;
+  loginH2.textContent = `${isLoginForm ? 'Kirjaudu' : 'Luo Käyttäjä'}`;
 };
 
 /**
@@ -329,12 +329,12 @@ const infoModal = (modaltext: string): string => {
 const orderReviewModal = (orders: orderHotdogs[]): string => {
   const { order_id, order_date, status } = orders[0];
   const originalDate = new Date(order_date);
-  const formattedDate = originalDate.toLocaleString("fi-FI", {
-    hour: "2-digit",
-    minute: "2-digit",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+  const formattedDate = originalDate.toLocaleString('fi-FI', {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   });
 
   // Give status name and color with classname
@@ -342,24 +342,24 @@ const orderReviewModal = (orders: orderHotdogs[]): string => {
   let statusStringClass: string;
   switch (status) {
     case 0:
-      statusString = "Vastaanotettu";
-      statusStringClass = "recieved";
+      statusString = 'Vastaanotettu';
+      statusStringClass = 'recieved';
       break;
     case 1:
-      statusString = "Työn alla";
-      statusStringClass = "in-progress";
+      statusString = 'Työn alla';
+      statusStringClass = 'in-progress';
       break;
     case 2:
-      statusString = "Valmis";
-      statusStringClass = "completed";
+      statusString = 'Valmis';
+      statusStringClass = 'completed';
       break;
     case 3:
-      statusString = "Noudettu";
-      statusStringClass = "picked-up";
+      statusString = 'Noudettu';
+      statusStringClass = 'picked-up';
       break;
     default:
-      statusString = "Kelpuuton";
-      statusStringClass = "unvalid";
+      statusString = 'Kelpuuton';
+      statusStringClass = 'unvalid';
   }
   let html = `
   <div class="order-review-container">
@@ -367,7 +367,7 @@ const orderReviewModal = (orders: orderHotdogs[]): string => {
       <div class="order-id-container"><h2>${order_id}</h2></div>
     </div>
     <div class="order-review-bottom">
-    <p>Tilattu: ${formattedDate}</p>
+    <p style="margin-bottom: 10px;">Tilattu: ${formattedDate}</p>
     <div class="status-container status-container-${statusStringClass}"><p>${statusString}</p></div>
     </div>
   </div> `;
@@ -429,7 +429,7 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
       <table>`;
   // If orders not found return No orders found to the page
   if (!orders) {
-    return "";
+    return '';
   }
   if (!Array.isArray(orders) || orders.length === 0) {
     html += `
@@ -446,10 +446,10 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
   newOrdersFirstArray.forEach((order) => {
     const { order_id, order_date, status } = order;
     const originalDate = new Date(order_date);
-    const formattedDate = originalDate.toLocaleString("fi-FI", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
+    const formattedDate = originalDate.toLocaleString('fi-FI', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
     });
 
     // Give status name and color with classname
@@ -457,24 +457,24 @@ const addUserDataToModal = (user: User, orders?: Order[]): string => {
     let statusStringClass: string;
     switch (status) {
       case 0:
-        statusString = "Vastaanotettu";
-        statusStringClass = "recieved";
+        statusString = 'Vastaanotettu';
+        statusStringClass = 'recieved';
         break;
       case 1:
-        statusString = "Työn alla";
-        statusStringClass = "in-progress";
+        statusString = 'Työn alla';
+        statusStringClass = 'in-progress';
         break;
       case 2:
-        statusString = "Valmis";
-        statusStringClass = "completed";
+        statusString = 'Valmis';
+        statusStringClass = 'completed';
         break;
       case 3:
-        statusString = "Noudettu";
-        statusStringClass = "picked-up";
+        statusString = 'Noudettu';
+        statusStringClass = 'picked-up';
         break;
       default:
-        statusString = "Kelpuuton";
-        statusStringClass = "unvalid";
+        statusString = 'Kelpuuton';
+        statusStringClass = 'unvalid';
     }
     html += `
               <tr class="profile-order-tr" data-order-id="${order.order_id}">
@@ -502,12 +502,12 @@ const adminOrderViewModal = (
     orderHotdogs[0];
 
   const originalDate = new Date(order_date);
-  const formattedDate = originalDate.toLocaleString("fi-FI", {
-    hour: "2-digit",
-    minute: "2-digit",
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+  const formattedDate = originalDate.toLocaleString('fi-FI', {
+    hour: '2-digit',
+    minute: '2-digit',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   });
 
   // Give status name and color with classname
@@ -515,24 +515,24 @@ const adminOrderViewModal = (
   let statusStringClass: string;
   switch (status) {
     case 0:
-      statusString = "Vastaanotettu";
-      statusStringClass = "recieved";
+      statusString = 'Vastaanotettu';
+      statusStringClass = 'recieved';
       break;
     case 1:
-      statusString = "Työn alla";
-      statusStringClass = "in-progress";
+      statusString = 'Työn alla';
+      statusStringClass = 'in-progress';
       break;
     case 2:
-      statusString = "Valmis";
-      statusStringClass = "completed";
+      statusString = 'Valmis';
+      statusStringClass = 'completed';
       break;
     case 3:
-      statusString = "Noudettu";
-      statusStringClass = "picked-up";
+      statusString = 'Noudettu';
+      statusStringClass = 'picked-up';
       break;
     default:
-      statusString = "Kelpuuton";
-      statusStringClass = "unvalid";
+      statusString = 'Kelpuuton';
+      statusStringClass = 'unvalid';
   }
   let html = `
   <div class="admin-orders-container">
@@ -550,7 +550,7 @@ const adminOrderViewModal = (
     <div class="admin-orders-bottom-container">
   `;
   // add every hotdog
-  let hotdogsHtml = "";
+  let hotdogsHtml = '';
   hotdogToppings.map((hotdogsToppings: HotdogsAndToppings) => {
     hotdogsHtml += `
       <div class="admin-hotdog-container">
@@ -560,7 +560,7 @@ const adminOrderViewModal = (
       </div>
     `;
   });
-  html += hotdogsHtml + "</div></div>";
+  html += hotdogsHtml + '</div></div>';
   return html;
 };
 
