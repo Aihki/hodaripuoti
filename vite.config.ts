@@ -17,8 +17,8 @@ export default defineConfig({
         theme_color: "#f69435",
         background_color: "#f69435",
         display: "standalone",
-        scope: "./src",
-        start_url: "./src/index.html",
+        scope: "./",
+        start_url: "./index.html",
         name: "Hodaripuoti",
         short_name: "MyApp",
         icons: [
