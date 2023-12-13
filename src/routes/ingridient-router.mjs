@@ -10,6 +10,7 @@ const customRouter = express.Router();
  *@apiVersion 1.0.0
  *@apiPermission all
  *
+ *
  *@apiDescription This route fetches all ingridients
  *
  *@apiSuccess {String} ingridient_id Id of the ingridient

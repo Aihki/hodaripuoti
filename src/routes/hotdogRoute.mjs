@@ -1,5 +1,5 @@
-import express from 'express';
-import { body } from 'express-validator';
+import express from "express";
+import { body } from "express-validator";
 import {
   getCustomerHotdogs,
   getHotdogById,
@@ -7,8 +7,8 @@ import {
   getMenuHotdogs,
   postHotdogs,
   postHotdogsToppings,
-} from '../controllers/hotdogController.mjs';
-import { getOrdersHotdogs } from '../controllers/orderController.mjs';
+} from "../controllers/hotdogController.mjs";
+import { getOrdersHotdogs } from "../controllers/orderController.mjs";
 
 const hotdogRouter = express.Router();
 
@@ -41,10 +41,10 @@ const hotdogRouter = express.Router();
     }
  */
 hotdogRouter
-  .route('/')
+  .route("/")
   .post(
-    body('hotdog_name').trim().isAlphanumeric(),
-    body('base_price').isNumeric(),
+    body("hotdog_name").trim().isAlphanumeric(),
+    body("base_price").isNumeric(),
     postHotdogs
   );
 
@@ -73,7 +73,7 @@ hotdogRouter
  *
  */
 
-hotdogRouter.route('/:id').get(getHotdogById);
+hotdogRouter.route("/:id").get(getHotdogById);
 /**
  * @api {post} /hotdogToppings Add hotdog toppings
  * @apiVersion 1.0.0
@@ -107,10 +107,10 @@ hotdogRouter.route('/:id').get(getHotdogById);
  */
 
 hotdogRouter
-  .route('/hotdogToppings')
+  .route("/hotdogToppings")
   .post(
-    body('hotdog_id').isNumeric(),
-    body('topping_id').isNumeric(),
+    body("hotdog_id").isNumeric(),
+    body("topping_id").isNumeric(),
     postHotdogsToppings
   );
 /**
@@ -139,7 +139,7 @@ hotdogRouter
       ]
  *
  */
-hotdogRouter.route('/hotdogToppings/:id').get(getHotdogToppings);
+hotdogRouter.route("/hotdogToppings/:id").get(getHotdogToppings);
 
 /**
  * @api {get} /menu Get menu hotdogs
@@ -150,6 +150,7 @@ hotdogRouter.route('/hotdogToppings/:id').get(getHotdogToppings);
  *
  * @apiDescription Get all menu hotdogs
  *
+ * 
  * @apiSuccess {Number} hotdog_id Hotdog's id
  * @apiSuccess {String} hotdog_name Name of the hotdog
  * @apiSuccess {Number} amount Amount of hotdogs
@@ -167,7 +168,7 @@ hotdogRouter.route('/hotdogToppings/:id').get(getHotdogToppings);
       ]
  *
  */
-hotdogRouter.route('/menu').get(getMenuHotdogs);
+hotdogRouter.route("/menu").get(getMenuHotdogs);
 
 /**
  * @api {get} /customer Get customer's hotdogs
@@ -195,6 +196,6 @@ hotdogRouter.route('/menu').get(getMenuHotdogs);
       ]
  *
  */
-hotdogRouter.route('/customer').get(getCustomerHotdogs);
+hotdogRouter.route("/customer").get(getCustomerHotdogs);
 
 export default hotdogRouter;
