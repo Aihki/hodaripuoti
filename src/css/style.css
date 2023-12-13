@@ -170,7 +170,13 @@ nav {
 }
 
 .nav-link:hover {
-  color: dodgerblue;
+  color: var(--light-green);
+}
+.fa-cart-shopping {
+  transition: 0.5s ease;
+}
+.fa-cart-shopping:hover {
+  color: var(--light-green) !important;
 }
 
 .burgermenu {
@@ -292,10 +298,63 @@ main {
   align-items: center;
   text-align: center;
   border: 3px solid var(--light-green);
+  background-color: var(--dark);
+  color: white;
   border-radius: 10px;
-  padding: 10px;
+  padding: 20px;
   font-size: 20px;
   margin: 10px;
+}
+
+.cart-count {
+  right: 5px;
+  bottom: 5px;
+  position: absolute;
+  font-size: 1rem;
+  color: white;
+  background-color: var(--green);
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+}
+.pop-cart-count {
+  animation-name: grow;
+  animation-duration: 900ms;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes grow {
+  0% {
+    opacity: 0;
+    transform: scale(0) rotateY(20deg);
+  }
+  40% {
+    transform: scale(1.1);
+  }
+  50% {
+    transform: scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  80% {
+    transform: scale(1.02);
+  }
+  90% {
+    transform: scale(0.98) rotateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 /* .total-box #total {
@@ -1186,7 +1245,9 @@ dialog:has(#authForm) {
   border-left-color: #2fad39;
   /* background-color: var(--light-green); */
 }
-
+.nav-item {
+  cursor: pointer;
+}
 .modal-input:invalid {
   border-left-color: #d21900;
 }
@@ -1601,6 +1662,9 @@ dialog:has(.confirm-modal-container) {
 
   .burgermenu.active .bar:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
+  }
+  .cart-count {
+    right: 43%;
   }
 
   .nav-menu {

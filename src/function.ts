@@ -1,6 +1,7 @@
 import { url } from './variables';
 import { ChefChoice, CustomIngredient, Ingredients } from './interfaces/Menu';
 import { fetchData } from './functions';
+import { resetCustomPrice } from './main';
 
 const getOptions = async (url: string, options = {}) => {
   const response = await fetch(url, options);
@@ -64,6 +65,10 @@ const displayOptions = async () => {
                 topping_price: price,
                 topping_id: parsedId,
               });
+            } else {
+              customIngredients = customIngredients.filter((ingredient) => {
+                return ingredient.topping_id !== parsedId;
+              });
             }
 
             let totalSum = 0;
@@ -82,6 +87,21 @@ const displayOptions = async () => {
                   checkboxes.forEach((checkbox) => {
                     checkbox.checked = false;
                     customIngredients = [];
+
+                    // Reset to Bun options
+                    const customContainers =
+                      document.querySelectorAll('.custom-container');
+                    customContainers.forEach((container) => {
+                      if (
+                        window.getComputedStyle(container).display === 'block'
+                      ) {
+                        (container as HTMLElement).style.display = 'none';
+                      }
+                      if (container.classList.contains('sämpylä-container')) {
+                        (container as HTMLElement).style.display = 'block';
+                      }
+                      resetCustomPrice();
+                    });
                     /*    if (totalBox) {
                       totalSum = 0;
                       totalBox.textContent = `Total Sum: ${totalSum.toFixed(
@@ -142,4 +162,5 @@ const displayChefchoice = async () => {
     console.error('Error fetching products:', error);
   }
 };
+
 export { displayChefchoice, displayOptions, customIngredients };

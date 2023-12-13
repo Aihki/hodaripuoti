@@ -616,10 +616,23 @@ const formUpdate = async (): Promise<void> => {
   addProfileOrderTrListener();
   addBackButtonListener();
   addDarkModeListener();
+  checkForUserTheme();
+};
+
+const checkForUserTheme = () => {
+  const theme = localStorage.getItem('theme');
+  const checkbox = document.querySelector('#checkbox');
+  if (theme === 'dark') {
+    document.body.classList.add('dark');
+    if (checkbox) {
+      (checkbox as HTMLInputElement).checked = true;
+    }
+  }
 };
 
 // On start get users role
 checkUserRole();
+checkForUserTheme();
 
 export {
   updateUserManagementTable,
@@ -633,4 +646,5 @@ export {
   showInfoModal,
   formUpdate,
   validateData,
+  checkForUserTheme,
 };
