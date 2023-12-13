@@ -83,7 +83,7 @@ const updateUserManagementModel = (users: User[]): string => {
 };
 
 /**
- * Create orders management modal and loop every order in there
+ * Create orders management modal, loop every order in there
  * @param orders - Array of all order objects
  * @returns - Html as string
  */
