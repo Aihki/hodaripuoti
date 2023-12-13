@@ -1,17 +1,17 @@
-import express from "express";
+import express from 'express';
 import {
   chef,
   postMenuItem,
   putMenuItem,
-} from "../controllers/chef-controller.mjs";
+} from '../controllers/chef-controller.mjs';
 
 const chefRouter = express.Router();
 
 /**
- * @api {get} /api/menu
+ * @api {get} /menu This route fetches all chef
+ * @apiVersion 1.0.0
  * @apiName Get menu
  * @apiGroup Menu
- * @apiVersion 1.0.0
  * @apiPermission all
  * 
  * @apiDescription This route fetches all chef
@@ -42,10 +42,11 @@ const chefRouter = express.Router();
 */
 
 /**
- * @api {post} /api/menu
+ * @api {post} /menu Post menu item
+ * @apiVersion 1.0.0
  * @apiName Post menu item
  * @apiGroup Menu
- * @apiVersion 1.0.0
+ * @apiPremission all
  *
  * @apiDescription This route posts a new menu item
  *
@@ -62,13 +63,14 @@ const chefRouter = express.Router();
  *
  *
  */
-chefRouter.route("/").get(chef).post(postMenuItem);
+chefRouter.route('/').get(chef).post(postMenuItem);
 
 /**
- * @api {put} /api/menu/:id
+ * @api {put} /menu/:id Put menu item
+ * @apiVersion 1.0.0
  * @apiName Put menu item
  * @apiGroup Menu
- * @apiVersion 1.0.0
+ * @apiPremission all
  *
  * @apiDescription This route updates a menu item
  *
@@ -85,6 +87,6 @@ chefRouter.route("/").get(chef).post(postMenuItem);
  *
  */
 
-chefRouter.route("/:id").put(putMenuItem);
+chefRouter.route('/:id').put(putMenuItem);
 
 export default chefRouter;

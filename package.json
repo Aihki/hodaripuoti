@@ -38,7 +38,7 @@
   },
   "apidoc": {
     "title": "My API docs",
-    "url": "https://example.com/api",
+    "url": "https://hodaripuoti.northeurope.cloudapp.azure.com/api",
     "order": [
       "Authentication",
       "User"

@@ -1,13 +1,13 @@
-import express from "express";
-import { customIngriedirents } from "../controllers/ingridient-controller.mjs";
+import express from 'express';
+import { customIngriedirents } from '../controllers/ingridient-controller.mjs';
 
 const customRouter = express.Router();
 
 /**
- *@api {get} /api/v1/ingridients
+ *@api {get} /ingridients Get ingridients
+ *@apiVersion 1.0.0
  *@apiName Get ingridients
  *@apiGroup Ingridients
- *@apiVersion 1.0.0
  *@apiPermission all
  *
  *
@@ -41,6 +41,6 @@ const customRouter = express.Router();
  * ]
  *
  */
-customRouter.route("/").get(customIngriedirents).post();
+customRouter.route('/').get(customIngriedirents).post();
 
 export default customRouter;
