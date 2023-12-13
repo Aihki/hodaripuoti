@@ -320,6 +320,15 @@ const infoModal = (modaltext: string): string => {
   </div> `;
   return html;
 };
+const thankYouPopUp = (thankYouText: string): string => {
+  console.log(thankYouText);
+  let html = `
+  <img src="/public/icons/icon-512x512.png" alt="maskotti">
+  <h2 class="message-title">${thankYouText}</h2>
+  <button class="message-btn">Katso tilausta</button>
+`;
+  return html;
+};
 
 /**
  * Create order review modal, get time orders status
@@ -576,4 +585,5 @@ export {
   addUserDataToModal,
   adminOrderViewModal,
   orderReviewModal,
+  thankYouPopUp,
 };

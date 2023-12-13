@@ -32,42 +32,91 @@
     <link rel="stylesheet" href="./assets/index-57f93e48.css">
   <link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
 
-  <body>
-    <dialog></dialog>
-    <header>
-      <nav>
-        <a href="#" class="branding">
-          <h1>Hodaripuoti</h1>
-        </a>
-        <ul class="nav-menu">
-          <li class="nav-item">
-            <a href="#" class="nav-link">etusivu</a>
-          </li>
-          <li class="nav-item">
-            <a href="#custom" class="nav-link">oma hodari</a>
-          </li>
-          <li class="nav-item">
-            <a href="#menu" class="nav-link">Kokin parhaat</a>
-          </li>
-          <li class="nav-item">
-            <a href="#contact" class="nav-link">Tietoa meistä</a>
-          </li>
-          <li class="nav-item">
-            <a href="#" class="nav-link" id="profileButton">Profiili</a>
-          </li>
-          <li class="nav-item">
-            <i
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HodariPuoti</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+  <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF" />
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmIFJXL74AxnaflEvhAZWef2DK4sisJXk&callback=initMap"
+    defer></script>
+  <meta http-equiv="Content-Encoding" content="gzip" />
+  <script src="https://kit.fontawesome.com/b4b9814ab0.js" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/c02d3fc986.js" crossorigin="anonymous"></script>
+  
+  
+  <script type="module" crossorigin src="./assets/index-292d78fa.js"></script>
+  <link rel="stylesheet" href="./assets/index-993c4eb9.css">
+<link rel="manifest" href="./manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="./registerSW.js"></script></head>
+
+<body>
+  <dialog></dialog>
+  <div class="message">
+  </div>
+  <header>
+    <nav>
+      <a href="#" class="branding">
+        <h1>Hodaripuoti</h1>
+      </a>
+      <ul class="nav-menu">
+        <li class="nav-item">
+          <a href="#" class="nav-link">etusivu</a>
+        </li>
+        <li class="nav-item">
+          <a href="#custom" class="nav-link">oma hodari</a>
+        </li>
+        <li class="nav-item">
+          <a href="#menu" class="nav-link">Kokin parhaat</a>
+        </li>
+        <li class="nav-item">
+          <a href="#contact" class="nav-link">Tietoa meistä</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" id="profileButton">Profiili</a>
+        </li>
+        <li class="nav-item">
+          <i
               class="fa-solid fa-cart-shopping"
               style="color: var(--light)"
               id="cart-icon"
             ></i>
             <div class="cart-count"><span id="cartCount">1</span></div>
-          </li>
-        </ul>
-        <div class="burgermenu">
-          <span class="bar"></span>
-          <span class="bar"></span>
-          <span class="bar"></span>
+        </li>
+      </ul>
+      <div class="burgermenu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </nav>
+    <div class="cart">
+      <h2 class="cart-title">Cart</h2>
+      <div class="cart-content"></div>
+      <div class="cart-total">
+        <div class="cart-total-title">Total</div>
+        <div class="cart-total-price">0€</div>
+      </div>
+      <p class="toimipaikka">Valtise toimipaikkasi</p>
+      <select id="location-select" class="location-select"></select>
+      <button type="button" class="cart-checkout">Checkout</button>
+      <i class="fa-solid fa-x" id="cart-close"></i>
+    </div>
+
+  </header>
+
+  <main>
+    <section id="adminSection" class="admin-section"></section>
+
+    <section class="caruselContainer">
+      <div class="slider-wrapper">
+        <div class="slider">
+          <img id="slide-1" src="./assets/slide1-fd2ec66a.webp" alt="kuva tulisesta hotdogista" />
+          <img id="slide-2" src="./assets/slide2-b79375de.webp" alt="kuva hodaripuidista" />
+          <img id="slide-3" src="./assets/slide3-dd4fc146.webp" alt="kuva Vegehotdogista" />
         </div>
       </nav>
       <div class="cart">
