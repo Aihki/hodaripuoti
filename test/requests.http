@@ -1,11 +1,11 @@
 
 ### PUT
-PUT http://localhost:3000/api/menu/1
+PUT http://localhost:3000/api/menu/86
 Content-Type: application/json
 
 {
-    "hotdog_name": "Tulinen vegedog",
-    "base_price": "10.00"
+    "hotdog_name": "Classic Hotdog",
+    "base_price": "15.00"
 }
 
 

@@ -35,7 +35,6 @@ const newChefChoice = async (menuItem) => {
 
 const updateChefChoice = async (id, update) => {
   const { hotdog_name, base_price } = update;
-
   const sql = `UPDATE Hotdogs SET hotdog_name = ?, base_price = ? WHERE hotdog_id = ?`;
   const params = [hotdog_name, base_price, id];
   try {
