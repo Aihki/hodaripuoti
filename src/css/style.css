@@ -1,11 +1,11 @@
 :root {
   --dark: #212628;
   --light-dark: #131d22;
-  --pure-light: #f0f0f0;
-  --light: #e0e2db;
-  --dark-green: #183d3d;
-  --green: #2f4141;
-  --light-green: #4d8671;
+  --pure-light: #ffffff;
+  --light: #efede7;
+  --dark-green: #884A39;
+  --green: #C38154;
+  --light-green: #FFC26F;
 }
 
 @font-face {
@@ -65,6 +65,10 @@ body.dark {
 body.dark h1,
 body.dark .support a {
   color: #fff;
+}
+
+body.dark table {
+  color: black;
 }
 
 .checkbox {
@@ -256,7 +260,6 @@ main {
 }
 
 .custom-hotdog-container {
-  border: 2px solid var(--dark);
   border-radius: 10px;
   padding: 10px;
   display: grid;
@@ -264,13 +267,16 @@ main {
   gap: 10px;
 }
 
-.sampyla-container,
+.sämpylä-container,
 .makkara-container,
 .täyte-container,
 .kastike-container {
-  border: 3px solid var(--light-green);
   border-radius: 10px;
   padding: 10px;
+}
+
+.custom-container h3 {
+  color: var(--light-green);
 }
 
 .divaider {
@@ -316,8 +322,9 @@ input {
 .drink-filter-title {
   text-align: center;
   font-family: defaultBold, sans-serif;
-  color: var(--light-green);
+  color: var(--dark-green);
   margin: 20px 0;
+
 }
 
 .contact-filter-title {
@@ -338,7 +345,7 @@ input {
   background-color: #f0f0f0;
   padding: 20px;
   border: 3px solid var(--light-green);
-  border-radius: 20px;
+  border-radius: 10px;
   text-align: center;
   background-color: var(--dark);
   display: flex;
@@ -432,15 +439,6 @@ input {
   background-color: #303030;
 }
 
-.user-manage-active:hover {
-  height: 100%;
-  background-color: var(--light-green);
-}
-
-.user-manage-active {
-  background-color: var(--light-green);
-  height: 100%;
-}
 
 .admin-section table {
   border-collapse: collapse;
@@ -595,7 +593,7 @@ x .orders-con .orders-nav h2 {
 
 .status-container-recieved {
   background-color: #77bbe9;
-  color: #124e75;
+  color: #0e3b59;
 }
 
 .status-container-in-progress {
@@ -629,17 +627,24 @@ x .orders-con .orders-nav h2 {
 }
 
 #menu-carousel {
+  color: var(--light);
+  padding: 10px;
+  border: 3px solid var(--light-green);
+  background-color: var(--dark);
   display: flex;
-  border: 1px solid var(--light-green);
   border-radius: 10px;
   overflow: hidden;
-  width: 100%;
+  margin: auto;
+  width: 50%;
   scroll-snap-type: x mandatory;
 }
 
 .custom-container {
-  flex: 0 0 100%;
-  scroll-snap-align: start;
+  margin: auto;
+}
+
+.checkbox-container {
+  margin: auto;
 }
 
 .carousel-btn {
@@ -890,24 +895,17 @@ x .orders-con .orders-nav h2 {
 
 .user-manage-active:hover {
   height: 100%;
-  background-color: var(--light-green);
+  background-color: var(--green);
 }
 
 .user-manage-active {
-  background-color: var(--light-green);
+  background-color: var(--green);
   height: 100%;
 }
 
 .admin-section table {
   border-collapse: collapse;
   width: 100%;
-}
-
-.carousel-btn {
-  display: inline-block;
-  border-radius: 1rem;
-  background-color: var(--green);
-  border: none;
 }
 
 .user-management-table-container {
@@ -1011,7 +1009,7 @@ x .orders-con .orders-nav h2 {
 
 .status-container-recieved {
   background-color: #77bbe9;
-  color: #124e75;
+  color: #0e3b59;
 }
 
 .status-container-in-progress {
@@ -1069,6 +1067,7 @@ x .orders-con .orders-nav h2 {
   padding: 20px;
   border: 1px solid #ddd;
   text-align: center;
+  border-radius: 5px;
 }
 
 /* ************* */
@@ -1155,7 +1154,7 @@ dialog:has(#authForm) {
 }
 
 .modal-input:valid {
-  border-left-color: var(--light-green);
+  border-left-color: #2fad39;
   /* background-color: var(--light-green); */
 }
 
@@ -1207,9 +1206,9 @@ dialog:has(.dialog-profile-container) {
 .profile-item-container:hover {
   border-radius: 10px;
   border-color: var(--dark-green);
-  -webkit-box-shadow: 0px 0px 10px 2px rgba(92, 131, 116, 1);
-  -moz-box-shadow: 0px 0px 10px 2px rgba(92, 131, 116, 1);
-  box-shadow: 0px 0px 10px 2px rgba(92, 131, 116, 1);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(195, 129, 84, 1);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(195, 129, 84, 1);
+  box-shadow: 0px 0px 10px 0px rgba(195, 129, 84, 1);
 }
 
 .profile-top {
@@ -1221,6 +1220,10 @@ dialog:has(.dialog-profile-container) {
 
 .profile-side {
   width: 100%;
+}
+
+#logOutButton {
+  margin-left: 10px;
 }
 
 .profile-top h3 {
@@ -1331,7 +1334,6 @@ dialog:has(.dialog-profile-container) {
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background-color: var(--light-green);
   border: 2px solid var(--dark-green);
   padding: 1em;
   display: flex;
@@ -1339,10 +1341,8 @@ dialog:has(.dialog-profile-container) {
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-
-  -webkit-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
-  -moz-box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.26);
+  background: rgb(255, 194, 111);
+  background: linear-gradient(0deg, rgba(255, 194, 111, 1) 22%, rgba(249, 224, 187, 1) 69%);
 }
 
 .rotating-card-back {
@@ -1535,6 +1535,10 @@ dialog:has(.confirm-modal-container) {
   footer {
     width: 100%;
   }
+
+  #menu-carousel {
+    width: 75%;
+  }
 }
 
 @media only screen and (max-width: 768px) {
@@ -1686,6 +1690,10 @@ dialog:has(.confirm-modal-container) {
   .order-info-button {
     height: 75px;
     justify-content: center;
+  }
+
+  #menu-carousel {
+    width: 90%;
   }
 }
 
