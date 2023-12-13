@@ -392,6 +392,43 @@ const addDarkModeListener = () => {
     });
   }
 };
+
+const openProfile = () => {
+  const message = document.querySelector(".message-btn") as HTMLElement;
+  if (!message) {
+    return;
+  }
+
+  message.addEventListener("click", async () => {
+    const messageBox = document.querySelector(".message") as HTMLElement;
+    if (!messageBox) {
+      return;
+    }
+    messageBox.style.display = "none";
+    const modal = document.querySelector("dialog");
+    const token = getToken();
+    if (modal && token !== null) {
+      const userData = await getUserData(token);
+      const orders = await fetchData(
+        url + "/order/getMyOrders/" + userData.user_id
+      );
+
+      const profileModal = addUserDataToModal(userData, orders);
+      modal.innerHTML = "";
+      modal.insertAdjacentHTML("beforeend", profileModal);
+      addModalCloseListener();
+      addLogOutListener();
+      addUpdateListener();
+      addProfileOrderTrListener();
+      addBackButtonListener();
+      addDarkModeListener();
+      (modal as any).showModal();
+      return;
+    }
+    renderForms(true);
+  });
+};
+
 runAppStarterListeners();
 
 export {
@@ -408,4 +445,5 @@ export {
   addProfileOrderTrListener,
   addBackButtonListener,
   addDarkModeListener,
+  openProfile,
 };
