@@ -136,7 +136,7 @@ const orderManagementModel = (orders: Order[]): string => {
                 <th>Tilauksen ID</th>
                 <th>Tilaaja</th>
                 <th>Hinta</th>
-                <th>Tilattu<i class="fa-solid fa-arrow-up-wide-short "></i></th>
+                <th>Tilattu</th>
                 <th>Tila</th>
                 <th>Toiminnot</th>
             </tr>
