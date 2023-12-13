@@ -1,111 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HodariPuoti</title>
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF" />
+    <meta name="theme-color" content="#ffffff" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="./src/css/style.css" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=&callback=initMap"
+      defer
+    ></script>
+    <meta http-equiv="Content-Encoding" content="gzip" />
+    <script
+      src="https://kit.fontawesome.com/b4b9814ab0.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://kit.fontawesome.com/c02d3fc986.js"
+      crossorigin="anonymous"
+    ></script>
+    <script type="module" src="./src/main.ts"></script>
+    <script type="module" src="./src/location.ts"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HodariPuoti</title>
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-  <link rel="mask-icon" href="/mask-icon.svg" color="#FFFFFF" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-  <link rel="stylesheet" href="./src/css/style.css" />
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmIFJXL74AxnaflEvhAZWef2DK4sisJXk&callback=initMap"
-    defer></script>
-  <meta http-equiv="Content-Encoding" content="gzip" />
-  <script src="https://kit.fontawesome.com/b4b9814ab0.js" crossorigin="anonymous"></script>
-  <script src="https://kit.fontawesome.com/c02d3fc986.js" crossorigin="anonymous"></script>
-  <script type="module" src="./src/main.ts"></script>
-  <script type="module" src="./src/location.ts"></script>
-</head>
+  <body>
+    <dialog></dialog>
+    <header>
+      <nav>
+        <a href="#" class="branding">
+          <h1>Hodaripuoti</h1>
+        </a>
 
-<body>
-  <dialog></dialog>
-  <header>
-    <nav>
-      <a href="#" class="branding">
-        <h1>Hodaripuoti</h1>
-      </a>
-      <ul class="nav-menu">
-        <li class="nav-item">
-          <a href="#" class="nav-link">etusivu</a>
-        </li>
-        <li class="nav-item">
-          <a href="#custom" class="nav-link">oma hodari</a>
-        </li>
-        <li class="nav-item">
-          <a href="#menu" class="nav-link">Kokin parhaat</a>
-        </li>
-        <li class="nav-item">
-          <a href="#contact" class="nav-link">Tietoa meistä</a>
-        </li>
-        <li class="nav-item">
-          <a href="#" class="nav-link" id="profileButton">Profiili</a>
-        </li>
-        <li class="nav-item">
-          <i class="fa-solid fa-cart-shopping" style="color: var(--light)" id="cart-icon"></i>
-        </li>
-      </ul>
-      <div class="burgermenu">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </div>
-    </nav>
-    <div class="cart">
-      <h2 class="cart-title">Cart</h2>
-      <div class="cart-content"></div>
-      <div class="cart-total">
-        <div class="cart-total-title">Total</div>
-        <div class="cart-total-price">0€</div>
-      </div>
-      <p class="toimipaikka">Valtise toimipaikkasi</p>
-      <select id="location-select" class="location-select"></select>
-      <button type="button" class="cart-checkout">Checkout</button>
-      <i class="fa-solid fa-x" id="cart-close"></i>
-
-    </div>
-  </header>
-
-  <main>
-    <section id="adminSection" class="admin-section"></section>
-
-    <section class="caruselContainer">
-      <div class="slider-wrapper">
-        <div class="slider">
-          <img id="slide-1" src="/public/images/slide1.webp" alt="kuva tulisesta hotdogista" />
-          <img id="slide-2" src="/public/images/slide2.webp" alt="kuva hodaripuidista" />
-          <img id="slide-3" src="/public/images/slide3.webp" alt="kuva Vegehotdogista" />
+        <input type="checkbox" class="checkbox" id="checkbox" />
+        <label for="checkbox" class="checkbox-label">
+          <span class="visually-hidden">Toggle Day/Night</span>
+          <i class="fa-solid fa-moon"></i>
+          <i class="fa-solid fa-sun"></i>
+          <span class="ball"></span>
+        </label>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#" class="nav-link">etusivu</a>
+          </li>
+          <li class="nav-item">
+            <a href="#custom" class="nav-link">oma hodari</a>
+          </li>
+          <li class="nav-item">
+            <a href="#menu" class="nav-link">Kokin parhaat</a>
+          </li>
+          <li class="nav-item">
+            <a href="#contact" class="nav-link">Tietoa meistä</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link" id="profileButton">Profiili</a>
+          </li>
+          <li class="nav-item">
+            <i
+              class="fa-solid fa-cart-shopping"
+              style="color: var(--light)"
+              id="cart-icon"
+            ></i>
+          </li>
+        </ul>
+        <div class="burgermenu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </div>
-        <div class="slider-nav">
-          <a href="#slide-1" id="nav-1" class="visually-hidden">slide 1</a>
-          <a href="#slide-2" id="nav-2" class="visually-hidden">slide 2</a>
-          <a href="#slide-3" id="nav-3" class="visually-hidden">slide 3</a>
+      </nav>
+      <div class="cart">
+        <h2 class="cart-title">Cart</h2>
+        <div class="cart-content"></div>
+        <div class="cart-total">
+          <div class="cart-total-title">Total</div>
+          <div class="cart-total-price">0€</div>
         </div>
+        <p class="toimipaikka">Valtise toimipaikkasi</p>
+        <select id="location-select" class="location-select"></select>
+        <button type="button" class="cart-checkout">Checkout</button>
+        <i class="fa-solid fa-x" id="cart-close"></i>
       </div>
-    </section>
+    </header>
 
-    <section id="custom">
-      <h2 class="custom-menu-title">Oma hodari</h2>
-      <div id="menu-carousel">
-        <div class="sämpylä-container custom-container"></div>
-        <div class="makkara-container custom-container"></div>
-        <div class="täyte-container custom-container"></div>
-        <div class="kastike-container custom-container"></div>
-      </div>
+    <main>
+      <section id="adminSection" class="admin-section"></section>
 
-      <div class="divaider">
-        <div class="carousel-btn-container">
-          <button class="carousel-btn prev"><span>prev</span></button>
-          <button class="carousel-btn next"><span>next</span></button>
+      <section class="caruselContainer">
+        <div class="slider-wrapper">
+          <div class="slider">
+            <img
+              id="slide-1"
+              src="/public/images/slide1.webp"
+              alt="kuva tulisesta hotdogista"
+            />
+            <img
+              id="slide-2"
+              src="/public/images/slide2.webp"
+              alt="kuva hodaripuidista"
+            />
+            <img
+              id="slide-3"
+              src="/public/images/slide3.webp"
+              alt="kuva Vegehotdogista"
+            />
+          </div>
+          <div class="slider-nav">
+            <a href="#slide-1" id="nav-1" class="visually-hidden">slide 1</a>
+            <a href="#slide-2" id="nav-2" class="visually-hidden">slide 2</a>
+            <a href="#slide-3" id="nav-3" class="visually-hidden">slide 3</a>
+          </div>
         </div>
-        <div class="total-box">
-          <div class="total">Total Sum: 0</div>
-          <a class="add-custom-to-cart-btn">Lisää koriin</a>
+      </section>
+
+      <section id="custom">
+        <h2 class="custom-menu-title">Oma hodari</h2>
+        <div id="menu-carousel">
+          <button class="carousel-prev prev">
+            <span id="prevText">prev</span>
+          </button>
+          <div class="custom-containers">
+            <div class="sämpylä-container custom-container"></div>
+            <div class="makkara-container custom-container"></div>
+            <div class="täyte-container custom-container"></div>
+            <div class="kastike-container custom-container"></div>
+          </div>
+          <button class="carousel-next next carousel-next-highlight">
+            <span id="nextText">next</span>
+          </button>
         </div>
-      </div>
-    </section>
 
     <section id="menu">
       <h2 class="menu-filter-title">Kokin parhaat</h2>
@@ -121,14 +150,45 @@
             Meidän hodari sämpylät ovat vasta leivottuja sekä teemme omat makkarat sekä kastikkeet päivittäin että saisi
             mahdollisimman tuoreen ja maittavan hodari kokemuksen
           </p>
+        <div class="divaider">
+          <div class="carousel-btn-container">
+            <button class="carousel-btn prev">
+              <span id="prevText">prev</span>
+            </button>
+            <button class="carousel-btn next">
+              <span id="nextText">next</span>
+            </button>
+          </div>
+          <div class="total-box">
+            <div class="total">Total Sum: 0</div>
+            <a class="add-custom-to-cart-btn">Lisää koriin</a>
+          </div>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <footer class="footeri">
-    <p>Copyright sit ei ole viel</p>
-  </footer>
-</body>
+      <section id="menu">
+        <h2 class="menu-filter-title">Kokin parhaat</h2>
+        <div class="menu-container"></div>
+      </section>
 
+      <section id="contact">
+        <h2 class="contact-filter-title">Tietoa meistä</h2>
+        <div class="location-container">
+          <div class="location-map" id="map"></div>
+          <div class="about">
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo
+              tenetur magnam deserunt velit dicta quia provident itaque
+              similique minima fugit quisquam esse incidunt ipsam ea ad,
+              consequatur sapiente repudiandae maiores?
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footeri">
+      <p>Copyright sit ei ole viel</p>
+    </footer>
+  </body>
 </html>

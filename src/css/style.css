@@ -323,7 +323,7 @@ input {
   text-align: center;
   font-family: defaultBold, sans-serif;
   color: var(--dark-green);
-  margin: 20px 0;
+  margin: 60px 0 20px 0;
 }
 
 .contact-filter-title {
@@ -630,11 +630,41 @@ x .orders-con .orders-nav h2 {
   border: 3px solid var(--light-green);
   background-color: var(--dark);
   display: flex;
+  justify-content: space-evenly;
+  align-items: center;
   border-radius: 10px;
   overflow: hidden;
   margin: auto;
-  width: 50%;
   scroll-snap-type: x mandatory;
+  max-width: 850px;
+}
+.carousel-next {
+  color: rgb(225, 224, 224);
+  background: none;
+  outline: none;
+  border: none;
+  height: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  margin: 0 10px;
+  font-size: 1.25rem;
+  display: none;
+}
+.carousel-prev {
+  color: rgb(225, 224, 224);
+  background: none;
+  outline: none;
+  border: none;
+  height: 20px;
+  height: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  margin: 0 10px;
+  font-size: 1.25rem;
+  display: none;
+}
+.carousel-next-highlight {
+  color: var(--light-green);
 }
 
 .custom-container {
@@ -654,10 +684,11 @@ x .orders-con .orders-nav h2 {
   text-align: center;
   font-size: 1rem;
   padding: 0.5rem;
-  width: 6rem;
+  width: 120px;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
   margin: 0 0.5rem;
+  white-space: nowrap;
 }
 
 .carousel-btn:hover {
@@ -1002,6 +1033,7 @@ x .orders-con .orders-nav h2 {
   border-radius: 5px;
   padding: 5px;
   margin: auto;
+  max-width: 175px;
 }
 
 .status-container-recieved {
@@ -1658,6 +1690,17 @@ dialog:has(.confirm-modal-container) {
 
   dialog:has(.admin-orders-top-container) .dialog-close-button {
     margin: 0;
+  }
+}
+@media only screen and (min-width: 900px) {
+  .carousel-btn {
+    display: none;
+  }
+  .carousel-next {
+    display: flex;
+  }
+  .carousel-prev {
+    display: flex;
   }
 }
 
