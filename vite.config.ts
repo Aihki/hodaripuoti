@@ -20,7 +20,7 @@ export default defineConfig({
         scope: "./",
         start_url: "./index.html",
         name: "Hodaripuoti",
-        short_name: "MyApp",
+        short_name: "Hodaripuoti",
         icons: [
           {
             src: "./icons/icon-192x192.png",

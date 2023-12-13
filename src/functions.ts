@@ -6,17 +6,18 @@ import {
   registerFormModal,
   updateUserManagementModel,
   userManagementModel,
-} from './components';
+} from "./components";
 import {
   CreateOrderResponse,
   FetchDataResponse,
   Hotdog,
   HotdogPrices,
-} from './interfaces/Order';
-import { User } from './interfaces/User';
+} from "./interfaces/Order";
+import { User } from "./interfaces/User";
 import {
   addAuthFormListeners,
   addBackButtonListener,
+  addDarkModeListener,
   addLogOutListener,
   addModalCloseListener,
   addOrderFilterListeners,
@@ -26,8 +27,8 @@ import {
   addUserManageNavListener,
   checkActionHandler,
   viewActionHandler,
-} from './listeners';
-import { url } from './variables';
+} from "./listeners";
+import { url } from "./variables";
 /**
  * Fetch data from url, returns as json
  * @param url - url to fetch data
@@ -51,7 +52,7 @@ const fetchData = async (url: string, options = {}): Promise<any> => {
  * @returns - Token
  */
 const getToken = (): string | null => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (!token) {
     return null;
   }
@@ -71,22 +72,22 @@ const checkUserRole = async (): Promise<void> => {
         showAdminTools(userRole);
       } else if (userRole === 0) {
         const adminSection = document.querySelector(
-          '#adminSection'
+          "#adminSection"
         ) as HTMLElement;
         if (adminSection) {
-          adminSection.style.display = 'none';
+          adminSection.style.display = "none";
         }
       }
     } else {
       const adminSection = document.querySelector(
-        '#adminSection'
+        "#adminSection"
       ) as HTMLElement;
       if (adminSection) {
-        adminSection.style.display = 'none';
+        adminSection.style.display = "none";
       }
     }
   } catch (error) {
-    console.error('Error:', error);
+    console.error("Error:", error);
   }
 };
 
@@ -98,10 +99,10 @@ const checkUserRole = async (): Promise<void> => {
 const getUserData = async (token: string): Promise<User> => {
   const options: RequestInit = {
     headers: {
-      Authorization: 'Bearer ' + token,
+      Authorization: "Bearer " + token,
     },
   };
-  return await fetchData(url + '/auth/me', options);
+  return await fetchData(url + "/auth/me", options);
 };
 
 /**
@@ -112,7 +113,7 @@ const getUserData = async (token: string): Promise<User> => {
  */
 const showAdminTools = async (role: number, incomingOrders?: any) => {
   const adminSection = document.querySelector(
-    '#adminSection'
+    "#adminSection"
   ) as HTMLDivElement;
   if (!adminSection) {
     return;
@@ -122,50 +123,50 @@ const showAdminTools = async (role: number, incomingOrders?: any) => {
   let orders;
   if (!incomingOrders) {
     // Get orders
-    orders = await fetchData(url + '/order');
+    orders = await fetchData(url + "/order");
   } else {
     orders = incomingOrders;
   }
 
   // Add orderManagemtnHtml to html page and add listeners
   const orderManagementHtml = orderManagementModel(orders);
-  adminSection.innerHTML = '';
-  adminSection.insertAdjacentHTML('beforeend', orderManagementHtml);
+  adminSection.innerHTML = "";
+  adminSection.insertAdjacentHTML("beforeend", orderManagementHtml);
   addOrderFilterListeners(role);
   updateOrderInfoBtnAmount();
 
   // if user role is 2 show superadmin tools, add listeners
   if (role === 2) {
     // Get users
-    const users = await fetchData(url + '/user');
+    const users = await fetchData(url + "/user");
     const userManagamentHtml = userManagementModel(users);
-    adminSection.insertAdjacentHTML('beforeend', userManagamentHtml);
+    adminSection.insertAdjacentHTML("beforeend", userManagamentHtml);
     addUserManageNavListener();
     addUserManageFormSubmitListener();
   }
 
   // Remove existing event listeners (if any)
-  document.querySelectorAll('.viewActionBtn').forEach((btn) => {
-    btn.removeEventListener('click', viewActionHandler);
+  document.querySelectorAll(".viewActionBtn").forEach((btn) => {
+    btn.removeEventListener("click", viewActionHandler);
   });
 
-  document.querySelectorAll('.checkActionBtn').forEach((btn) => {
-    btn.removeEventListener('click', (event) =>
+  document.querySelectorAll(".checkActionBtn").forEach((btn) => {
+    btn.removeEventListener("click", (event) =>
       checkActionHandler(role, event)
     );
   });
 
   // Add new event listeners
-  document.querySelectorAll('.viewActionBtn').forEach((btn) => {
-    btn.addEventListener('click', viewActionHandler);
+  document.querySelectorAll(".viewActionBtn").forEach((btn) => {
+    btn.addEventListener("click", viewActionHandler);
   });
 
-  document.querySelectorAll('.checkActionBtn').forEach((btn) => {
-    btn.addEventListener('click', (event) => checkActionHandler(role, event));
+  document.querySelectorAll(".checkActionBtn").forEach((btn) => {
+    btn.addEventListener("click", (event) => checkActionHandler(role, event));
   });
 
   // show adminSection
-  adminSection.style.display = 'block';
+  adminSection.style.display = "block";
 };
 
 /**
@@ -173,25 +174,25 @@ const showAdminTools = async (role: number, incomingOrders?: any) => {
  */
 const updateOrderInfoBtnAmount = async () => {
   // get counts from database
-  const counts = await fetchData(url + '/order/ordersCounts');
+  const counts = await fetchData(url + "/order/ordersCounts");
   if (counts.length < 1) {
     return;
   }
   const orderInfoBtnOrders = document
-    .querySelector('.order-info-btn-orders')
-    ?.querySelector('.order-amount');
+    .querySelector(".order-info-btn-orders")
+    ?.querySelector(".order-amount");
   const orderInfoBtnRecieved = document
-    .querySelector('.order-info-btn-recieved')
-    ?.querySelector('.order-amount');
+    .querySelector(".order-info-btn-recieved")
+    ?.querySelector(".order-amount");
   const orderInfoBtnCompleted = document
-    .querySelector('.order-info-btn-completed')
-    ?.querySelector('.order-amount');
+    .querySelector(".order-info-btn-completed")
+    ?.querySelector(".order-amount");
   const orderInfoBtnInProgress = document
-    .querySelector('.order-info-btn-in-progress')
-    ?.querySelector('.order-amount');
+    .querySelector(".order-info-btn-in-progress")
+    ?.querySelector(".order-amount");
   const orderInfoBtnPickedUp = document
-    .querySelector('.order-info-btn-picked-up')
-    ?.querySelector('.order-amount');
+    .querySelector(".order-info-btn-picked-up")
+    ?.querySelector(".order-amount");
   if (
     !orderInfoBtnCompleted ||
     !orderInfoBtnInProgress ||
@@ -214,17 +215,17 @@ const updateOrderInfoBtnAmount = async () => {
  * @param isLogin - boolean, if (true) render login form. else render register form
  */
 const renderForms = (isLogin: boolean | null): void => {
-  const modal = document.querySelector('dialog');
+  const modal = document.querySelector("dialog");
   if (!modal) {
     return;
   }
   if (isLogin === true) {
     const authDialog: string = loginFormModal();
-    modal.innerHTML = '';
-    modal.insertAdjacentHTML('beforeend', authDialog);
-    const form = document.querySelector('#authForm');
+    modal.innerHTML = "";
+    modal.insertAdjacentHTML("beforeend", authDialog);
+    const form = document.querySelector("#authForm");
 
-    form?.addEventListener('submit', (evt) => {
+    form?.addEventListener("submit", (evt) => {
       evt.preventDefault();
       formLogin();
     });
@@ -233,11 +234,11 @@ const renderForms = (isLogin: boolean | null): void => {
     (modal as any)?.showModal();
   } else {
     const authDialog: string = registerFormModal();
-    modal.innerHTML = '';
-    modal.insertAdjacentHTML('beforeend', authDialog);
+    modal.innerHTML = "";
+    modal.insertAdjacentHTML("beforeend", authDialog);
 
-    const form = document.querySelector('#authForm');
-    form?.addEventListener('submit', (evt) => {
+    const form = document.querySelector("#authForm");
+    form?.addEventListener("submit", (evt) => {
       evt.preventDefault();
       formRegister();
     });
@@ -250,12 +251,12 @@ const renderForms = (isLogin: boolean | null): void => {
  */
 const formRegister = async (): Promise<void> => {
   const username = (
-    document.querySelector('#usernameInput') as HTMLInputElement
+    document.querySelector("#usernameInput") as HTMLInputElement
   ).value;
-  const email = (document.querySelector('#emailInput') as HTMLInputElement)
+  const email = (document.querySelector("#emailInput") as HTMLInputElement)
     .value;
   const password = (
-    document.querySelector('#passwordInput') as HTMLInputElement
+    document.querySelector("#passwordInput") as HTMLInputElement
   ).value;
   const formData = {
     username: username,
@@ -264,18 +265,18 @@ const formRegister = async (): Promise<void> => {
   };
 
   if (!validateData(email, password, username)) {
-    alert('Invalid input fields');
+    alert("Invalid input fields");
     return;
   }
 
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
   };
-  await fetchData(url + '/user', options);
+  await fetchData(url + "/user", options);
   renderForms(true);
 };
 /**
@@ -283,10 +284,10 @@ const formRegister = async (): Promise<void> => {
  * Add token to local storage
  */
 const formLogin = async (): Promise<void> => {
-  const email = (document.querySelector('#emailInput') as HTMLInputElement)
+  const email = (document.querySelector("#emailInput") as HTMLInputElement)
     .value;
   const password = (
-    document.querySelector('#passwordInput') as HTMLInputElement
+    document.querySelector("#passwordInput") as HTMLInputElement
   ).value;
   const formData = {
     email: email,
@@ -294,21 +295,21 @@ const formLogin = async (): Promise<void> => {
   };
 
   if (!validateData(email, password, null)) {
-    alert('Invalid input fields');
+    alert("Invalid input fields");
     return;
   }
 
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify(formData),
   };
-  const loginData = await fetchData(url + '/auth/login', options);
+  const loginData = await fetchData(url + "/auth/login", options);
 
-  localStorage.setItem('token', loginData.token);
-  (document.querySelector('dialog') as any)?.close(); // close modal
+  localStorage.setItem("token", loginData.token);
+  (document.querySelector("dialog") as any)?.close(); // close modal
   checkUserRole();
 };
 
@@ -350,15 +351,15 @@ const validateData = (
  */
 const updateUserManagementTable = (users: User[]) => {
   const userManagementTableContainer = document.querySelector(
-    '.user-management-table-container'
+    ".user-management-table-container"
   );
   if (!userManagementTableContainer) {
     return;
   }
   const userManagementHtml = updateUserManagementModel(users);
-  userManagementTableContainer.innerHTML = '';
+  userManagementTableContainer.innerHTML = "";
   userManagementTableContainer.insertAdjacentHTML(
-    'beforeend',
+    "beforeend",
     userManagementHtml
   );
 };
@@ -368,13 +369,13 @@ const updateUserManagementTable = (users: User[]) => {
  * @param text - Info's text
  */
 const showInfoModal = (text: string) => {
-  const modal = document.querySelector('dialog');
+  const modal = document.querySelector("dialog");
   if (!modal) {
     return;
   }
   const infoModalHtml = infoModal(text);
-  modal.innerHTML = '';
-  modal.insertAdjacentHTML('beforeend', infoModalHtml);
+  modal.innerHTML = "";
+  modal.insertAdjacentHTML("beforeend", infoModalHtml);
 };
 
 /**
@@ -387,35 +388,35 @@ const createNewOrder = async (
   hotdogOrder: Hotdog[],
   total_price: number
 ): Promise<CreateOrderResponse | null | void> => {
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem("token");
   if (!token) {
-    throw new Error('Token not found');
+    throw new Error("Token not found");
   }
   const userData = await getUserData(token);
   const user_id = userData.user_id;
 
   // Handle order creation
   const orderOptions = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ user_id, total_price }),
   };
   let order_id: number | undefined;
   try {
     const orderResponse = (await fetchData(
-      url + '/order',
+      url + "/order",
       orderOptions
     )) as FetchDataResponse;
     if (!orderResponse || !orderResponse.order_id) {
-      throw new Error('Failed to create order');
+      throw new Error("Failed to create order");
     }
     order_id = orderResponse.order_id;
   } catch (error) {
-    console.error('Error creating order:', (error as Error).message);
+    console.error("Error creating order:", (error as Error).message);
     // Return an error message to the customer
-    return { error: 'Failed to create order' };
+    return { error: "Failed to create order" };
   }
 
   // for each hotdog in order
@@ -427,29 +428,29 @@ const createNewOrder = async (
     if (hotdog.hotdog_id === null) {
       const base_price = hotdog.base_price;
       if (!base_price) {
-        throw new Error('hotdog.base_price is undefined');
+        throw new Error("hotdog.base_price is undefined");
       }
       // Handle hotdog creation
       const hotdogOptions = {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ hotdog_name: 'Custom', base_price }),
+        body: JSON.stringify({ hotdog_name: "Custom", base_price }),
       };
       try {
         const hotdogResponse = (await fetchData(
-          url + '/hotdog',
+          url + "/hotdog",
           hotdogOptions
         )) as FetchDataResponse;
         if (!hotdogResponse || !hotdogResponse.hotdog_id) {
-          throw new Error('Failed to create hotdog');
+          throw new Error("Failed to create hotdog");
         }
         hotdog_id = hotdogResponse.hotdog_id;
       } catch (error) {
-        console.error('Error creating hotdog:', (error as Error).message);
+        console.error("Error creating hotdog:", (error as Error).message);
         // Return an error message to the customer
-        return { error: 'Failed to create hotdog' };
+        return { error: "Failed to create hotdog" };
       }
     } else {
       // if hotdog does exist(menu item), just send the hotdog_id
@@ -458,9 +459,9 @@ const createNewOrder = async (
 
     // Handle orders_hotdogs creation
     const ordersHotdogsOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         order_id,
@@ -470,45 +471,45 @@ const createNewOrder = async (
     } as RequestInit;
     try {
       const ordersHotdogs = await fetchData(
-        url + '/order/orderHotdogs',
+        url + "/order/orderHotdogs",
         ordersHotdogsOptions
       );
       if (!ordersHotdogs) {
-        throw new Error('Failed to create orderHotdogs');
+        throw new Error("Failed to create orderHotdogs");
       }
     } catch (error) {
-      console.error('Error creating orderHotdogs:', (error as Error).message);
+      console.error("Error creating orderHotdogs:", (error as Error).message);
       // Return an error message to the customer
-      return { error: 'Failed to create orderHotdogs' };
+      return { error: "Failed to create orderHotdogs" };
     }
 
     // Handle hotdog_toppings creation
     if (hotdog.hotdog_id === null) {
       const hotdogToppingsOptions = {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ hotdog_id, topping_ids: hotdog.toppings }),
       } as RequestInit;
       try {
         const hotdogToppings = await fetchData(
-          url + '/hotdog/hotdogToppings',
+          url + "/hotdog/hotdogToppings",
           hotdogToppingsOptions
         );
         if (!hotdogToppings) {
-          throw new Error('Failed to create hotdogToppings');
+          throw new Error("Failed to create hotdogToppings");
         }
         if (order_id) {
           calculateTotal(order_id);
         }
       } catch (error) {
         console.error(
-          'Error creating hotdogToppings:',
+          "Error creating hotdogToppings:",
           (error as Error).message
         );
         // Return an error message to the customer
-        return { error: 'Failed to create hotdogToppings' };
+        return { error: "Failed to create hotdogToppings" };
       }
     }
   });
@@ -523,15 +524,15 @@ const calculateTotal = async (order_id: number) => {
   let countedPrice: number = 0;
   try {
     const countedPriceResponse = await fetchData(
-      url + '/order/orderTotalPrice/' + order_id
+      url + "/order/orderTotalPrice/" + order_id
     );
 
     if (!countedPriceResponse) {
-      throw new Error('Failed to get order');
+      throw new Error("Failed to get order");
     }
 
     countedPriceResponse.forEach((hotdog: HotdogPrices) => {
-      if (hotdog.hotdog_name === 'Custom') {
+      if (hotdog.hotdog_name === "Custom") {
         countedPrice += parseFloat(hotdog.total_topping_price);
       } else {
         countedPrice += parseFloat(hotdog.hotdog_base_price);
@@ -539,9 +540,9 @@ const calculateTotal = async (order_id: number) => {
     });
     // handle total price updating
     const totalPriceOptions = {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         total_price: countedPrice,
@@ -550,24 +551,24 @@ const calculateTotal = async (order_id: number) => {
     };
     try {
       const ordersTotalPrice = await fetchData(
-        url + '/order/orderTotalPrice',
+        url + "/order/orderTotalPrice",
         totalPriceOptions
       );
       if (!ordersTotalPrice) {
-        throw new Error('Failed to PUT ordersTotalPrice');
+        throw new Error("Failed to PUT ordersTotalPrice");
       }
     } catch (error) {
       console.error(
-        'Error creating ordersTotalPrice:',
+        "Error creating ordersTotalPrice:",
         (error as Error).message
       );
       // Return an error message to the customer
-      return { error: 'Failed to create ordersTotalPrice' };
+      return { error: "Failed to create ordersTotalPrice" };
     }
   } catch (error) {
-    console.error('Error creating order:', (error as Error).message);
+    console.error("Error creating order:", (error as Error).message);
     // Return an error message to the customer
-    return { error: 'Failed to create order' };
+    return { error: "Failed to create order" };
   }
 };
 
@@ -576,13 +577,13 @@ const calculateTotal = async (order_id: number) => {
  */
 const formUpdate = async (): Promise<void> => {
   const username = (
-    document.querySelector('#usernameInput') as HTMLInputElement
+    document.querySelector("#usernameInput") as HTMLInputElement
   ).value;
   const password = (
-    document.querySelector('#passwordInput') as HTMLInputElement
+    document.querySelector("#passwordInput") as HTMLInputElement
   ).value;
-  const modal = document.querySelector('dialog');
-  const token = localStorage.getItem('token');
+  const modal = document.querySelector("dialog");
+  const token = localStorage.getItem("token");
   if (!token || !modal) {
     return;
   }
@@ -591,26 +592,27 @@ const formUpdate = async (): Promise<void> => {
     password: password,
   };
   const options = {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + token,
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token,
     },
     body: JSON.stringify(formData),
   };
   const userData = await getUserData(token);
-  await fetchData(url + '/user/' + userData.user_id, options);
+  await fetchData(url + "/user/" + userData.user_id, options);
   const orders = await fetchData(
-    url + '/order/getMyOrders/' + userData.user_id
+    url + "/order/getMyOrders/" + userData.user_id
   );
   const profileModal = addUserDataToModal(userData, orders);
-  modal.innerHTML = '';
-  modal.insertAdjacentHTML('beforeend', profileModal);
+  modal.innerHTML = "";
+  modal.insertAdjacentHTML("beforeend", profileModal);
   addModalCloseListener();
   addLogOutListener();
   addUpdateListener();
   addProfileOrderTrListener();
   addBackButtonListener();
+  addDarkModeListener();
 };
 
 // On start get users role
