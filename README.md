@@ -1,10 +1,10 @@
 -- Users taulukko luominen
-```
+```sql
 DROP DATABASE IF EXISTS Hodaripuoti;
 CREATE DATABASE Hodaripuoti;
 USE Hodaripuoti;
 ```
-```
+```sql
 CREATE TABLE Users (
     user_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(300) NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE Users (
 ```
 
 -- Orders taulukko luominen
-```
+```sql
 CREATE TABLE Orders (
     order_id INT PRIMARY KEY AUTO_INCREMENT,
     user_id INT DEFAULT NULL,
@@ -28,7 +28,7 @@ CREATE TABLE Orders (
 ```
 
 -- Toppings taulukko luominen
-```
+```sql
 CREATE TABLE Toppings (
     topping_id INT PRIMARY KEY AUTO_INCREMENT,
     topping_name VARCHAR(300) NOT NULL,
@@ -37,14 +37,14 @@ CREATE TABLE Toppings (
 );
 ```
 -- Custom Hotdogs Taulukko luominen
-```
+```sql
 CREATE TABLE Hotdogs (
     hotdog_id INT PRIMARY KEY AUTO_INCREMENT,
     hotdog_name VARCHAR(300) NOT NULL,
     base_price DECIMAL(8, 2) NOT NULL
 );
 ```
-```
+```sql
 CREATE TABLE Orders_hotdogs
 (
   order_id INT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE Orders_hotdogs
   FOREIGN KEY (hotdog_id) REFERENCES Hotdogs(hotdog_id)
 );
 ```
-```
+```sql
 CREATE TABLE Hotdog_toppings
 (
   hotdog_id INT NOT NULL,
@@ -65,7 +65,7 @@ CREATE TABLE Hotdog_toppings
   FOREIGN KEY (topping_id) REFERENCES Toppings(topping_id)
 );
 ```
-```
+```sql
 INSERT INTO `Toppings` (`topping_id`, `topping_name`, `topping_type`, `topping_price`) VALUES
 (1, 'Ketsuppi', 'kastike', '0.50'),
 (2, 'Sinappi', 'kastike', '0.50'),
@@ -99,14 +99,14 @@ INSERT INTO `Toppings` (`topping_id`, `topping_name`, `topping_type`, `topping_p
 (30, 'Gluteeniton sämpylä', 'sämpylä', '1.00'),
 (31, 'Kaura sämpylä', 'sämpylä', '1.00');
 ```
-```
+```sql
 INSERT INTO `Users` (`user_id`, `username`, `password`, `email`, `role`, `points`) VALUES
 (1, 'Veetiso', '$2a$10$upws5TmYp/sAM5NZ5UIWAOBVgef9bJfpwv.5U07Xp2j3rpvm0hgvy', 'veetiso@mail.com', 2, 0),
 (2, 'Admin 1', '$2a$10$upws5TmYp/sAM5NZ5UIWAOBVgef9bJfpwv.5U07Xp2j3rpvm0hgvy', 'user1@mail.com', 1, 0),
 (3, 'Admin 2', '$2a$10$upws5TmYp/sAM5NZ5UIWAOBVgef9bJfpwv.5U07Xp2j3rpvm0hgvy', 'user2@mail.com', 2, 0),
 (4, 'User 1', '$2a$10$upws5TmYp/sAM5NZ5UIWAOBVgef9bJfpwv.5U07Xp2j3rpvm0hgvy', 'user0@mail.com', 0, 0);
 ```
-```
+```sql
 INSERT INTO `Hotdogs` (`hotdog_id`, `hotdog_name`, `base_price`) VALUES
 (1, 'Tulinen vegedog', '3.50'),
 (2, 'Gluteeniton vegedog', '3.50'),
@@ -118,7 +118,7 @@ INSERT INTO `Hotdogs` (`hotdog_id`, `hotdog_name`, `base_price`) VALUES
 (8, 'Tulinen dog', '3.50'),
 (9, 'Nirso dog', '2.50');
 ```
-```
+```sql
 INSERT INTO `Hotdog_toppings` (`hotdog_id`, `topping_id`) VALUES
 (1, 3),
 (1, 14),
