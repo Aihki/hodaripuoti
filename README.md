@@ -13,6 +13,8 @@ Tämä projekti on toteutettu osana Metropolian webkehityskurssia. Se tarjoaa hy
 
 
 ## Database
+
+Tässä on databasen luomiseen tarvittava scripti
 -- Users taulukko luominen
 ```sql
 DROP DATABASE IF EXISTS Hodaripuoti;
