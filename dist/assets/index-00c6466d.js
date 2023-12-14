@@ -157,7 +157,7 @@
     </div>
     <button class="form-button form-button-cancel" id="dialogCloseButton">Peru</button>
   </div> `,Tt=e=>(console.log(e),`
-  <img src="/public/icons/icon-512x512.png" alt="maskotti">
+  <img src="./icons/icon-512x512.png" alt="maskotti">
   <h2 class="message-title">${e}</h2>
   <button class="message-btn">Katso tilausta</button>
 `),Et=e=>{const{order_id:t,order_date:o,status:r}=e[0],a=new Date(o).toLocaleString("fi-FI",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"2-digit",year:"numeric"});let s,i;switch(r){case 0:s="Vastaanotettu",i="recieved";break;case 1:s="Työn alla",i="in-progress";break;case 2:s="Valmis",i="completed";break;case 3:s="Noudettu",i="picked-up";break;default:s="Kelpuuton",i="unvalid"}return`
