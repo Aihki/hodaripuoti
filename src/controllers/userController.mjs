@@ -78,7 +78,7 @@ const postUser = async (req, res) => {
   if (!errors.isEmpty()) {
     // details about errors:
 
-    return res.status(400).json({ message: 'invalid input fields' });
+    return res.json({ error: 'invalid input fields' });
   }
   const newUser = req.body;
   const salt = await bcrypt.genSalt(10);

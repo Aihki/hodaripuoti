@@ -1585,6 +1585,14 @@ form {
   cursor: pointer;
   padding: 10px 30px;
 }
+.invalid-mail-or-pwd {
+  color: red;
+  margin: 10px 0 0 0;
+  animation-name: grow;
+  animation-duration: 900ms;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards;
+}
 
 #login-label {
   background: rgb(92, 131, 116);

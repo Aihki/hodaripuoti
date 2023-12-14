@@ -6,14 +6,14 @@ const isPartiallyVisible = (el) => {
 };
 
 const handleScroll = () => {
-  const menuItems = document.querySelectorAll("#menu .menu-item-container");
+  const menuItems = document.querySelectorAll('#menu .menu-item-container');
 
   menuItems.forEach((item) => {
     if (isPartiallyVisible(item)) {
-      item.classList.add("reveal");
+      item.classList.add('reveal');
     }
   });
 };
 
-window.addEventListener("scroll", handleScroll);
-window.addEventListener("load", handleScroll);
+window.addEventListener('scroll', handleScroll);
+window.addEventListener('load', handleScroll);

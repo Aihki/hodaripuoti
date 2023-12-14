@@ -1,7 +1,7 @@
 import { displayChefchoice, displayOptions } from './function';
 import { customIngredients } from './function';
 import { Hotdog } from './interfaces/Order';
-import { createNewOrder, fetchData } from './functions';
+import { createNewOrder, fetchData, renderForms } from './functions';
 import { url } from './variables';
 import { Ingredient } from './interfaces/Menu';
 
@@ -186,7 +186,8 @@ if (cartIcon && cart && closeCart) {
 const purchaseClicked = () => {
   const token = localStorage.getItem('token');
   if (!token) {
-    throw new Error('Token not found');
+    renderForms(true);
+    return;
   }
   if (allCartItems.length > 0) {
     console.log(allCartItems);

@@ -10,6 +10,7 @@ const login = async (email) => {
 
     return rows[0];
   } catch (e) {
+    console.log('here2');
     console.error('error', e.message);
     return { error: e.message };
   }
