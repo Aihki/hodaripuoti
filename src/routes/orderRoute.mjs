@@ -1,5 +1,5 @@
-import express from 'express';
-import { body } from 'express-validator';
+import express from "express";
+import { body } from "express-validator";
 import {
   getFilteredOrders,
   getHotdogsAndToppings,
@@ -13,12 +13,12 @@ import {
   postOrdersHotdogs,
   putOrderStatus,
   putOrderTotalPrice,
-} from '../controllers/orderController.mjs';
+} from "../controllers/orderController.mjs";
 
 const orderRouter = express.Router();
 
 /**
- * @api {get} / Get all orders
+ * @api {get} /order Get all orders
  * @apiVersion 1.0.0
  * @apiName getOrders
  * @apiGroup Orders
@@ -54,7 +54,7 @@ const orderRouter = express.Router();
  * @apiUse UnauthorizedError
  */
 /**
- * @api {post} / Add order
+ * @api {post} /order Add order
  * @apiVersion 1.0.0
  * @apiName postOrders
  * @apiGroup Orders
@@ -84,15 +84,15 @@ const orderRouter = express.Router();
  * @apiUse UnauthorizedError
  */
 orderRouter
-  .route('/')
+  .route("/")
   .get(getOrders)
   .post(
-    body('user_id').isNumeric(),
-    body('total_price').isNumeric(),
+    body("user_id").isNumeric(),
+    body("total_price").isNumeric(),
     postOrders
   );
 /**
- * @api {get} /ordersCounts Get all orders status counts
+ * @api {get} /order/ordersCounts Get all orders status counts
  * @apiVersion 1.0.0
  * @apiName getOrdersCounts
  * @apiGroup Orders
@@ -120,10 +120,10 @@ orderRouter
  *
  * @apiUse UnauthorizedError
  */
-orderRouter.route('/ordersCounts').get(getOrdersCounts);
+orderRouter.route("/ordersCounts").get(getOrdersCounts);
 
 /**
- * @api {get} /getMyOrders/:id Get all users orders
+ * @api {get} /order/getMyOrders/:id Get all users orders
  * @apiVersion 1.0.0
  * @apiName getMyOrders
  * @apiGroup Orders
@@ -158,10 +158,10 @@ orderRouter.route('/ordersCounts').get(getOrdersCounts);
  *
  * @apiUse UnauthorizedError
  */
-orderRouter.route('/getMyOrders/:id').get(getMyOrders);
+orderRouter.route("/getMyOrders/:id").get(getMyOrders);
 
 /**
- * @api {get} /:id Get order with id
+ * @api {get} /order/:id Get order with id
  * @apiVersion 1.0.0
  * @apiName getOrderById
  * @apiGroup Orders
@@ -189,10 +189,10 @@ orderRouter.route('/getMyOrders/:id').get(getMyOrders);
  *
  * @apiUse UnauthorizedError
  */
-orderRouter.route('/:id').get(getOrderById);
+orderRouter.route("/:id").get(getOrderById);
 
 /**
- * @api {put} /changeOrderStatus Update order status
+ * @api {put} /order/changeOrderStatus Update order status
  * @apiVersion 1.0.0
  * @apiName putOrderStatus
  * @apiGroup Orders
@@ -219,10 +219,10 @@ orderRouter.route('/:id').get(getOrderById);
  *
  * @apiUse UnauthorizedError
  */
-orderRouter.route('/changeOrderStatus').put(putOrderStatus);
+orderRouter.route("/changeOrderStatus").put(putOrderStatus);
 
 /**
- * @api {get} /getFilteredOrders/:id Get orders with status as id
+ * @api {get} /order/getFilteredOrders/:id Get orders with status as id
  * @apiVersion 1.0.0
  * @apiName getFilteredOrders
  * @apiGroup Orders
@@ -257,10 +257,10 @@ orderRouter.route('/changeOrderStatus').put(putOrderStatus);
  *
  * @apiUse UnauthorizedError
  */
-orderRouter.route('/getFilteredOrders/:id').get(getFilteredOrders);
+orderRouter.route("/getFilteredOrders/:id").get(getFilteredOrders);
 
 /**
- * @api {post} /orderHotdogs Post new order hotdogs link
+ * @api {post} /order/orderHotdogs Post new order hotdogs link
  * @apiVersion 1.0.0
  * @apiName postOrdersHotdogs
  * @apiGroup Orders
@@ -294,16 +294,16 @@ orderRouter.route('/getFilteredOrders/:id').get(getFilteredOrders);
  * @apiUse UnauthorizedError
  */
 orderRouter
-  .route('/orderHotdogs')
+  .route("/orderHotdogs")
   .post(
-    body('order_id').isNumeric(),
-    body('hotdog_id').isNumeric(),
-    body('amount').isNumeric(),
+    body("order_id").isNumeric(),
+    body("hotdog_id").isNumeric(),
+    body("amount").isNumeric(),
     postOrdersHotdogs
   );
 
 /**
- * @api {get} /orderHotdogs/:id Get all hotdogs of order and order data
+ * @api {get} /order/orderHotdogs/:id Get all hotdogs of order and order data
  * @apiVersion 1.0.0
  * @apiName getOrdersHotdogs
  * @apiGroup Orders
@@ -349,10 +349,10 @@ orderRouter
 ]
  *
  */
-orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
+orderRouter.route("/orderHotdogs/:id").get(getOrdersHotdogs);
 
 /**
- * @api {get} /hotdogsAndToppings/:id Get all toppings hotdogs
+ * @api {get} /order/hotdogsAndToppings/:id Get all toppings hotdogs
  * @apiVersion 1.0.0
  * @apiName getHotdogsAndToppings
  * @apiGroup Orders
@@ -383,10 +383,10 @@ orderRouter.route('/orderHotdogs/:id').get(getOrdersHotdogs);
 ]
  *
  */
-orderRouter.route('/hotdogsAndToppings/:id').get(getHotdogsAndToppings);
+orderRouter.route("/hotdogsAndToppings/:id").get(getHotdogsAndToppings);
 
 /**
- * @api {get} /getOrderTotalPrice/:id Get prices of hotdogs with order id
+ * @api {get} /order/getOrderTotalPrice/:id Get prices of hotdogs with order id
  * @apiVersion 1.0.0
  * @apiName getOrderTotalPrice
  * @apiGroup Orders
@@ -426,10 +426,10 @@ orderRouter.route('/hotdogsAndToppings/:id').get(getHotdogsAndToppings);
 ]
  *
  */
-orderRouter.route('/orderTotalPrice/:id').get(getOrderTotalPrice);
+orderRouter.route("/orderTotalPrice/:id").get(getOrderTotalPrice);
 
 /**
- * @api {put} /orderTotalPrice Update orders total price
+ * @api {put} /order/orderTotalPrice Update orders total price
  * @apiVersion 1.0.0
  * @apiName putOrderTotalPrice
  * @apiGroup Orders
@@ -459,6 +459,6 @@ orderRouter.route('/orderTotalPrice/:id').get(getOrderTotalPrice);
 }
  *
  */
-orderRouter.route('/orderTotalPrice').put(putOrderTotalPrice);
+orderRouter.route("/orderTotalPrice").put(putOrderTotalPrice);
 
 export default orderRouter;

@@ -1,4 +1,4 @@
-import express from 'express';
+import express from "express";
 import {
   deleteUserById,
   getUserById,
@@ -8,13 +8,13 @@ import {
   getUsersWithRole,
   putRole,
   getWorkers,
-} from '../controllers/userController.mjs';
-import { body } from 'express-validator';
+} from "../controllers/userController.mjs";
+import { body } from "express-validator";
 
 const userRouter = express.Router();
 
 /**
- * @api {get} / Get list of users
+ * @api {get} /user Get list of users
  * @apiVersion 1.0.0
  * @apiName getUsers
  * @apiGroup Users
@@ -49,7 +49,7 @@ const userRouter = express.Router();
  *
  */
 /**
- * @api {post} / Add User
+ * @api {post} /user Add User
  * @apiVersion 1.0.0
  * @apiName postUser
  * @apiGroup Users
@@ -88,17 +88,17 @@ const userRouter = express.Router();
  *
  */
 userRouter
-  .route('/')
+  .route("/")
   .get(getUsers)
   .post(
-    body('email').trim().isEmail(),
-    body('username').trim().isLength({ min: 3, max: 40 }).isAlphanumeric(),
-    body('password').trim().isLength({ min: 8 }),
+    body("email").trim().isEmail(),
+    body("username").trim().isLength({ min: 3, max: 40 }).isAlphanumeric(),
+    body("password").trim().isLength({ min: 8 }),
     postUser
   );
 
 /**
- * @api {get} /workers Get list of users with role 1 or 2
+ * @api {get} /user/workers Get list of users with role 1 or 2
  * @apiVersion 1.0.0
  * @apiName getWorkers
  * @apiGroup Users
@@ -132,10 +132,10 @@ userRouter
 ]
  *
  */
-userRouter.route('/workers').get(getWorkers);
+userRouter.route("/workers").get(getWorkers);
 
 /**
- * @api {get} /:id Get user with user ID
+ * @api {get} /user/:id Get user with user ID
  * @apiVersion 1.0.0
  * @apiName getWorkers
  * @apiGroup Users
@@ -161,7 +161,7 @@ userRouter.route('/workers').get(getWorkers);
  *
  */
 /**
- * @api {put} /:id Update user data
+ * @api {put} /user/:id Update user data
  * @apiVersion 1.0.0
  * @apiName putUserById
  * @apiGroup Users
@@ -187,10 +187,10 @@ userRouter.route('/workers').get(getWorkers);
 }
  *
  */
-userRouter.route('/:id').get(getUserById).put(putUserById);
+userRouter.route("/:id").get(getUserById).put(putUserById);
 
 /**
- * @api {get} /role/:id Get users with role
+ * @api {get} /user/role/:id Get users with role
  * @apiVersion 1.0.0
  * @apiName getUsersWithRole
  * @apiGroup Users
@@ -222,6 +222,6 @@ userRouter.route('/:id').get(getUserById).put(putUserById);
     },]
  *
  */
-userRouter.route('/role/:id').get(getUsersWithRole);
+userRouter.route("/role/:id").get(getUsersWithRole);
 
 export default userRouter;

@@ -75,7 +75,7 @@ hotdogRouter
 
 hotdogRouter.route("/:id").get(getHotdogById);
 /**
- * @api {post} /hotdogToppings Add hotdog toppings
+ * @api {post} /hotdog/hotdogToppings Add hotdog toppings
  * @apiVersion 1.0.0
  * @apiName postHotdogsToppings
  * @apiGroup Hotdog
@@ -114,7 +114,7 @@ hotdogRouter
     postHotdogsToppings
   );
 /**
- * @api {get} /hotdogToppings/:id Get hotdog toppings
+ * @api {get} /hotdog/hotdogToppings/:id Get hotdog toppings
  * @apiVersion 1.0.0
  * @apiName getHotdogToppings
  * @apiGroup Hotdog
@@ -142,7 +142,7 @@ hotdogRouter
 hotdogRouter.route("/hotdogToppings/:id").get(getHotdogToppings);
 
 /**
- * @api {get} /menu Get menu hotdogs
+ * @api {get} /hotdog/menu Get menu hotdogs
  * @apiVersion 1.0.0
  * @apiName getMenuHotdogs
  * @apiGroup Hotdog
@@ -171,7 +171,7 @@ hotdogRouter.route("/hotdogToppings/:id").get(getHotdogToppings);
 hotdogRouter.route("/menu").get(getMenuHotdogs);
 
 /**
- * @api {get} /customer Get customer's hotdogs
+ * @api {get} /hotdog/customer Get customer's hotdogs
  * @apiVersion 1.0.0
  * @apiName getCustomerHotdogs
  * @apiGroup Hotdog
