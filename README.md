@@ -181,3 +181,22 @@ INSERT INTO `Hotdog_toppings` (`hotdog_id`, `topping_id`) VALUES
 (9, 27),
 (9, 1);
 ```
+
+##Käyttö ohjeet ja asennus
+1. Esiksi kloonaa git
+   ```git clone https://github.com/Aihki/hodaripuoti.git```
+
+2. setuppaa database scripti ylempänä
+3.  luo oma .env tiedosto
+    DB_HOST= localhost
+    DB_USER= user
+    DB_PASSWORD= pwd
+    DB_NAME= Hodaripuoti
+    
+    JWT_SECRET= your-token-secret-here
+
+    
+5. asenna node.js ja muut tarvittavat paketit
+   ```npm i or npm install```
+6. käynnistä verkkosivu
+   ```npm start```
