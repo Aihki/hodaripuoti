@@ -189,11 +189,11 @@ INSERT INTO `Hotdog_toppings` (`hotdog_id`, `topping_id`) VALUES
 
 2. setuppaa database scripti ylempänä
 3.  luo oma .env tiedosto
-    *DB_HOST= localhost
-    *DB_USER= user
-    *DB_PASSWORD= pwd
-    *DB_NAME= Hodaripuoti
-    *JWT_SECRET= your-token-secret-here
+    - DB_HOST= localhost
+    - DB_USER= user
+    - DB_PASSWORD= pwd
+    - DB_NAME= Hodaripuoti
+    - JWT_SECRET= your-token-secret-here
 
     
 5. asenna node.js ja muut tarvittavat paketit
