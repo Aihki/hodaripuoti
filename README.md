@@ -182,7 +182,8 @@ INSERT INTO `Hotdog_toppings` (`hotdog_id`, `topping_id`) VALUES
 (9, 1);
 ```
 
-##Käyttö ohjeet ja asennus
+## Käyttö ohjeet ja asennus
+
 1. Esiksi kloonaa git
    ```git clone https://github.com/Aihki/hodaripuoti.git```
 
