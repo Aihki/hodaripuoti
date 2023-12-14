@@ -2,8 +2,17 @@
 
 Tämä projekti on toteutettu osana Metropolian webkehityskurssia. Se tarjoaa hyvän yleiskatsauksen siitä, mitä olemme oppineet kurssin aikana ja miten olemme soveltaneet oppimaamme käytännössä.
 
+## Teknologiat
+- HTML
+- CSS
+- JavaScript
+- Express
+- Node.js
+- TypeScript
+- SQL
 
 
+## Database
 -- Users taulukko luominen
 ```sql
 DROP DATABASE IF EXISTS Hodaripuoti;
