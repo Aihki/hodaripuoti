@@ -11,6 +11,12 @@ Tämä projekti on toteutettu osana Metropolian webkehityskurssia. Se tarjoaa hy
 - TypeScript
 - SQL
 
+## Esittely 
+<img width="1679" alt="Screenshot 2024-01-07 at 12 21 15" src="https://github.com/Aihki/hodaripuoti/assets/64736229/78eba0c7-628b-463e-9ae8-881a47497147">
+
+https://github.com/Aihki/hodaripuoti/assets/64736229/328ee134-e61d-4943-a839-8090adb02aa3
+
+
 
 ## Database
 
